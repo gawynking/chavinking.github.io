@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>SQL开发规范与优化规则 - ChavinKing</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="ChavinKing" /><meta name="description" content="​ 本文档说明优化技术主要考虑大数据环境SQL on Hadoop解决方案下的优化规则及开发规范，已尽力刨除RDBMS优化细节，且尽量不加杂关系代数" /><meta name="keywords" content="data warehouse, Github, flink, java, spark, ETL" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.96.0 with theme even" />
+
+
+<link rel="canonical" href="https://chavinking.github.io/post/sql/SQL%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83%E4%B8%8E%E4%BC%98%E5%8C%96%E8%A7%84%E5%88%99/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<link href="/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/reset-even.css">
+
+
+<meta property="og:title" content="SQL开发规范与优化规则" />
+<meta property="og:description" content="​ 本文档说明优化技术主要考虑大数据环境SQL on Hadoop解决方案下的优化规则及开发规范，已尽力刨除RDBMS优化细节，且尽量不加杂关系代数" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://chavinking.github.io/post/sql/SQL%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83%E4%B8%8E%E4%BC%98%E5%8C%96%E8%A7%84%E5%88%99/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2020-08-11T01:37:56+08:00" />
+<meta property="article:modified_time" content="2020-08-11T01:37:56+08:00" />
+
+<meta itemprop="name" content="SQL开发规范与优化规则">
+<meta itemprop="description" content="​ 本文档说明优化技术主要考虑大数据环境SQL on Hadoop解决方案下的优化规则及开发规范，已尽力刨除RDBMS优化细节，且尽量不加杂关系代数"><meta itemprop="datePublished" content="2020-08-11T01:37:56+08:00" />
+<meta itemprop="dateModified" content="2020-08-11T01:37:56+08:00" />
+<meta itemprop="wordCount" content="2318">
+<meta itemprop="keywords" content="SQL,优化," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="SQL开发规范与优化规则"/>
+<meta name="twitter:description" content="​ 本文档说明优化技术主要考虑大数据环境SQL on Hadoop解决方案下的优化规则及开发规范，已尽力刨除RDBMS优化细节，且尽量不加杂关系代数"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">ChavinKing</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于我</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">ChavinKing</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于我</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">SQL开发规范与优化规则</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-08-11 01:37 </span>
+        <div class="post-category">
+            <a href="/categories/SQL/"> SQL </a>
+            </div>
+          <span class="more-meta"> 约 2318 字 </span>
+          <span class="more-meta"> 预计阅读 5 分钟 </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#一-sql优化技术">一 SQL优化技术</a>
+      <ul>
+        <li><a href="#1-查询重用">1 查询重用</a></li>
+        <li><a href="#2-查询重写---等价转换">2 查询重写 - 等价转换</a></li>
+        <li><a href="#3-物理优化">3 物理优化</a></li>
+      </ul>
+    </li>
+    <li><a href="#二-示例sql解析">二 示例SQL解析</a></li>
+    <li><a href="#三-sql开发规范">三 SQL开发规范</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <hr>
+<p>​	本文档说明优化技术主要考虑大数据环境SQL on Hadoop解决方案下的优化规则及开发规范，已尽力刨除RDBMS优化细节，且尽量不加杂关系代数专业术语。</p>
+<p>​	根据多年的SQL优化经验，SQL优化可以从两个方向考虑：</p>
+<ul>
+<li>
+<p>其一优化人效，较好的SQL可读性，保证SQL语义简练完整，这也是最重要的；</p>
+</li>
+<li>
+<p>其次优化SQL性能，保证代码执行质量。</p>
+<p>以下技术细节也是以这两个原则做为基础出发点论述SQL规范及SQL优化重点知识。</p>
+</li>
+</ul>
+<h2 id="一-sql优化技术">一 SQL优化技术</h2>
+<h3 id="1-查询重用">1 查询重用</h3>
+<ul>
+<li>查询结果重用
+<ul>
+<li>建立中间表 - 结果集重用</li>
+<li>分区表 - 结果集重用</li>
+<li>from提前语法 - 结果集重用</li>
+</ul>
+</li>
+<li>查询逻辑重用
+<ul>
+<li>with子句 - 业务逻辑重用，提高SQL可读性</li>
+</ul>
+</li>
+<li>查询计划重用
+<ul>
+<li>OLAP环境 - 略</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-查询重写---等价转换">2 查询重写 - 等价转换</h3>
+<ol>
+<li>
+<p>简单查询优化</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="p">...</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">tbl</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="p">...</span><span class="w"> 
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>优化规则：</p>
+<ul>
+<li>尽早执行选择（where过滤）、投影（select指定列）操作</li>
+</ul>
+</li>
+<li>
+<p>聚合查询优化</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">tbl</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="p">...</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">group</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="p">...</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">having</span><span class="w"> </span><span class="p">...</span><span class="w"> 
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>优化规则：</p>
+<ul>
+<li>
+<p>符合简单查询规则；</p>
+</li>
+<li>
+<p>尽量提取having条件到where层过滤；</p>
+</li>
+<li>
+<p>粒度指标合并；一般首先选择一次聚合产出多个不同指标，避免同粒度指标的重复扫表；</p>
+</li>
+</ul>
+</li>
+<li>
+<p>子查询优化</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="p">...</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">sub_query</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">)</span><span class="w"> </span><span class="p">...</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="p">...</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">tbl</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">xxx</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">sub_query</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">)</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>优化规则：</p>
+<ul>
+<li>
+<p>符合简单查询，聚合查询优化规则；</p>
+</li>
+<li>
+<p>子查询应只出现在from子句中，个别场景可以出现在where子句，如果很难满足该条件，应该重新审视数据结构设计的合理性；</p>
+</li>
+<li>
+<p>仅考虑非相关子查询（即子查询逻辑比较独立，可单独测试）开发，否则请审查数据结构设计的合理性；</p>
+</li>
+<li>
+<p>聚合子查询是子查询存在的标准模式；</p>
+</li>
+<li>
+<p>子查询内禁止使用order by子句；</p>
+</li>
+<li>
+<p>优化技巧：</p>
+<ul>
+<li>
+<p>子查询合并：</p>
+<p>粒度相同指标可以考虑从同一个子查询产出（避免了多次扫表操作，减少io，提升了执行性能和可读性）；</p>
+</li>
+<li>
+<p>子查询展开：</p>
+<p>[not] in/[not] exists 子查询应尽量改写成join逻辑实现；</p>
+<p>单表扫描，非聚合子查询（即子查询符合简单SQL规则）应首先改写join逻辑实现；</p>
+</li>
+<li>
+<p>子查询消除：</p>
+<p>可以考虑使用窗口函数消除子查询；</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>join优化</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="p">...</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">sub_query</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">)</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="k">left</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">sub_query</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">)</span><span class="w"> </span><span class="n">t2</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">t1</span><span class="p">.</span><span class="n">xxx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t2</span><span class="p">.</span><span class="n">xxx</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">t2</span><span class="p">...</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">t1</span><span class="p">...</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">and</span><span class="w"> </span><span class="n">t2</span><span class="p">...</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="p">...</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">tbl</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">xxx</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">sub_query</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">)</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>优化规则：</p>
+<ul>
+<li>外连接消除：如果外连接可以改写成内连接的SQL要改写成inner join逻辑；</li>
+<li>join过程中需要时刻考虑两表关系：1:1 一对一 ；1:n 一对多 ；n:m 多对多 ，尽量避免局部笛卡尔积操作；</li>
+<li>使用left join语法替换子查询 ；</li>
+<li>如果是内连接，小表写在左侧；</li>
+<li>join语法统一使用left join ，join 等模式进行设计；</li>
+</ul>
+<p>join示例具体执行计划参考：<a href="http://chavinking.github.io/post/sql/%E5%9F%BA%E4%BA%8EPGSQL%E5%B7%A6%E8%BF%9E%E6%8E%A5SQL%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E8%A7%A3%E6%9E%90/">案例参考</a></p>
+</li>
+</ol>
+<h3 id="3-物理优化">3 物理优化</h3>
+<p>​	SQL语句查询代价在物理上基于CPU和IO的，在分布式系统领域还要加上网络IO开销。</p>
+<p>​	基于此，物理优化的准则包括以下几种：</p>
+<ul>
+<li>尽量减少回表次数；</li>
+<li>尽早过滤数据集；</li>
+<li>每一层子查询均需要指定查询列，降低内存使用量；</li>
+<li>使用中间表、分区表进行增量加工；</li>
+<li>优先使用parquet进行格式存储，归档数据首选orc+snappy进行数据存储；</li>
+</ul>
+<p>​</p>
+<h2 id="二-示例sql解析">二 示例SQL解析</h2>
+<p>​	以下每一个SQL例子用语言描述执行过程：</p>
+<ul>
+<li>
+<p>一个简单SQL 执行过程描述</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">e</span><span class="p">.</span><span class="n">deptno</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">cnt</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">sum</span><span class="p">(</span><span class="n">sal</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">sal</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="k">public</span><span class="p">.</span><span class="n">employee</span><span class="w"> </span><span class="n">e</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">sal</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1000</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">group</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">deptno</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">having</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">deptno</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">limit</span><span class="w"> </span><span class="mi">10</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>from :  加载数据表</p>
+<p>where :  应用过滤条件</p>
+<p>【join】 : 按连接条件执行join</p>
+<p>group by :  执行聚合逻辑</p>
+<p>having : 针对聚合后的数据应用 过滤条件</p>
+<p>select : 返回最终列</p>
+<p>order by : 执行排序操作</p>
+<p>limit : 执行limit 操作，返回最终结果。</p>
+</li>
+<li>
+<p>一个join SQL 执行过程描述</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">e</span><span class="p">.</span><span class="n">empno</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">e</span><span class="p">.</span><span class="n">ename</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">e</span><span class="p">.</span><span class="n">job</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">e</span><span class="p">.</span><span class="n">mgr</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">e</span><span class="p">.</span><span class="n">hiredate</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">e</span><span class="p">.</span><span class="n">sal</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">e</span><span class="p">.</span><span class="n">deptno</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">d</span><span class="p">.</span><span class="n">dname</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">d</span><span class="p">.</span><span class="n">loc</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="k">public</span><span class="p">.</span><span class="n">employee</span><span class="w"> </span><span class="n">e</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">left</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="k">public</span><span class="p">.</span><span class="n">department</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">deptno</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">deptno</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">loc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;NEW YORK&#39;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">dname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;ACCOUNTING&#39;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">deptno</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">30</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">job</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;MANAGER&#39;</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">and</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">sal</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">1000</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">and</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">deptno</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">null</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>加载左表、通过where子句左表的过滤条件过滤数据，结果集记为tmp1;</p>
+<p>加载右表、通过on子句右表的过滤条件过滤右表数据，结果集记为tmp2；</p>
+<p>临时结果tmp1与tmp2按照关联条件做左连接操作，tmp1未能关联到的tmp2数据，结构解tmp2列置null，join结果记为tmp3;</p>
+<p>针对tmp3应用右表在where子句中的过滤条件，返回最终结果。</p>
+</li>
+</ul>
+<h2 id="三-sql开发规范">三 SQL开发规范</h2>
+<ol>
+<li>
+<p>避免使用tab键格式化SQL（hive client 遇到tab键会报错）；</p>
+</li>
+<li>
+<p>禁止使用select * ，建议由select column &hellip; 替代，不需要做绝对校验；</p>
+</li>
+<li>
+<p>多表join，且存在多inner join以及多left join场景，inner join 在最前，left join紧接其后；</p>
+<p>例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="n">t1</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">aid</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="n">t2</span><span class="p">.</span><span class="n">bname</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">bname</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="n">t3</span><span class="p">.</span><span class="n">cname</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">cname</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="n">t4</span><span class="p">.</span><span class="n">dname</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">dname</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="n">t5</span><span class="p">.</span><span class="n">ename</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">ename</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="n">t6</span><span class="p">.</span><span class="n">fname</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">fname</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">tbl_a</span><span class="w"> </span><span class="n">t1</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">join</span><span class="w"> </span><span class="n">tbl_b</span><span class="w"> </span><span class="n">t2</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">t1</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t2</span><span class="p">.</span><span class="n">aid</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">join</span><span class="w"> </span><span class="n">tbl_c</span><span class="w"> </span><span class="n">t3</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">t1</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t3</span><span class="p">.</span><span class="n">aid</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">left</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">tbl_d</span><span class="w"> </span><span class="n">t4</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">t1</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t4</span><span class="p">.</span><span class="n">aid</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">left</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">tbl_e</span><span class="w"> </span><span class="n">t5</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">t1</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t5</span><span class="p">.</span><span class="n">aid</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">left</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">tbl_f</span><span class="w"> </span><span class="n">t6</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">t1</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t6</span><span class="p">.</span><span class="n">aid</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>SQL开发select子句每一列最好统一带别名；</p>
+</li>
+<li>
+<p>建表语句都需要配置注释；建表语句子列格式需要上下对齐；</p>
+<p>例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">drop</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span><span class="n">fact</span><span class="p">.</span><span class="n">fact_example_dtl</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">fact</span><span class="p">.</span><span class="n">fact_example_dtl</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">skey</span><span class="w">                    </span><span class="nb">bigint</span><span class="w">             </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;代理键&#39;</span><span class="p">,</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">name</span><span class="w">                    </span><span class="n">string</span><span class="w">             </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;名字&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">age</span><span class="w">                     </span><span class="nb">int</span><span class="w">                </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;年龄&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">sex</span><span class="w">                     </span><span class="nb">int</span><span class="w">                </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;性别：1-男 2-女&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">create_date</span><span class="w">             </span><span class="n">string</span><span class="w">             </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;创建时间&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">update_date</span><span class="w">             </span><span class="n">string</span><span class="w">             </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;更新时间&#39;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">etl_time</span><span class="w">                </span><span class="k">timestamp</span><span class="w">          </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;跑数时间&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">)</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;签约事实表&#39;</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">partitioned</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="p">(</span><span class="n">pdate</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="k">comment</span><span class="w"> </span><span class="s1">&#39;分区日期:yyyyMMdd&#39;</span><span class="p">)</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">stored</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">parquet</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>使用left join消除简单子查询；</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="p">...</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">from</span><span class="w"> </span><span class="n">tbl_a</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">where</span><span class="w"> </span><span class="n">age</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">10</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">)</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="k">left</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">from</span><span class="w"> </span><span class="n">tbl_b</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">where</span><span class="w"> </span><span class="n">sex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">)</span><span class="w"> </span><span class="n">t2</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">t1</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t2</span><span class="p">.</span><span class="n">aid</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">改写为</span><span class="w"> </span><span class="p">:</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="p">...</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">tbl_a</span><span class="w"> </span><span class="n">t1</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">left</span><span class="w"> </span><span class="k">join</span><span class="w"> </span><span class="n">tbl_b</span><span class="w"> </span><span class="n">t2</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">t1</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t2</span><span class="p">.</span><span class="n">aid</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">t2</span><span class="p">.</span><span class="n">sex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">t1</span><span class="p">.</span><span class="n">age</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">10</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ol>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">ChavinKing</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-08-11 01:37
+        
+    </span>
+  </p>
+  
+  
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">赞赏支持</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wx.png">
+        <span>微信打赏</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/zfb.png">
+        <span>支付宝打赏</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/SQL/">SQL</a>
+          <a href="/tags/%E4%BC%98%E5%8C%96/">优化</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/java/Spark%E6%A0%B8%E5%BF%83%E7%AE%97%E5%AD%90/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Spark核心算子</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/other/%E5%9F%BA%E4%BA%8EMacM1%E5%A4%84%E7%90%86%E5%99%A8%E7%9A%84github%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/">
+            <span class="next-text nav-default">基于MacM1处理器的github博客搭建</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="http://www.cnblogs.com/wcwen1990" class="iconfont icon-cnblogs" title="cnblogs"></a>
+      <a href="mailto:chavinking1990@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/chavinking" class="iconfont icon-github" title="github"></a>
+  <a href="https://chavinking.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2020 - 
+    2022
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">ChavinKing</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.30dad356188cdaba5047112eaa8bf5e85cb14ae7e803337403591fce94a531a0.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-138883536-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

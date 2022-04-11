@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://chavinking.github.io/sitemap.xml

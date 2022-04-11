@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>site on ChavinKing</title>
+    <link>https://chavinking.github.io/tags/site/</link>
+    <description>Recent content in site on ChavinKing</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Tue, 11 Aug 2020 01:37:56 +0800</lastBuildDate><atom:link href="https://chavinking.github.io/tags/site/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>基于MacM1处理器的github博客搭建</title>
+      <link>https://chavinking.github.io/post/other/%E5%9F%BA%E4%BA%8EMacM1%E5%A4%84%E7%90%86%E5%99%A8%E7%9A%84github%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</link>
+      <pubDate>Tue, 11 Aug 2020 01:37:56 +0800</pubDate>
+      
+      <guid>https://chavinking.github.io/post/other/%E5%9F%BA%E4%BA%8EMacM1%E5%A4%84%E7%90%86%E5%99%A8%E7%9A%84github%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</guid>
+      <description>1 hugo下载 https://github.com/gohugoio/hugo/releases 2 hugo安装 解压文件后将hugo移动到制定目录/opt/script/run/hugo,同时配置环境变量export PATH=&amp;quot;/opt/script/run:$PATH&amp;quot; 3 测</description>
+    </item>
+    
+  </channel>
+</rss>

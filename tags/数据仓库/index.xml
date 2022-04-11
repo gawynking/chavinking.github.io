@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>数据仓库&#34; on ChavinKing</title>
+    <link>https://chavinking.github.io/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/</link>
+    <description>Recent content in 数据仓库&#34; on ChavinKing</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Tue, 11 Aug 2020 01:37:56 +0800</lastBuildDate><atom:link href="https://chavinking.github.io/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Spark核心算子</title>
+      <link>https://chavinking.github.io/post/java/Spark%E6%A0%B8%E5%BF%83%E7%AE%97%E5%AD%90/</link>
+      <pubDate>Tue, 11 Aug 2020 01:37:56 +0800</pubDate>
+      
+      <guid>https://chavinking.github.io/post/java/Spark%E6%A0%B8%E5%BF%83%E7%AE%97%E5%AD%90/</guid>
+      <description>Spark RDD： Transformation Meaning map(func) 返回一个新的分布式数据集，该数据集是通过将源的每个元素传递给函数func处理形成的。 filter(func) 返回一个新的数据集，该数据集是通过fu</description>
+    </item>
+    
+    <item>
+      <title>增量ETL (长周期指标) 优化方案</title>
+      <link>https://chavinking.github.io/post/dw/%E5%A2%9E%E9%87%8FETL-%E9%95%BF%E5%91%A8%E6%9C%9F%E6%8C%87%E6%A0%87-%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88/</link>
+      <pubDate>Tue, 11 Aug 2020 01:37:56 +0800</pubDate>
+      
+      <guid>https://chavinking.github.io/post/dw/%E5%A2%9E%E9%87%8FETL-%E9%95%BF%E5%91%A8%E6%9C%9F%E6%8C%87%E6%A0%87-%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88/</guid>
+      <description>​ 在日常数据处理过程中避免不了要计算跨长周期数据指标统计需求，常见三种场景抽象如下： pv类： 统计每个城市(过去30天)用户浏览次数； 统计每个</description>
+    </item>
+    
+  </channel>
+</rss>

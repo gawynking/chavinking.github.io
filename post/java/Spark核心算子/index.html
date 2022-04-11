@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Spark核心算子 - ChavinKing</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="ChavinKing" /><meta name="description" content="Spark RDD： Transformation Meaning map(func) 返回一个新的分布式数据集，该数据集是通过将源的每个元素传递给函数func处理形成的。 filter(func) 返回一个新的数据集，该数据集是通过fu" /><meta name="keywords" content="data warehouse, Github, flink, java, spark, ETL" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.96.0 with theme even" />
+
+
+<link rel="canonical" href="https://chavinking.github.io/post/java/Spark%E6%A0%B8%E5%BF%83%E7%AE%97%E5%AD%90/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<link href="/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/reset-even.css">
+
+
+<meta property="og:title" content="Spark核心算子" />
+<meta property="og:description" content="Spark RDD： Transformation Meaning map(func) 返回一个新的分布式数据集，该数据集是通过将源的每个元素传递给函数func处理形成的。 filter(func) 返回一个新的数据集，该数据集是通过fu" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://chavinking.github.io/post/java/Spark%E6%A0%B8%E5%BF%83%E7%AE%97%E5%AD%90/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2020-08-11T01:37:56+08:00" />
+<meta property="article:modified_time" content="2020-08-11T01:37:56+08:00" />
+
+<meta itemprop="name" content="Spark核心算子">
+<meta itemprop="description" content="Spark RDD： Transformation Meaning map(func) 返回一个新的分布式数据集，该数据集是通过将源的每个元素传递给函数func处理形成的。 filter(func) 返回一个新的数据集，该数据集是通过fu"><meta itemprop="datePublished" content="2020-08-11T01:37:56+08:00" />
+<meta itemprop="dateModified" content="2020-08-11T01:37:56+08:00" />
+<meta itemprop="wordCount" content="4097">
+<meta itemprop="keywords" content="Spark,数据仓库," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Spark核心算子"/>
+<meta name="twitter:description" content="Spark RDD： Transformation Meaning map(func) 返回一个新的分布式数据集，该数据集是通过将源的每个元素传递给函数func处理形成的。 filter(func) 返回一个新的数据集，该数据集是通过fu"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">ChavinKing</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于我</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">ChavinKing</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于我</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Spark核心算子</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-08-11 01:37 </span>
+        <div class="post-category">
+            <a href="/categories/Spark/"> Spark </a>
+            </div>
+          <span class="more-meta"> 约 4097 字 </span>
+          <span class="more-meta"> 预计阅读 9 分钟 </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents"></nav>
+  </div>
+</div>
+    <div class="post-content">
+      <table>
+<thead>
+<tr>
+<th><strong>Spark RDD</strong>：</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Transformation</strong></td>
+<td><strong>Meaning</strong></td>
+</tr>
+<tr>
+<td>map(func)</td>
+<td>返回一个新的分布式数据集，该数据集是通过将源的每个元素传递给函数func处理形成的。</td>
+</tr>
+<tr>
+<td>filter(func)</td>
+<td>返回一个新的数据集，该数据集是通过func处理后在其上返回true 的源元素形成的。</td>
+</tr>
+<tr>
+<td>flatMap(func)</td>
+<td>与map相似，但是每个输入项都可以映射成0个或多个输出项（因此func应该返回Seq而不是单个项）。</td>
+</tr>
+<tr>
+<td>mapPartitions(func)</td>
+<td>与map相似，但是分别在每个RDD的分区（块）上运行，因此当运行在类型为T的RDD上时函数func必须被声明成 Iterator<!-- raw HTML omitted --> =&gt; Iterator<!-- raw HTML omitted -->（即对RDD中的每个分区的迭代器进行操作）迭代器。</td>
+</tr>
+<tr>
+<td>mapPartitionsWithIndex(func)</td>
+<td>与mapPartitions类似，但它还为func提供表示分区索引的整数值，因此当在类型T的RDD上运行时，func的类型必须为 (Int, Iterator<!-- raw HTML omitted -->) =&gt; Iterator<!-- raw HTML omitted -->（即带索引的迭代器类型）。</td>
+</tr>
+<tr>
+<td>union(otherDataset)</td>
+<td>返回一个新的数据集，其中包含了源数据集以及参数数据集中的每个元素。</td>
+</tr>
+<tr>
+<td>intersection(otherDataset)</td>
+<td>返回一个新的RDD，其中包含源数据集中和参数数据集交集的元素。</td>
+</tr>
+<tr>
+<td>distinct([numPartitions]))</td>
+<td>返回一个新的数据集，其中包含源数据集的所有不同元素。</td>
+</tr>
+<tr>
+<td>groupByKey([numPartitions])</td>
+<td>在类型为(K,V)对的数据集上调用时，返回(K，Iterable <!-- raw HTML omitted -->)对的数据集。 注意：如果要分组以便对每个键执行汇总（例如求和或平均值），则使用reduceByKey或aggregateByKey将产生更好的性能。 注意：默认情况下，输出中的并行度取决于父RDD的分区数。您可以传递一个可选numPartitions参数来设置不同数量的任务。</td>
+</tr>
+<tr>
+<td>reduceByKey(func, [numPartitions])</td>
+<td>当在(K，V)对的数据集上调用时，返回（K，V）对的数据集，其中每个键的值使用给定的reduce函数func进行汇总，该函数必须为(V，V）=&gt; V.与groupByKey一样，reduce任务的数量可以通过可选的第二个参数配置。</td>
+</tr>
+<tr>
+<td>aggregateByKey(zeroValue)(seqOp, combOp, [numPartitions])</td>
+<td>在（K，V）对的数据集上调用时，返回（K，U）对的数据集，其中每个键的值使用给定的Combine函数和中性的“零”值进行汇总。允许与输入值类型不同的聚合值类型，同时避免不必要的分配。像in中一样groupByKey，reduce任务的数量可以通过可选的第二个参数进行配置。</td>
+</tr>
+<tr>
+<td>sortByKey([ascending], [numPartitions])</td>
+<td>当在一个(K,V)对数据集上调用时，返回一个按照key值排序的(K,V)对数据集。</td>
+</tr>
+<tr>
+<td>join(otherDataset, [numPartitions])</td>
+<td>当在(K,V)和(K,W)类型的数据集上调用时，返回类型(K,(V,W))对的数据集，其中每个键都包含所有参与value成对的元素。外连接通过支持leftOuterJoin，rightOuterJoin和fullOuterJoin支持。</td>
+</tr>
+<tr>
+<td>cogroup(otherDataset, [numPartitions])</td>
+<td>当在(K,V)和(K,W)类型的数据集上调用时，返回(K,（Iterable <!-- raw HTML omitted -->，Iterable <!-- raw HTML omitted -->))元组的数据集。此操作也称为groupWith。</td>
+</tr>
+<tr>
+<td>cartesian(otherDataset)</td>
+<td>在类型T和U的数据集上调用时，返回（T，U）对（所有元素对）的数据集（笛卡尔积）。</td>
+</tr>
+<tr>
+<td>coalesce(numPartitions)</td>
+<td>将RDD中的分区数减少到numPartitions。筛选大型数据集后，对于更有效地运行操作很有用。</td>
+</tr>
+<tr>
+<td>repartition(numPartitions)</td>
+<td>随机地重新随机排列RDD中的数据以创建更多或更少的分区，并在整个分区之间保持平衡。这总是会通过网络重新整理所有数据。</td>
+</tr>
+<tr>
+<td>repartitionAndSortWithinPartitions(partitioner)</td>
+<td>根据给定的分区程序对RDD进行重新分区，并在每个结果分区中，按其键对记录进行排序。这比repartition在每个分区内调用然后排序更为有效，因为它可以将排序推入洗牌机制。</td>
+</tr>
+<tr>
+<td><em>sample(withReplacement, fraction, seed)</em></td>
+<td><em>Sample a fraction fraction of the data, with or without replacement, using a given random number generator seed.</em></td>
+</tr>
+<tr>
+<td><em>pipe(command, [envVars])</em></td>
+<td><em>通过外壳命令（例如Perl或bash脚本）通过管道传递RDD的每个分区。将RDD元素写入进程的stdin，并将输出到其stdout的行作为字符串的RDD返回。</em></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Action</strong></td>
+<td><strong>Meaning</strong></td>
+</tr>
+<tr>
+<td>reduce(func)</td>
+<td>使用函数func（该函数接受两个参数并返回一个）来聚合数据集的元素。该函数应该是可交换的和关联的，以便可以并行正确地计算它。</td>
+</tr>
+<tr>
+<td>collect()</td>
+<td>在驱动程序中将数据集的所有元素作为数组返回。这通常在返回足够小的数据子集的过滤器或其他操作之后很有用。</td>
+</tr>
+<tr>
+<td>count()</td>
+<td>返回数据集中的元素数。</td>
+</tr>
+<tr>
+<td>first()</td>
+<td>返回数据集的第一个元素（类似于take（1））。</td>
+</tr>
+<tr>
+<td>take(n)</td>
+<td>返回具有数据集的前n个元素的数组。</td>
+</tr>
+<tr>
+<td>takeOrdered(n, [ordering])</td>
+<td>使用自然顺序或自定义比较器返回RDD 的前n个元素。</td>
+</tr>
+<tr>
+<td>saveAsTextFile(path)</td>
+<td>将数据集的元素以文本文件（或文本文件集）的形式写入本地文件系统，HDFS或任何其他Hadoop支持的文件系统中的给定目录中。Spark将在每个元素上调用toString，以将其转换为文件中的一行文本。</td>
+</tr>
+<tr>
+<td>saveAsSequenceFile(path)</td>
+<td>将数据集的元素作为Hadoop SequenceFile写入本地文件系统，HDFS或任何其他Hadoop支持的文件系统中的给定路径中。这在实现Hadoop的Writable接口的键/值对的RDD上可用。在Scala中，它也可用于隐式转换为Writable的类型（Spark包括对基本类型（如Int，Double，String等）的转换）。</td>
+</tr>
+<tr>
+<td>saveAsObjectFile(path)</td>
+<td>使用Java序列化以简单的格式编写数据集的元素，然后可以使用 SparkContext.objectFile()进行加载。</td>
+</tr>
+<tr>
+<td>countByKey()</td>
+<td>仅在类型（K，V）的RDD上可用。返回（K，Int）对，包含每个键的计数。</td>
+</tr>
+<tr>
+<td>foreach(func)</td>
+<td>在数据集的每个元素上运行函数func。通常这样做是出于副作用，例如更新累加器或与外部存储系统交互。</td>
+</tr>
+<tr>
+<td><em>takeSample(withReplacement, num, [seed])</em></td>
+<td><em>返回带有数据集num个元素的随机样本的数组，带有或不带有替换，可以选择预先指定一个随机数生成器种子。</em></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Spark Streaming</strong>**：**</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Transformation</strong></td>
+<td><strong>Meaning</strong></td>
+</tr>
+<tr>
+<td>map(func)</td>
+<td>通过将源DStream的每个元素传递给函数func来返回新的DStream 。</td>
+</tr>
+<tr>
+<td>flatMap(func)</td>
+<td>与map相似，但是每个输入项可以映射到0个或多个输出项。</td>
+</tr>
+<tr>
+<td>filter(func)</td>
+<td>通过仅选择func返回true 的源DStream的记录来返回新的DStream 。</td>
+</tr>
+<tr>
+<td>repartition(numPartitions)</td>
+<td>通过创建更多或更少的分区来更改此DStream中的并行度。</td>
+</tr>
+<tr>
+<td>union(otherStream)</td>
+<td>返回一个新的DStream，其中包含源DStream和otherDStream中的元素的并集。</td>
+</tr>
+<tr>
+<td>count()</td>
+<td>通过计算源DStream的每个RDD中的元素数，返回一个新的单元素RDD DStream。</td>
+</tr>
+<tr>
+<td>reduce(func)</td>
+<td>通过使用函数func（带有两个参数并返回一个）来聚合源DStream的每个RDD中的元素，从而返回一个单元素RDD的新DStream 。该函数应具有关联性和可交换性，以便可以并行计算。</td>
+</tr>
+<tr>
+<td>countByValue()</td>
+<td>在元素类型为K的DStream上调用时，返回一个新的（K，Long）对的DStream，其中每个键的值是其在源DStream的每个RDD中的频率。</td>
+</tr>
+<tr>
+<td>reduceByKey(func, [numTasks])</td>
+<td>在（K，V）对的DStream上调用时，返回一个新的（K，V）对的DStream，其中使用给定的reduce函数聚合每个键的值。注意：默认情况下，这使用Spark的默认并行任务数（本地模式为2，而在集群模式下，此数量由config属性确定spark.default.parallelism）进行分组。您可以传递一个可选numTasks参数来设置不同数量的任务。</td>
+</tr>
+<tr>
+<td>join(otherStream, [numTasks])</td>
+<td>在（K，V）和（K，W）对的两个DStream上调用时，返回一个新的（K，（V，W））对的DStream，其中每个键都有所有元素对。</td>
+</tr>
+<tr>
+<td>cogroup(otherStream, [numTasks])</td>
+<td>在（K，V）和（K，W）对的DStream上调用时，返回一个新的（K，Seq [V]，Seq [W]）元组的DStream。</td>
+</tr>
+<tr>
+<td><strong>transform(func)</strong></td>
+<td><strong>通过对源DStream应用任意的RDD-to-RDD函数来返回新的DStream。这可用于在DStream上执行任意RDD操作。</strong></td>
+</tr>
+<tr>
+<td><strong>updateStateByKey(func)</strong></td>
+<td><strong>返回一个新的“状态” DStream，在该DStream中，通过在键的先前状态和键的新值上应用给定函数来更新每个键的状态。这可用于维护每个键的任意状态数据。</strong></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Transformation</strong></td>
+<td><strong>Meaning</strong></td>
+</tr>
+<tr>
+<td>window(windowLength, slideInterval)</td>
+<td>返回基于源DStream的窗口批处理计算的新DStream。</td>
+</tr>
+<tr>
+<td>countByWindow(windowLength, slideInterval)</td>
+<td>返回流中元素的滑动窗口计数。</td>
+</tr>
+<tr>
+<td>reduceByWindow(func, windowLength, slideInterval)</td>
+<td>返回一个新的单元素流，该流是通过使用func在滑动间隔内聚合流中的元素而创建的。该函数应该是关联的和可交换的，以便可以并行正确地计算它。</td>
+</tr>
+<tr>
+<td>reduceByKeyAndWindow(func, windowLength, slideInterval, [numTasks])</td>
+<td>当在（K，V）对的DStream上调用时，返回新的（K，V）对的DStream，其中使用给定的reduce函数func 在滑动窗口中的批处理上聚合每个键的值。注意：默认情况下，这使用Spark的默认并行任务数（本地模式为2，而在集群模式下，此数量由config属性确定spark.default.parallelism）进行分组。您可以传递一个可选 numTasks参数来设置不同数量的任务。</td>
+</tr>
+<tr>
+<td>reduceByKeyAndWindow(func, invFunc, windowLength, slideInterval, [numTasks])</td>
+<td>上述方法的一种更有效的版本，reduceByKeyAndWindow()其中，使用前一个窗口的减少值递增计算每个窗口的减少值。这是通过减少进入滑动窗口的新数据并“逆向减少”离开窗口的旧数据来完成的。一个示例是在窗口滑动时“增加”和“减少”键的计数。但是，它仅适用于“可逆归约函数”，即具有相应的“逆归约”函数（作为参数invFunc）的归约函数。像in中一样reduceByKeyAndWindow，reduce任务的数量可以通过可选参数配置。请注意，必须启用检查点才能使用此操作。</td>
+</tr>
+<tr>
+<td>countByValueAndWindow(windowLength, slideInterval, [numTasks])</td>
+<td>在（K，V）对的DStream上调用时，返回新的（K，Long）对的DStream，其中每个键的值是其在滑动窗口内的频率。像in中一样 reduceByKeyAndWindow，reduce任务的数量可以通过可选参数配置。</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Output Operation</strong></td>
+<td><strong>Meaning</strong></td>
+</tr>
+<tr>
+<td>print()</td>
+<td>在运行流应用程序的驱动程序节点上，打印DStream中每批数据的前十个元素。这对于开发和调试很有用。</td>
+</tr>
+<tr>
+<td>saveAsTextFiles(prefix, [suffix])</td>
+<td>将此DStream的内容另存为文本文件。基于产生在每批间隔的文件名的前缀和后缀：&ldquo;prefix-TIME_IN_MS[.suffix]&quot;。</td>
+</tr>
+<tr>
+<td>saveAsObjectFiles(prefix, [suffix])</td>
+<td>将此DStream的内容保存为SequenceFiles序列化Java对象的内容。基于产生在每批间隔的文件名的前缀和 后缀：&ldquo;prefix-TIME_IN_MS[.suffix]&quot;。</td>
+</tr>
+<tr>
+<td>saveAsHadoopFiles(prefix, [suffix])</td>
+<td>将此DStream的内容另存为Hadoop文件。基于产生在每批间隔的文件名的前缀和后缀：&ldquo;prefix-TIME_IN_MS[.suffix]&quot;。</td>
+</tr>
+<tr>
+<td>foreachRDD(func)</td>
+<td>最通用的输出运算符，将函数func应用于从流生成的每个RDD。此功能应将每个RDD中的数据推送到外部系统，例如将RDD保存到文件或通过网络将其写入数据库。请注意，函数func在运行流应用程序的驱动程序进程中执行，并且通常在其中具有RDD操作，这将强制计算流RDD。</td>
+</tr>
+</tbody>
+</table>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">ChavinKing</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-08-11 01:37
+        
+    </span>
+  </p>
+  
+  
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">赞赏支持</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wx.png">
+        <span>微信打赏</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/zfb.png">
+        <span>支付宝打赏</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/Spark/">Spark</a>
+          <a href="/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/">数据仓库</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/java/Thinking-in-Java/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Java编程思想-知识整理-思维导图</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/sql/SQL%E5%BC%80%E5%8F%91%E8%A7%84%E8%8C%83%E4%B8%8E%E4%BC%98%E5%8C%96%E8%A7%84%E5%88%99/">
+            <span class="next-text nav-default">SQL开发规范与优化规则</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="http://www.cnblogs.com/wcwen1990" class="iconfont icon-cnblogs" title="cnblogs"></a>
+      <a href="mailto:chavinking1990@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/chavinking" class="iconfont icon-github" title="github"></a>
+  <a href="https://chavinking.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2020 - 
+    2022
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">ChavinKing</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.30dad356188cdaba5047112eaa8bf5e85cb14ae7e803337403591fce94a531a0.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-138883536-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>增量ETL (长周期指标) 优化方案 - ChavinKing</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="ChavinKing" /><meta name="description" content="​ 在日常数据处理过程中避免不了要计算跨长周期数据指标统计需求，常见三种场景抽象如下： pv类： 统计每个城市(过去30天)用户浏览次数； 统计每个" /><meta name="keywords" content="data warehouse, Github, flink, java, spark, ETL" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.96.0 with theme even" />
+
+
+<link rel="canonical" href="https://chavinking.github.io/post/dw/%E5%A2%9E%E9%87%8FETL-%E9%95%BF%E5%91%A8%E6%9C%9F%E6%8C%87%E6%A0%87-%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<link href="/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/reset-even.css">
+
+
+<meta property="og:title" content="增量ETL (长周期指标) 优化方案" />
+<meta property="og:description" content="​ 在日常数据处理过程中避免不了要计算跨长周期数据指标统计需求，常见三种场景抽象如下： pv类： 统计每个城市(过去30天)用户浏览次数； 统计每个" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://chavinking.github.io/post/dw/%E5%A2%9E%E9%87%8FETL-%E9%95%BF%E5%91%A8%E6%9C%9F%E6%8C%87%E6%A0%87-%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2020-08-11T01:37:56+08:00" />
+<meta property="article:modified_time" content="2020-08-11T01:37:56+08:00" />
+
+<meta itemprop="name" content="增量ETL (长周期指标) 优化方案">
+<meta itemprop="description" content="​ 在日常数据处理过程中避免不了要计算跨长周期数据指标统计需求，常见三种场景抽象如下： pv类： 统计每个城市(过去30天)用户浏览次数； 统计每个"><meta itemprop="datePublished" content="2020-08-11T01:37:56+08:00" />
+<meta itemprop="dateModified" content="2020-08-11T01:37:56+08:00" />
+<meta itemprop="wordCount" content="1577">
+<meta itemprop="keywords" content="ETL,数据仓库&#34;," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="增量ETL (长周期指标) 优化方案"/>
+<meta name="twitter:description" content="​ 在日常数据处理过程中避免不了要计算跨长周期数据指标统计需求，常见三种场景抽象如下： pv类： 统计每个城市(过去30天)用户浏览次数； 统计每个"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">ChavinKing</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于我</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">ChavinKing</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于我</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">增量ETL (长周期指标) 优化方案</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-08-11 01:37 </span>
+        <div class="post-category">
+            <a href="/categories/SQL/"> SQL </a>
+            </div>
+          <span class="more-meta"> 约 1577 字 </span>
+          <span class="more-meta"> 预计阅读 4 分钟 </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#场景1统计过去30天本年历史至今用户浏览次数">场景1：统计(过去30天|本年|历史至今)用户浏览次数？</a></li>
+    <li><a href="#场景2统计每个城市过去30天本年历史至今交易用户数">场景2：统计每个城市(过去30天|本年|历史至今)交易用户数?</a></li>
+    <li><a href="#场景3数据集部分数据行存在状态变化数据指标需求">场景3：数据集<strong>部分数据行存在状态变化数据</strong>指标需求</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <hr>
+<p>​	在日常数据处理过程中避免不了要计算跨长周期数据指标统计需求，常见三种场景抽象如下：</p>
+<ul>
+<li>
+<p>pv类：</p>
+<ul>
+<li>统计每个城市(过去30天)用户浏览次数；</li>
+<li>统计每个城市(本年)用户浏览次数；</li>
+<li>统计每个城市(历史至今)用户浏览次数；</li>
+</ul>
+</li>
+<li>
+<p>uv类：</p>
+<ul>
+<li>统计每个城市(过去30天)交易用户数；</li>
+<li>统计每个城市(本年)交易用户数；</li>
+<li>统计每个城市(历史至今)交易用户数；</li>
+</ul>
+</li>
+<li>
+<p>数据集<strong>小部分</strong>数据行存在<strong>状态变化</strong>数据指标ETL场景。</p>
+</li>
+</ul>
+<p>​    通常面对以上数据指标需求，最大的问题是跨长周期数据量往往是巨大的或者数据周期范围不固定。下面依次求解：</p>
+<hr>
+<h2 id="场景1统计过去30天本年历史至今用户浏览次数">场景1：统计(过去30天|本年|历史至今)用户浏览次数？</h2>
+<p>​    常规解决方案如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="n">city_id</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">city_id</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">pv</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">events</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">p_date</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">date_add</span><span class="p">(</span><span class="k">current_date</span><span class="p">(),</span><span class="o">-</span><span class="mi">31</span><span class="p">)</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">and</span><span class="w"> </span><span class="n">p_date</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">date_add</span><span class="p">(</span><span class="k">current_date</span><span class="p">(),</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">group</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">city_id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>​    这里解法面临的问题，过去30天埋点事件数据量巨大，服务器无法承受且此简单SQL运行时间太长。</p>
+<p>解决思路：</p>
+<p>​    通过构建增量更新的中间表，降低结果SQL扫描数据量，从而优化任务的执行时间和资源消耗问题。</p>
+<p>1、 设计中间表</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">e_city_day_indi</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">city_id</span><span class="w">   </span><span class="nb">bigint</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">pv</span><span class="w">        </span><span class="nb">int</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">)</span><span class="n">partitioned</span><span class="w"> </span><span class="k">by</span><span class="p">(</span><span class="n">p_date</span><span class="w"> </span><span class="n">string</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">stored</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">parquet</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>​    e_city_day_indi有两种加载方法，我分别称其为<strong>日增量更新</strong>方法和<strong>循环迭代更新</strong>方法，用于方便后续问题描述。</p>
+<ul>
+<li>
+<p>​	日增量更新：每天汇总当天数据计算出每个城市PV，并且存储到当天日期分区；</p>
+<ul>
+<li>优点 - 更通用；</li>
+<li>缺点 - 不能完全避免多分区扫描，且可能造成小文件过多。</li>
+</ul>
+</li>
+<li>
+<p>​	循环迭代更新：每天新增数据和前一天快照数据做合并，并且将结果存储到当天日期分区。</p>
+<ul>
+<li>优点 - 应用端仅扫描最新分区即可满足需求；</li>
+<li>缺点 - 应用面较窄，部分长周期需求无法满足。</li>
+</ul>
+</li>
+</ul>
+<p>2、 ETL实现</p>
+<ul>
+<li>
+<p>日增量更新:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">insert</span><span class="w"> </span><span class="n">overwrite</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">e_city_day_indi</span><span class="w"> </span><span class="n">partition</span><span class="p">(</span><span class="n">p_date</span><span class="p">)</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="n">city_id</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">city_id</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">pv</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="n">date_add</span><span class="p">(</span><span class="k">current_date</span><span class="p">(),</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">p_date</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">events</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">p_date</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">date_add</span><span class="p">(</span><span class="k">current_date</span><span class="p">(),</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">group</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">city_id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>循环迭代更新:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">insert</span><span class="w"> </span><span class="n">overwrite</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">e_city_day_indi</span><span class="w"> </span><span class="n">partition</span><span class="p">(</span><span class="n">p_date</span><span class="p">)</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="n">city_id</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="k">sum</span><span class="p">(</span><span class="n">pv</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">pv</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="n">date_add</span><span class="p">(</span><span class="k">current_date</span><span class="p">(),</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">p_date</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">select</span><span class="w"> </span><span class="c1">-- 当日新增 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">     </span><span class="n">city_id</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">city_id</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span><span class="k">count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">pv</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">from</span><span class="w"> </span><span class="n">events</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">where</span><span class="w"> </span><span class="n">p_date</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">date_add</span><span class="p">(</span><span class="k">current_date</span><span class="p">(),</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">group</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">city_id</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">union</span><span class="w"> </span><span class="k">all</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">select</span><span class="w"> </span><span class="c1">-- 截止昨日的全量 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">     </span><span class="n">city_id</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span><span class="n">pv</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">from</span><span class="w"> </span><span class="n">e_city_day_indi</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">where</span><span class="w"> </span><span class="n">p_date</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">date_add</span><span class="p">(</span><span class="k">current_date</span><span class="p">(),</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">)</span><span class="w"> </span><span class="n">t</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">group</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">city_id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<p>3、 优化后取数逻辑</p>
+<ul>
+<li>
+<p>日增量更新取数SQL</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="n">city_id</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="k">sum</span><span class="p">(</span><span class="n">pv</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">pv</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">e_city_day_indi</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">p_date</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">date_add</span><span class="p">(</span><span class="k">current_date</span><span class="p">(),</span><span class="o">-</span><span class="mi">31</span><span class="p">)</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">and</span><span class="w"> </span><span class="n">p_date</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">date_add</span><span class="p">(</span><span class="k">current_date</span><span class="p">(),</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">group</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">city_id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>循环迭代更新取数SQL</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="n">city_id</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="n">pv</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">e_city_day_indi</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">pdate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">date_add</span><span class="p">(</span><span class="k">current_date</span><span class="p">(),</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<p>​    以上两种增量加载方法可以满足问题1需求，同时降低了加工数据量。</p>
+<hr>
+<h2 id="场景2统计每个城市过去30天本年历史至今交易用户数">场景2：统计每个城市(过去30天|本年|历史至今)交易用户数?</h2>
+<p>​     常规解决方案如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="n">city_id</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="k">distinct</span><span class="w"> </span><span class="n">user_id</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">uv</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">events</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">p_date</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">date_add</span><span class="p">(</span><span class="k">current_date</span><span class="p">(),</span><span class="o">-</span><span class="mi">31</span><span class="p">)</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">and</span><span class="w"> </span><span class="n">p_date</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">date_add</span><span class="p">(</span><span class="k">current_date</span><span class="p">(),</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">group</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">city_id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>​    典型count distinct类型需求，面临的问题，过去30天埋点事件数据量巨大，服务器无法承受且此简单SQL运行时间太长。</p>
+<p>解决思路：</p>
+<p>​    通过构建增量更新的中间表，降低结果SQL扫描数据量，从而优化任务的执行时间和资源消耗问题。</p>
+<p>1、 设计中间表</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">e_city_day_indi</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">city_id</span><span class="w">   </span><span class="nb">bigint</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">user_id</span><span class="w">   </span><span class="nb">bigint</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">pv</span><span class="w">     </span><span class="nb">int</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">)</span><span class="w"> </span><span class="n">partitioned</span><span class="w"> </span><span class="k">by</span><span class="p">(</span><span class="n">p_date</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">stored</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">parquet</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>​    e_city_day_indi数据加载方法在这里仅介绍日增量更新方法。</p>
+<p>2、ETL实现</p>
+<ul>
+<li>
+<p>日增量更新</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">insert</span><span class="w"> </span><span class="n">overwrite</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">e_city_day_indi</span><span class="w"> </span><span class="n">partition</span><span class="p">(</span><span class="n">p_date</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="n">city_id</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="n">user_id</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">pv</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="n">date_add</span><span class="p">(</span><span class="k">current_date</span><span class="p">(),</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">p_date</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">events</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">p_date</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">date_add</span><span class="p">(</span><span class="k">current_date</span><span class="p">(),</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">group</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">city_id</span><span class="p">,</span><span class="n">user_id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<p>3、优化后取数逻辑</p>
+<ul>
+<li>
+<p>日增量更新</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="n">city_id</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="k">distinct</span><span class="w"> </span><span class="n">user_id</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">uv</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> </span><span class="k">sum</span><span class="p">(</span><span class="n">pv</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">pv</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">e_city_day_indi</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">p_date</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">date_add</span><span class="p">(</span><span class="k">current_date</span><span class="p">(),</span><span class="o">-</span><span class="mi">31</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">and</span><span class="w"> </span><span class="n">p_date</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">date_add</span><span class="p">(</span><span class="k">current_date</span><span class="p">(),</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">group</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">city_id</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<hr>
+<h2 id="场景3数据集部分数据行存在状态变化数据指标需求">场景3：数据集<strong>部分数据行存在状态变化数据</strong>指标需求</h2>
+<p>​    这种需求场景比较特殊，场景是针对全量数据做update操作，<strong>一般性问题是全表数据量较大，但是需要update数据量较小</strong>，且基于hive解决方案，update是较难以处理的场景。</p>
+<p>​    解决思路：<strong>将变化数据和明确不变数据做分离（能否合理做数据热度分离是关键）</strong>。具体实施细节是设计分区表，将少量变化数据存储一个分区，将大量不变数据存储在另一个分区，限制历史存在<strong>更新可能性</strong>的数据存储在活跃分区，而<strong>不具备更新场景的数据</strong>存储在归档分区。</p>
+<p>​    实施方案：</p>
+<ul>
+<li>
+<p>设计目标表两个分区（或者日期分区下设计二级分区）</p>
+<ul>
+<li>活跃分区（例如：p_date = ? and <strong>is_active = true</strong>）：用来存储生命周期未结束且可能存在update操作的数据。</li>
+<li>非活跃分区（（例如：p_date = ? and <strong>is_active = false</strong>）：用来存储明确生命周期结束数据。</li>
+</ul>
+</li>
+<li>
+<p>设计日期分区：以生命周期结束日期（end_date）作为分区键</p>
+<ul>
+<li>历史日期分区（end_date &lt;= current_date()）存储生命周期结束的数据行；</li>
+<li>未来日期分区（end_date = &lsquo;9999-12-31&rsquo;）存储生命周期尚未结束的数据行。</li>
+</ul>
+</li>
+</ul>
+<p>​</p>
+<p>​	以上3种典型场景是做数据开发过程中较基础也是比较常见的增量ETL开发场景，使用合适的方法处理问题可以大大减少资源消耗同时可以有效降低执行时间。</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">ChavinKing</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-08-11 01:37
+        
+    </span>
+  </p>
+  
+  
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">赞赏支持</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wx.png">
+        <span>微信打赏</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/zfb.png">
+        <span>支付宝打赏</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/ETL/">ETL</a>
+          <a href="/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/">数据仓库&#34;</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/sql/%E5%9F%BA%E4%BA%8EPGSQL%E5%B7%A6%E8%BF%9E%E6%8E%A5SQL%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92%E8%A7%A3%E6%9E%90/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">基于PGSQL左连接SQL执行计划解析</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="http://www.cnblogs.com/wcwen1990" class="iconfont icon-cnblogs" title="cnblogs"></a>
+      <a href="mailto:chavinking1990@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/chavinking" class="iconfont icon-github" title="github"></a>
+  <a href="https://chavinking.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2020 - 
+    2022
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">ChavinKing</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.30dad356188cdaba5047112eaa8bf5e85cb14ae7e803337403591fce94a531a0.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-138883536-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

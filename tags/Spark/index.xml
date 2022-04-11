@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Spark on ChavinKing</title>
+    <link>https://chavinking.github.io/tags/Spark/</link>
+    <description>Recent content in Spark on ChavinKing</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Tue, 11 Aug 2020 01:37:56 +0800</lastBuildDate><atom:link href="https://chavinking.github.io/tags/Spark/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Spark核心算子</title>
+      <link>https://chavinking.github.io/post/java/Spark%E6%A0%B8%E5%BF%83%E7%AE%97%E5%AD%90/</link>
+      <pubDate>Tue, 11 Aug 2020 01:37:56 +0800</pubDate>
+      
+      <guid>https://chavinking.github.io/post/java/Spark%E6%A0%B8%E5%BF%83%E7%AE%97%E5%AD%90/</guid>
+      <description>Spark RDD： Transformation Meaning map(func) 返回一个新的分布式数据集，该数据集是通过将源的每个元素传递给函数func处理形成的。 filter(func) 返回一个新的数据集，该数据集是通过fu</description>
+    </item>
+    
+  </channel>
+</rss>
