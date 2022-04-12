@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="ChavinKing" /><meta name="description" content="​ 在日常数据处理过程中避免不了要计算跨长周期数据指标统计需求，常见三种场景抽象如下： pv类： 统计每个城市(过去30天)用户浏览次数； 统计每个" /><meta name="keywords" content="data warehouse, Github, flink, java, spark, ETL" />
+<meta name="author" content="ChavinKing" /><meta name="description" content="一 背景 ​ 在日常数据处理过程中避免不了要计算跨长周期数据指标统计需求，常见三种场景抽象如下： pv类： 统计每个城市(过去30天)用户浏览次数； 统" /><meta name="keywords" content="data warehouse, Github, flink, java, spark, ETL" />
 
 
 
@@ -41,19 +41,19 @@
 
 
 <meta property="og:title" content="增量ETL (长周期指标) 优化方案" />
-<meta property="og:description" content="​ 在日常数据处理过程中避免不了要计算跨长周期数据指标统计需求，常见三种场景抽象如下： pv类： 统计每个城市(过去30天)用户浏览次数； 统计每个" />
+<meta property="og:description" content="一 背景 ​ 在日常数据处理过程中避免不了要计算跨长周期数据指标统计需求，常见三种场景抽象如下： pv类： 统计每个城市(过去30天)用户浏览次数； 统" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://chavinking.github.io/post/dw/%E5%A2%9E%E9%87%8FETL-%E9%95%BF%E5%91%A8%E6%9C%9F%E6%8C%87%E6%A0%87-%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2020-08-11T01:37:56+08:00" />
 <meta property="article:modified_time" content="2020-08-11T01:37:56+08:00" />
 
 <meta itemprop="name" content="增量ETL (长周期指标) 优化方案">
-<meta itemprop="description" content="​ 在日常数据处理过程中避免不了要计算跨长周期数据指标统计需求，常见三种场景抽象如下： pv类： 统计每个城市(过去30天)用户浏览次数； 统计每个"><meta itemprop="datePublished" content="2020-08-11T01:37:56+08:00" />
+<meta itemprop="description" content="一 背景 ​ 在日常数据处理过程中避免不了要计算跨长周期数据指标统计需求，常见三种场景抽象如下： pv类： 统计每个城市(过去30天)用户浏览次数； 统"><meta itemprop="datePublished" content="2020-08-11T01:37:56+08:00" />
 <meta itemprop="dateModified" content="2020-08-11T01:37:56+08:00" />
-<meta itemprop="wordCount" content="1577">
+<meta itemprop="wordCount" content="1583">
 <meta itemprop="keywords" content="ETL,数据仓库&#34;," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="增量ETL (长周期指标) 优化方案"/>
-<meta name="twitter:description" content="​ 在日常数据处理过程中避免不了要计算跨长周期数据指标统计需求，常见三种场景抽象如下： pv类： 统计每个城市(过去30天)用户浏览次数； 统计每个"/>
+<meta name="twitter:description" content="一 背景 ​ 在日常数据处理过程中避免不了要计算跨长周期数据指标统计需求，常见三种场景抽象如下： pv类： 统计每个城市(过去30天)用户浏览次数； 统"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -127,7 +127,7 @@
         <div class="post-category">
             <a href="/categories/SQL/"> SQL </a>
             </div>
-          <span class="more-meta"> 约 1577 字 </span>
+          <span class="more-meta"> 约 1583 字 </span>
           <span class="more-meta"> 预计阅读 4 分钟 </span>
         <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
       </div>
@@ -138,15 +138,21 @@
   <div class="post-toc-content">
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#场景1统计过去30天本年历史至今用户浏览次数">场景1：统计(过去30天|本年|历史至今)用户浏览次数？</a></li>
-    <li><a href="#场景2统计每个城市过去30天本年历史至今交易用户数">场景2：统计每个城市(过去30天|本年|历史至今)交易用户数?</a></li>
-    <li><a href="#场景3数据集部分数据行存在状态变化数据指标需求">场景3：数据集<strong>部分数据行存在状态变化数据</strong>指标需求</a></li>
+    <li><a href="#一-背景">一 背景</a></li>
+    <li><a href="#二-案例">二 案例</a>
+      <ul>
+        <li><a href="#场景1统计过去30天本年历史至今用户浏览次数">场景1：统计(过去30天|本年|历史至今)用户浏览次数？</a></li>
+        <li><a href="#场景2统计每个城市过去30天本年历史至今交易用户数">场景2：统计每个城市(过去30天|本年|历史至今)交易用户数?</a></li>
+        <li><a href="#场景3数据集部分数据行存在状态变化数据指标需求">场景3：数据集<strong>部分数据行存在状态变化数据</strong>指标需求</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
       <hr>
+<h2 id="一-背景">一 背景</h2>
 <p>​	在日常数据处理过程中避免不了要计算跨长周期数据指标统计需求，常见三种场景抽象如下：</p>
 <ul>
 <li>
@@ -170,8 +176,8 @@
 </li>
 </ul>
 <p>​    通常面对以上数据指标需求，最大的问题是跨长周期数据量往往是巨大的或者数据周期范围不固定。下面依次求解：</p>
-<hr>
-<h2 id="场景1统计过去30天本年历史至今用户浏览次数">场景1：统计(过去30天|本年|历史至今)用户浏览次数？</h2>
+<h2 id="二-案例">二 案例</h2>
+<h3 id="场景1统计过去30天本年历史至今用户浏览次数">场景1：统计(过去30天|本年|历史至今)用户浏览次数？</h3>
 <p>​    常规解决方案如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -369,8 +375,7 @@
 </div></li>
 </ul>
 <p>​    以上两种增量加载方法可以满足问题1需求，同时降低了加工数据量。</p>
-<hr>
-<h2 id="场景2统计每个城市过去30天本年历史至今交易用户数">场景2：统计每个城市(过去30天|本年|历史至今)交易用户数?</h2>
+<h3 id="场景2统计每个城市过去30天本年历史至今交易用户数">场景2：统计每个城市(过去30天|本年|历史至今)交易用户数?</h3>
 <p>​     常规解决方案如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -481,8 +486,7 @@
 </div>
 </div></li>
 </ul>
-<hr>
-<h2 id="场景3数据集部分数据行存在状态变化数据指标需求">场景3：数据集<strong>部分数据行存在状态变化数据</strong>指标需求</h2>
+<h3 id="场景3数据集部分数据行存在状态变化数据指标需求">场景3：数据集<strong>部分数据行存在状态变化数据</strong>指标需求</h3>
 <p>​    这种需求场景比较特殊，场景是针对全量数据做update操作，<strong>一般性问题是全表数据量较大，但是需要update数据量较小</strong>，且基于hive解决方案，update是较难以处理的场景。</p>
 <p>​    解决思路：<strong>将变化数据和明确不变数据做分离（能否合理做数据热度分离是关键）</strong>。具体实施细节是设计分区表，将少量变化数据存储一个分区，将大量不变数据存储在另一个分区，限制历史存在<strong>更新可能性</strong>的数据存储在活跃分区，而<strong>不具备更新场景的数据</strong>存储在归档分区。</p>
 <p>​    实施方案：</p>
@@ -547,7 +551,11 @@
             <span class="prev-text nav-default">基于PGSQL左连接SQL执行计划解析</span>
             <span class="prev-text nav-mobile">上一篇</span>
           </a>
-        
+        <a class="next" href="/post/other/%E5%9F%BA%E4%BA%8EMacM1%E5%A4%84%E7%90%86%E5%99%A8%E7%9A%84github%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/">
+            <span class="next-text nav-default">基于Mac M1处理器的github博客搭建</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
       </nav>
     </footer>
   </article>

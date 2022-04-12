@@ -17,15 +17,6 @@
     </item>
     
     <item>
-      <title>Other</title>
-      <link>https://chavinking.github.io/categories/Other/</link>
-      <pubDate>Tue, 11 Aug 2020 01:37:56 +0800</pubDate>
-      
-      <guid>https://chavinking.github.io/categories/Other/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Spark</title>
       <link>https://chavinking.github.io/categories/Spark/</link>
       <pubDate>Tue, 11 Aug 2020 01:37:56 +0800</pubDate>
@@ -40,6 +31,15 @@
       <pubDate>Tue, 11 Aug 2020 01:37:56 +0800</pubDate>
       
       <guid>https://chavinking.github.io/categories/SQL/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Other</title>
+      <link>https://chavinking.github.io/categories/Other/</link>
+      <pubDate>Tue, 10 Apr 2018 01:37:56 +0800</pubDate>
+      
+      <guid>https://chavinking.github.io/categories/Other/</guid>
       <description></description>
     </item>
     

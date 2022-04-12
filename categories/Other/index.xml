@@ -6,14 +6,14 @@
     <description>Recent content in Other on ChavinKing</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Tue, 11 Aug 2020 01:37:56 +0800</lastBuildDate><atom:link href="https://chavinking.github.io/categories/Other/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 10 Apr 2018 01:37:56 +0800</lastBuildDate><atom:link href="https://chavinking.github.io/categories/Other/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>基于MacM1处理器的github博客搭建</title>
+      <title>基于Mac M1处理器的github博客搭建</title>
       <link>https://chavinking.github.io/post/other/%E5%9F%BA%E4%BA%8EMacM1%E5%A4%84%E7%90%86%E5%99%A8%E7%9A%84github%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</link>
-      <pubDate>Tue, 11 Aug 2020 01:37:56 +0800</pubDate>
+      <pubDate>Tue, 10 Apr 2018 01:37:56 +0800</pubDate>
       
       <guid>https://chavinking.github.io/post/other/%E5%9F%BA%E4%BA%8EMacM1%E5%A4%84%E7%90%86%E5%99%A8%E7%9A%84github%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</guid>
-      <description>1 hugo下载 https://github.com/gohugoio/hugo/releases 2 hugo安装 解压文件后将hugo移动到制定目录/opt/script/run/hugo,同时配置环境变量export PATH=&amp;quot;/opt/script/run:$PATH&amp;quot; 3 测</description>
+      <description>1 hugo下载 1 https://github.com/gohugoio/hugo/releases 2 hugo安装 1 2 3 4 解压文件后将hugo移动到制定目录,如下： /opt/script/run/hugo 同时配置环境变量,如下： export PATH=&amp;#34;/opt/script/run:$PATH&amp;#34; 3 测试安装成功： 1 hugo version 4 建站</description>
     </item>
     
   </channel>
