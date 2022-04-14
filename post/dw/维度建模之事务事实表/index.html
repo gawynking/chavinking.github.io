@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>数据仓库 · ChavinKing</title>
+  <title>维度建模之事务事实表 - ChavinKing</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="ChavinKing" /><meta name="description" content="ChavinKing&#39;s Blog" /><meta name="keywords" content="data warehouse, Github, flink, java, spark, ETL" />
+<meta name="author" content="ChavinKing" /><meta name="description" content="一 概念" /><meta name="keywords" content="data warehouse, Github, flink, java, spark, ETL" />
 
 
 
@@ -26,9 +26,7 @@
 <meta name="generator" content="Hugo 0.96.0 with theme even" />
 
 
-<link rel="canonical" href="https://chavinking.github.io/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/" />
-  <link href="https://chavinking.github.io/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/index.xml" rel="alternate" type="application/rss+xml" title="ChavinKing" />
-  <link href="https://chavinking.github.io/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/index.xml" rel="feed" type="application/rss+xml" title="ChavinKing" />
+<link rel="canonical" href="https://chavinking.github.io/post/dw/%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E4%B9%8B%E4%BA%8B%E5%8A%A1%E4%BA%8B%E5%AE%9E%E8%A1%A8/" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -42,15 +40,20 @@
 <link rel="stylesheet" href="/css/reset-even.css">
 
 
-<meta property="og:title" content="数据仓库" />
-<meta property="og:description" content="ChavinKing&#39;s Blog" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://chavinking.github.io/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/" />
+<meta property="og:title" content="维度建模之事务事实表" />
+<meta property="og:description" content="一 概念" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://chavinking.github.io/post/dw/%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E4%B9%8B%E4%BA%8B%E5%8A%A1%E4%BA%8B%E5%AE%9E%E8%A1%A8/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2022-04-11T01:37:56+08:00" />
+<meta property="article:modified_time" content="2022-04-11T01:37:56+08:00" />
 
-<meta itemprop="name" content="数据仓库">
-<meta itemprop="description" content="ChavinKing&#39;s Blog"><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="数据仓库"/>
-<meta name="twitter:description" content="ChavinKing&#39;s Blog"/>
+<meta itemprop="name" content="维度建模之事务事实表">
+<meta itemprop="description" content="一 概念"><meta itemprop="datePublished" content="2022-04-11T01:37:56+08:00" />
+<meta itemprop="dateModified" content="2022-04-11T01:37:56+08:00" />
+<meta itemprop="wordCount" content="3">
+<meta itemprop="keywords" content="ETL,数据仓库," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="维度建模之事务事实表"/>
+<meta name="twitter:description" content="一 概念"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -114,56 +117,92 @@
     <main id="main" class="main">
       <div class="content-wrapper">
         <div id="content" class="content">
-          <section id="archive" class="archive">
-  <div class="archive-title tag">
-        <h2 class="archive-name">数据仓库</h2>
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">维度建模之事务事实表</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2022-04-11 01:37 </span>
+        <div class="post-category">
+            <a href="/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"> 数据仓库 </a>
+            </div>
+          <span class="more-meta"> 约 3 字 </span>
+          <span class="more-meta"> 预计阅读 1 分钟 </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
       </div>
+    </header>
 
-  <div class="archive-post">
-      <span class="archive-post-time">
-        2022-04-11 01:37
-      </span>
-      <span class="archive-post-title">
-        <a href="/post/dw/%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E4%B9%8B%E4%BA%8B%E5%8A%A1%E4%BA%8B%E5%AE%9E%E8%A1%A8/" class="archive-post-link">
-          维度建模之事务事实表
-        </a>
-      </span>
-    </div><div class="archive-post">
-      <span class="archive-post-time">
-        2022-04-11 01:37
-      </span>
-      <span class="archive-post-title">
-        <a href="/post/dw/%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E4%B9%8B%E4%B8%9A%E5%8A%A1%E8%BF%87%E7%A8%8B/" class="archive-post-link">
-          维度建模之业务过程
-        </a>
-      </span>
-    </div><div class="archive-post">
-      <span class="archive-post-time">
-        2022-04-11 01:37
-      </span>
-      <span class="archive-post-title">
-        <a href="/post/dw/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E4%B9%8B%E5%86%8D%E8%AE%BA%E5%AE%BD%E8%A1%A8%E5%BB%BA%E6%A8%A1/" class="archive-post-link">
-          数据仓库之宽表建模
-        </a>
-      </span>
-    </div><div class="archive-post">
-      <span class="archive-post-time">
-        2020-08-11 01:37
-      </span>
-      <span class="archive-post-title">
-        <a href="/post/dw/%E5%A2%9E%E9%87%8FETL-%E9%95%BF%E5%91%A8%E6%9C%9F%E6%8C%87%E6%A0%87-%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88/" class="archive-post-link">
-          增量ETL (长周期指标) 优化方案
-        </a>
-      </span>
-    </div>
-</section>
-
-<nav class="pagination">
-  
-  
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#一-概念">一 概念</a></li>
+  </ul>
 </nav>
+  </div>
+</div>
+    <div class="post-content">
+      <hr>
+<h2 id="一-概念">一 概念</h2>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">ChavinKing</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2022-04-11 01:37
+        
+    </span>
+  </p>
+  
+  
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">赞赏支持</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wx.png">
+        <span>微信打赏</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/zfb.png">
+        <span>支付宝打赏</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/ETL/">ETL</a>
+          <a href="/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/">数据仓库</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/dw/%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E4%B9%8B%E4%B8%9A%E5%8A%A1%E8%BF%87%E7%A8%8B/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">维度建模之业务过程</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/java/Thinking-in-Java/">
+            <span class="next-text nav-default">Java编程思想-知识整理-思维导图</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
         </div>
         
+
+  
+
+  
 
       </div>
     </main>

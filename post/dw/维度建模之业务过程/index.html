@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>维度建模之业务过程 - ChavinKing</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="ChavinKing" /><meta name="description" content="在维度建模理论中&amp;quot;业务过程&amp;quot;是模型设计的一个非常重要的概念，它是事实表设计的动力源泉，在业务过程概念之下才衍生出了各种事" /><meta name="keywords" content="data warehouse, Github, flink, java, spark, ETL" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.96.0 with theme even" />
+
+
+<link rel="canonical" href="https://chavinking.github.io/post/dw/%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E4%B9%8B%E4%B8%9A%E5%8A%A1%E8%BF%87%E7%A8%8B/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<link href="/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/reset-even.css">
+
+
+<meta property="og:title" content="维度建模之业务过程" />
+<meta property="og:description" content="在维度建模理论中&quot;业务过程&quot;是模型设计的一个非常重要的概念，它是事实表设计的动力源泉，在业务过程概念之下才衍生出了各种事" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://chavinking.github.io/post/dw/%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E4%B9%8B%E4%B8%9A%E5%8A%A1%E8%BF%87%E7%A8%8B/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2022-04-11T01:37:56+08:00" />
+<meta property="article:modified_time" content="2022-04-11T01:37:56+08:00" />
+
+<meta itemprop="name" content="维度建模之业务过程">
+<meta itemprop="description" content="在维度建模理论中&quot;业务过程&quot;是模型设计的一个非常重要的概念，它是事实表设计的动力源泉，在业务过程概念之下才衍生出了各种事"><meta itemprop="datePublished" content="2022-04-11T01:37:56+08:00" />
+<meta itemprop="dateModified" content="2022-04-11T01:37:56+08:00" />
+<meta itemprop="wordCount" content="1789">
+<meta itemprop="keywords" content="ETL,数据仓库," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="维度建模之业务过程"/>
+<meta name="twitter:description" content="在维度建模理论中&quot;业务过程&quot;是模型设计的一个非常重要的概念，它是事实表设计的动力源泉，在业务过程概念之下才衍生出了各种事"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">ChavinKing</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于我</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">ChavinKing</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于我</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">维度建模之业务过程</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2022-04-11 01:37 </span>
+        <div class="post-category">
+            <a href="/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"> 数据仓库 </a>
+            </div>
+          <span class="more-meta"> 约 1789 字 </span>
+          <span class="more-meta"> 预计阅读 4 分钟 </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-定义">1 定义</a></li>
+    <li><a href="#2-理解">2 理解</a></li>
+    <li><a href="#3-再来理解维度建模">3 再来理解维度建模</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <hr>
+<p>在维度建模理论中&quot;业务过程&quot;是模型设计的一个非常重要的概念，它是事实表设计的动力源泉，在业务过程概念之下才衍生出了各种事实表的设计方法论。那么什么是业务过程呢？笔者在这里针对这个问题做个简单的概述，希望可以对为之困扰或者刚入行的同学有帮助。</p>
+<h2 id="1-定义">1 定义</h2>
+<p>我们先来看一下业务过程的定义（以下定义来自维基百科）：</p>
+<p>在现代管理学或组织的经营管理领域，业务过程不是一个普通词组，它被赋予了更确定的含义，专指为特定的对象（客户）创造价值的过程；具体地说，就是达成这一目标的一系列相互关联、有组织的活动或任务。这一特定含义的确立，源自20世纪90年代从美国兴起的业务过程再造（BPR）。</p>
+<p>数据仓库中业务过程概念更倾向于企业运作过程 &ndash; 构成核心业务和创造基本价值的过程。典型的运作过程例如采购、制造、市场营销、销售。</p>
+<h2 id="2-理解">2 理解</h2>
+<p>什么是业务过程？看了章节1的定义后是否能真正理解业务过程的含义，相信到这里大部分人对业务过程的理解还是很迷茫的，这个问题在笔者多年的数据仓库架构生涯中，在与无数数仓从业人员交流中可以察觉到，不同的人对业务过程的理解差异还是比较大的。并且，相对理解比较好的大部分都在头部互联网大厂。</p>
+<p>另外需要提及的一点是，目前市面上关于数据仓库的书籍，大部分情况下都对这个最基本的概念一笔带过，这对于有经验的数据工程师来说还好，对于没有数仓设计经验的同学来说就会加重后续的学习负担，这也是为什么今天可以在这里要针对这个基本概念进行说明的主要原因。废话不多说，下面我尽量用直观的方法来讲述这个概念。</p>
+<ul>
+<li>业务流程与业务过程的关系</li>
+</ul>
+<p>在真正探讨业务过程之前我们先引进另一个概念-业务流程，对业务流程的理解也是困扰数仓设计入门同学的一个问题原因，因为市面比较常见的数据仓库著作（比如著名的《数据仓库工具箱》中对这两个概念的描述都比较隐晦）中并没有准确提及到业务流程概念，更少有资料会来解释业务流程和业务过程之间的关系了。如果不了解业务流程的概念，那么对业务过程的理解也不会深刻。</p>
+<p>业务流程简单理解成为了完成业务目标而分别需要共同完成的一系列动作的序列，这里用“序列”是因为业务流程一般来说都有着严格的先后顺序限定。而业务过程可以理解为业务流程中的一个个具体的有业务价值的关键动作。</p>
+<p>比如订单的主要业务流程主要是：选品-加购物车-下单-付款-配送-完单等，那么其中每一个关键步骤都可以定义为业务过程，比如选品过程、加购过程、下单过程、付款过程、订单完结过程等，其中物流又有独立的配送流程，基于配送流程又可以定义多个用于描述物流业务的业务过程。</p>
+<p>总而言之，在数据仓库领域，我们可以简单的理解为业务过程从属于业务流程中的一系列关键动作，而大名鼎鼎的“维度建模”就是针对业务过程进行模型设计的一种建仓方法论，通过对关键业务过程建模来还原企业真实的业务流程关系，从而实现数据仓库目标之一“还原企业的真实业务场景”的目的。</p>
+<h2 id="3-再来理解维度建模">3 再来理解维度建模</h2>
+<p>到这里，相信聪明的同学已经对业务流程和业务过程这两个基本概念有了较为清晰的认识。在了解了业务过程这个核心概念之后我们可以再来讨论维度建模的本质。所谓的建模无非是用来描述现实世界的符号化表示的过程，而维度建模可以理解为针对业务过程建模的过程，从而实现还原业务场景的目标。</p>
+<p>比如还是以订单业务为例，上文中我们已经知道了订单的业务流程：选品-加购物车-下单-付款-配送-完单。那么如何对订单业务进行数仓建模呢？当然这里只同步各位同学我们要建设哪些数据仓库的表，而不会纠结于表结构的设计。针对这个过程我们需要做如下工作：</p>
+<ul>
+<li>针对选品过程，设计选品行为表；</li>
+<li>针对加购过程，设计加购行为表；</li>
+<li>针对下单过程，设计下单事务表；</li>
+<li>针对付款过程，设计支付事务表；</li>
+<li>针对配送流程，我们还需要设计一系列的配送过程表；</li>
+<li>针对完单过程，设计完单事务表；</li>
+<li>针对退款过程，设计退款事务表；</li>
+</ul>
+<p>通过对关键业务过程设计独立模型的方式，从而让我们实现了数据仓库建模的过程，上述设计过程也能更好的描述订单业务，如果上述模型均已设计好，我们可以实现订单业务下的各种不同分析需求了。</p>
+<p>至此，我们的订单业务的数仓建模工作已经完成，下面是笔者在工作中对今天这个主题的一点个人理解。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">- 所谓维度建模既是面向业务过程建模；
+</span></span><span class="line"><span class="cl">- 所谓维度指的既是业务过程所处的环境信息；
+</span></span><span class="line"><span class="cl">- 所谓事实指的既是业务过程的度量；
+</span></span><span class="line"><span class="cl">- 所谓的事实表设计指的既是对业务过程建模的方法论；
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">ChavinKing</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2022-04-11 01:37
+        
+    </span>
+  </p>
+  
+  
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">赞赏支持</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wx.png">
+        <span>微信打赏</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/zfb.png">
+        <span>支付宝打赏</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/ETL/">ETL</a>
+          <a href="/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/">数据仓库</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/dw/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E4%B9%8B%E5%86%8D%E8%AE%BA%E5%AE%BD%E8%A1%A8%E5%BB%BA%E6%A8%A1/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">数据仓库之宽表建模</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/dw/%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E4%B9%8B%E4%BA%8B%E5%8A%A1%E4%BA%8B%E5%AE%9E%E8%A1%A8/">
+            <span class="next-text nav-default">维度建模之事务事实表</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="http://www.cnblogs.com/wcwen1990" class="iconfont icon-cnblogs" title="cnblogs"></a>
+      <a href="mailto:chavinking1990@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/chavinking" class="iconfont icon-github" title="github"></a>
+  <a href="https://chavinking.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2020 - 
+    2022
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">ChavinKing</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.30dad356188cdaba5047112eaa8bf5e85cb14ae7e803337403591fce94a531a0.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-138883536-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

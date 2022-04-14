@@ -431,7 +431,7 @@
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">1) 全表扫描左表employee，同时根据employee表子查询条件(sal &gt;= &#39;1000&#39;::numeric)和where过滤条件(job)::text = &#39;MANAGER&#39;::text)联合过滤，即Filter: ((sal &gt;= &#39;1000&#39;::numeric) AND ((job)::text = &#39;MANAGER&#39;::text))，计算结果临时表记为tmp1;
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">1) 全表扫描左表employee，同时根据employee表子查询条件(sal &gt;= &#39;1000&#39;::numeric)和where过滤条件(job)::text = &#39;MANAGER&#39;::text)联合过滤，即Filter: ((sal &gt;= &#39;1000&#39;::numeric) AND ((job)::text = &#39;MANAGER&#39;::text))，计算结果临时表记为tmp1;
 </span></span><span class="line"><span class="cl">2) 全表扫描右表department，同时根据department表子查询条件(deptno &lt;= 30)和on子句(loc)::text = &#39;NEW YORK&#39;::text)联合过滤，即Filter: ((deptno &lt;= 30) AND ((loc)::text = &#39;NEW YORK&#39;::text))，计算结果临时表记为tmp2;
 </span></span><span class="line"><span class="cl">3) 左表employee及右表department处理后临时表tmp1和tmp2通过Join Filter: (e.deptno = d.deptno)连接条件进行Nested Loop Left Join(嵌套循环左连接)操作，左临时表结果集全量返回，右表不匹配行置为null，返回结果临时表记为tmp;
 </span></span><span class="line"><span class="cl">4) 返回结果集。
@@ -798,7 +798,7 @@
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">1) 全表扫描左表employee，同时根据employee表子查询条件(sal &gt;= &#39;1000&#39;::numeric)和where过滤条件(job)::text = &#39;MANAGER&#39;::text)联合过滤，即Filter: ((sal &gt;= &#39;1000&#39;::numeric) AND ((job)::text = &#39;MANAGER&#39;::text))，计算结果临时表记为tmp1；
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">1) 全表扫描左表employee，同时根据employee表子查询条件(sal &gt;= &#39;1000&#39;::numeric)和where过滤条件(job)::text = &#39;MANAGER&#39;::text)联合过滤，即Filter: ((sal &gt;= &#39;1000&#39;::numeric) AND ((job)::text = &#39;MANAGER&#39;::text))，计算结果临时表记为tmp1；
 </span></span><span class="line"><span class="cl">2) 全表扫描右表department，同时根据department表子查询条件(deptno &lt;= 30)和on子句过滤条件((loc)::text = &#39;NEW YORK&#39;::text)以及where子句过滤条件((dname)::text = &#39;ACCOUNTING&#39;::text)联合过滤，即Filter: ((deptno &lt;= 30) AND ((loc)::text = &#39;NEW YORK&#39;::text) AND ((dname)::text = &#39;ACCOUNTING&#39;::text))，计算结果临时表记为tmp2；
 </span></span><span class="line"><span class="cl">3) 临时表tmp1和tmp2通过Join Filter: (employee.deptno = department.deptno)连接条件进行Nested Loop（嵌套循环连接）操作（此处left join写法已经被转换为内链接），返回匹配结果临时表记为tmp3；
 </span></span><span class="line"><span class="cl">4) 返回结果集。
@@ -1112,7 +1112,7 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">- SQL join操作，应该首先保证过滤无效数据，尽量在join之前保证结果集最小化；
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">- SQL join操作，应该首先保证过滤无效数据，尽量在join之前保证结果集最小化；
 </span></span><span class="line"><span class="cl">- 连接操作过滤：
 </span></span><span class="line"><span class="cl">	- 左表 首先以 子查询 条件 以及 where 条件过滤数据 
 </span></span><span class="line"><span class="cl">	- 右表 首先以 子查询 条件 以及 on子句条件过滤数据 

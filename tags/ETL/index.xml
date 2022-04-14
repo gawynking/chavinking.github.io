@@ -6,7 +6,34 @@
     <description>Recent content in ETL on ChavinKing</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Tue, 11 Aug 2020 01:37:56 +0800</lastBuildDate><atom:link href="https://chavinking.github.io/tags/ETL/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 11 Apr 2022 01:37:56 +0800</lastBuildDate><atom:link href="https://chavinking.github.io/tags/ETL/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>数据仓库之宽表建模</title>
+      <link>https://chavinking.github.io/post/dw/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E4%B9%8B%E5%86%8D%E8%AE%BA%E5%AE%BD%E8%A1%A8%E5%BB%BA%E6%A8%A1/</link>
+      <pubDate>Mon, 11 Apr 2022 01:37:56 +0800</pubDate>
+      
+      <guid>https://chavinking.github.io/post/dw/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E4%B9%8B%E5%86%8D%E8%AE%BA%E5%AE%BD%E8%A1%A8%E5%BB%BA%E6%A8%A1/</guid>
+      <description>​ 数据仓库理论经过最近这三十年的发展，到目前为止主要有两大主流门派，范式建模和维度建模，然而随着国内大数据技术的应用普及，在国内衍生出了另外</description>
+    </item>
+    
+    <item>
+      <title>维度建模之业务过程</title>
+      <link>https://chavinking.github.io/post/dw/%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E4%B9%8B%E4%B8%9A%E5%8A%A1%E8%BF%87%E7%A8%8B/</link>
+      <pubDate>Mon, 11 Apr 2022 01:37:56 +0800</pubDate>
+      
+      <guid>https://chavinking.github.io/post/dw/%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E4%B9%8B%E4%B8%9A%E5%8A%A1%E8%BF%87%E7%A8%8B/</guid>
+      <description>在维度建模理论中&amp;quot;业务过程&amp;quot;是模型设计的一个非常重要的概念，它是事实表设计的动力源泉，在业务过程概念之下才衍生出了各种事</description>
+    </item>
+    
+    <item>
+      <title>维度建模之事务事实表</title>
+      <link>https://chavinking.github.io/post/dw/%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E4%B9%8B%E4%BA%8B%E5%8A%A1%E4%BA%8B%E5%AE%9E%E8%A1%A8/</link>
+      <pubDate>Mon, 11 Apr 2022 01:37:56 +0800</pubDate>
+      
+      <guid>https://chavinking.github.io/post/dw/%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E4%B9%8B%E4%BA%8B%E5%8A%A1%E4%BA%8B%E5%AE%9E%E8%A1%A8/</guid>
+      <description>一 概念</description>
+    </item>
+    
     <item>
       <title>增量ETL (长周期指标) 优化方案</title>
       <link>https://chavinking.github.io/post/dw/%E5%A2%9E%E9%87%8FETL-%E9%95%BF%E5%91%A8%E6%9C%9F%E6%8C%87%E6%A0%87-%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88/</link>
