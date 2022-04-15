@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="ChavinKing" /><meta name="description" content="一 概念" /><meta name="keywords" content="data warehouse, Github, flink, java, spark, ETL" />
+<meta name="author" content="ChavinKing" /><meta name="description" content="​ 事实表是维度建模的重要组成部分，其严格围绕业务过程进行设计，通过描述业务过程的度量和维度来还原业务过程场景，其中事务事实表是最基础的事实表" /><meta name="keywords" content="data warehouse, Github, flink, java, spark, ETL" />
 
 
 
@@ -41,19 +41,19 @@
 
 
 <meta property="og:title" content="维度建模之事务事实表" />
-<meta property="og:description" content="一 概念" />
+<meta property="og:description" content="​ 事实表是维度建模的重要组成部分，其严格围绕业务过程进行设计，通过描述业务过程的度量和维度来还原业务过程场景，其中事务事实表是最基础的事实表" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://chavinking.github.io/post/dw/%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E4%B9%8B%E4%BA%8B%E5%8A%A1%E4%BA%8B%E5%AE%9E%E8%A1%A8/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2022-04-11T01:37:56+08:00" />
 <meta property="article:modified_time" content="2022-04-11T01:37:56+08:00" />
 
 <meta itemprop="name" content="维度建模之事务事实表">
-<meta itemprop="description" content="一 概念"><meta itemprop="datePublished" content="2022-04-11T01:37:56+08:00" />
+<meta itemprop="description" content="​ 事实表是维度建模的重要组成部分，其严格围绕业务过程进行设计，通过描述业务过程的度量和维度来还原业务过程场景，其中事务事实表是最基础的事实表"><meta itemprop="datePublished" content="2022-04-11T01:37:56+08:00" />
 <meta itemprop="dateModified" content="2022-04-11T01:37:56+08:00" />
-<meta itemprop="wordCount" content="3">
+<meta itemprop="wordCount" content="1159">
 <meta itemprop="keywords" content="ETL,数据仓库," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="维度建模之事务事实表"/>
-<meta name="twitter:description" content="一 概念"/>
+<meta name="twitter:description" content="​ 事实表是维度建模的重要组成部分，其严格围绕业务过程进行设计，通过描述业务过程的度量和维度来还原业务过程场景，其中事务事实表是最基础的事实表"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -127,8 +127,8 @@
         <div class="post-category">
             <a href="/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"> 数据仓库 </a>
             </div>
-          <span class="more-meta"> 约 3 字 </span>
-          <span class="more-meta"> 预计阅读 1 分钟 </span>
+          <span class="more-meta"> 约 1159 字 </span>
+          <span class="more-meta"> 预计阅读 3 分钟 </span>
         <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
       </div>
     </header>
@@ -139,13 +139,42 @@
     <nav id="TableOfContents">
   <ul>
     <li><a href="#一-概念">一 概念</a></li>
+    <li><a href="#二-示例">二 示例</a></li>
   </ul>
 </nav>
   </div>
 </div>
     <div class="post-content">
       <hr>
+<p>​		事实表是维度建模的重要组成部分，其严格围绕业务过程进行设计，通过描述业务过程的度量和维度来还原业务过程场景，其中事务事实表是最基础的事实表技术，本文将会对事务事实表做详细的介绍。</p>
 <h2 id="一-概念">一 概念</h2>
+<p>事务事实表作为最基础的事实表技术，其设计思路简单直接，但是在笔者的工作中发现，事务事实表往往是数据工程师理解误差最大的概念之一，同时也是争议最大的问题之一。我们先来看一下事务事实表的基本定义：</p>
+<blockquote>
+<p>事务事实表记录的事务层面的事实，保存的是最原子的数据，也称“原子事实表”。事务事实表中的数据在事务事件发生后产生，数据的粒度通常是每个事务记录一条记录。一旦事务被提交，事实表数据被插入，数据就不再进行更改，其更新方式为增量更新。由于事实表具有稀疏性质 ，因此只有当天数据才会进入 当天的事实表中，相当于每个分区里面都是每天的数据，不包含之前的数据。</p>
+</blockquote>
+<p>从事务事实表的定义我们可以总结几个关键词来方便后续对概念的理解：</p>
+<ul>
+<li>事务层面：这里需要解释的一点是事务事实表建模的对象是业务过程对应得事务动作（没错，就是数据库的事务）；</li>
+<li>原子数据：因为事务事实表建模的对象是事务，因此事务事实表建模的粒度是最细粒度；</li>
+<li>增量更新：因为事务是瞬时性的，根据CURD原则，事务一旦产生将不在改变，因此比较适合进行增量ETL设计；</li>
+<li>稀疏性质：因为事务发生度量就确定了，因此事务的产生是稀疏的（对应的周期快照每天一份数据这种稠密模式）；</li>
+</ul>
+<p>上边事务事实表的四个性质中，最核心的就是事务，因此我们可以理解为事务事实表是面向业务过程对应的关键动作的承载事务设计的。下面这点需要特殊注意：</p>
+<blockquote>
+<p>业务系统数据表一般会承接多个事务，比如订单表和订单明细表，在下单时插入数据，在支付时更新状态，在完单时也会更新状态，更有一些每一次关键的物流状态也会相应的更新一些属性值；因此，一般来说，应用事务事实表建模，业务系统同步的一张底表可能隐含的包含了多个业务过程，这种情况下对应的事务事实表也是多个（当然也可以通过多事务事实表设计，但本质上还是多个事务表）。</p>
+</blockquote>
+<h2 id="二-示例">二 示例</h2>
+<p>以订单业务为例，很容易抽象出订单的业务流程：选品-加购物车-下单-付款-配送-完单。那么如何应用事务事实表对订单业务进行数仓建模呢？当然这里只同步各位同学我们要建设哪些数据仓库的表，而不会纠结于表结构的设计。针对这个过程我们需要做如下工作：</p>
+<ul>
+<li>针对选品过程，设计选品行为表；</li>
+<li>针对加购过程，设计加购行为表；</li>
+<li>针对下单过程，设计下单事务表；</li>
+<li>针对付款过程，设计支付事务表；</li>
+<li>针对配送流程，我们还需要设计一系列的配送过程表；</li>
+<li>针对完单过程，设计完单事务表；</li>
+<li>针对退款过程，设计退款事务表；</li>
+</ul>
+<p>通过对关键业务过程设计独立模型的方式，从而让我们实现了数据仓库建模的过程，上述设计过程也能更好的描述订单业务，如果上述模型均已设计好，我们可以实现订单业务下的各种不同分析需求了。</p>
 
     </div>
 
