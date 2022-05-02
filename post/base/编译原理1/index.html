@@ -1,0 +1,2384 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>编译原理知识点整理 - ChavinKing</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="ChavinKing" /><meta name="description" content="第一章 绪论 计算机语言发展历程 第一代语言：机器语言 第二代语言：汇编语言 第三代语言：高级语言(如C，C&#43;&#43;，Java等) 第四代语言：极高级领域语" /><meta name="keywords" content="data warehouse, Github, flink, java, spark, ETL" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.96.0 with theme even" />
+
+
+<link rel="canonical" href="https://chavinking.github.io/post/base/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%861/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<link href="/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/reset-even.css">
+
+
+<meta property="og:title" content="编译原理知识点整理" />
+<meta property="og:description" content="第一章 绪论 计算机语言发展历程 第一代语言：机器语言 第二代语言：汇编语言 第三代语言：高级语言(如C，C&#43;&#43;，Java等) 第四代语言：极高级领域语" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://chavinking.github.io/post/base/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%861/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2020-04-15T01:37:56+08:00" />
+<meta property="article:modified_time" content="2020-04-15T01:37:56+08:00" />
+
+<meta itemprop="name" content="编译原理知识点整理">
+<meta itemprop="description" content="第一章 绪论 计算机语言发展历程 第一代语言：机器语言 第二代语言：汇编语言 第三代语言：高级语言(如C，C&#43;&#43;，Java等) 第四代语言：极高级领域语"><meta itemprop="datePublished" content="2020-04-15T01:37:56+08:00" />
+<meta itemprop="dateModified" content="2020-04-15T01:37:56+08:00" />
+<meta itemprop="wordCount" content="15809">
+<meta itemprop="keywords" content="编译," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="编译原理知识点整理"/>
+<meta name="twitter:description" content="第一章 绪论 计算机语言发展历程 第一代语言：机器语言 第二代语言：汇编语言 第三代语言：高级语言(如C，C&#43;&#43;，Java等) 第四代语言：极高级领域语"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">ChavinKing</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于我</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">ChavinKing</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于我</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">编译原理知识点整理</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-04-15 01:37 </span>
+        <div class="post-category">
+            <a href="/categories/%E5%9F%BA%E6%9C%AC%E5%8A%9F/"> 基本功 </a>
+            </div>
+          <span class="more-meta"> 约 15809 字 </span>
+          <span class="more-meta"> 预计阅读 32 分钟 </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#第一章-绪论">第一章 绪论</a>
+      <ul>
+        <li><a href="#计算机语言发展历程">计算机语言发展历程</a></li>
+        <li><a href="#什么是编译">什么是编译？</a></li>
+        <li><a href="#编译器在计算机语言中的位置">编译器在计算机语言中的位置</a></li>
+        <li><a href="#计算机-宏">计算机-宏</a></li>
+        <li><a href="#编译系统的结构">编译系统的结构</a></li>
+        <li><a href="#词法分析概述">词法分析概述</a></li>
+        <li><a href="#语法分析概述">语法分析概述</a></li>
+        <li><a href="#语义分析概述">语义分析概述</a></li>
+        <li><a href="#中间代码生成">中间代码生成</a></li>
+        <li><a href="#代码优化">代码优化</a></li>
+        <li><a href="#目标代码生成">目标代码生成</a></li>
+        <li><a href="#符号表symbol-table">符号表(Symbol table)</a></li>
+        <li><a href="#文法">文法</a></li>
+      </ul>
+    </li>
+    <li><a href="#第二章-词法分析">第二章 词法分析</a>
+      <ul>
+        <li><a href="#正则表达式">正则表达式</a></li>
+        <li><a href="#有穷自动机fa">有穷自动机(FA)</a></li>
+        <li><a href="#从正则表达式到有穷自动机">从正则表达式到有穷自动机</a></li>
+      </ul>
+    </li>
+    <li><a href="#第三章-语法分析">第三章 语法分析</a>
+      <ul>
+        <li><a href="#自顶向下的语法分析top-down-parsing">自顶向下的语法分析(Top-Down Parsing)</a></li>
+        <li><a href="#ll1文法应用预测分析技术">LL(1)文法(应用预测分析技术)</a></li>
+        <li><a href="#first集follow集select集预测分析表的构建方法">FIRST集/FOLLOW集/SELECT集/预测分析表的构建方法</a></li>
+        <li><a href="#ll1文法的分析方法">LL(1)文法的分析方法</a></li>
+        <li><a href="#自底向上语法分析down-up-parsing">自底向上语法分析(Down-Up Parsing)</a></li>
+      </ul>
+    </li>
+    <li><a href="#第四章-语法制导翻译">第四章 语法制导翻译</a>
+      <ul>
+        <li><a href="#概念">概念</a></li>
+        <li><a href="#语法制导定义sdd">语法制导定义SDD</a></li>
+        <li><a href="#语法制导翻译方案sdt">语法制导翻译方案SDT</a></li>
+      </ul>
+    </li>
+    <li><a href="#第五章-中间代码生成">第五章 中间代码生成</a>
+      <ul>
+        <li><a href="#类型表达式">类型表达式</a></li>
+        <li><a href="#声明语句的翻译">声明语句的翻译</a></li>
+        <li><a href="#简单赋值语句的翻译">简单赋值语句的翻译</a></li>
+        <li><a href="#数组引用的翻译">数组引用的翻译</a></li>
+        <li><a href="#控制流语句的翻译">控制流语句的翻译</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <hr>
+<h2 id="第一章-绪论">第一章 绪论</h2>
+<h3 id="计算机语言发展历程">计算机语言发展历程</h3>
+<blockquote>
+<ul>
+<li>第一代语言：机器语言</li>
+<li>第二代语言：汇编语言</li>
+<li>第三代语言：高级语言(如C，C++，Java等)</li>
+<li>第四代语言：极高级领域语言(如SQL)</li>
+<li>第五代语言：可视化配置语言</li>
+<li>第六代语言：自然语言</li>
+</ul>
+</blockquote>
+<h3 id="什么是编译">什么是编译？</h3>
+<p><img src="../../../images/compiler/compiler-1.png" alt="compiler-1"></p>
+<blockquote>
+<p>编译的本质是翻译（将源语言翻译成目标语言）</p>
+<ul>
+<li>将汇编语言翻译成机器语言的过程称为汇编</li>
+<li>将高级语言翻译成汇编语言或者机器语言的过程称为编译</li>
+</ul>
+<p>编译器和解释器的区别：</p>
+<ul>
+<li>编译器直接将源程序翻译成目标程序进行执行</li>
+<li>解释器直接读取源程序逐行执行</li>
+</ul>
+</blockquote>
+<h3 id="编译器在计算机语言中的位置">编译器在计算机语言中的位置</h3>
+<p><img src="../../../images/compiler/compiler-2.png" alt="compiler-2"></p>
+<h3 id="计算机-宏">计算机-宏</h3>
+<blockquote>
+<p>宏（Macro），是一种批量批量处理的称谓。计算机科学里的宏是一种抽象(Abstraction)，它根据一系列预定义的规则替换一定的文本模式。解释器或编译器在遇到宏时会自动进行这一模式替换。</p>
+</blockquote>
+<h3 id="编译系统的结构">编译系统的结构</h3>
+<p><img src="../../../images/compiler/compiler-3.png" alt="编译系统的结构"></p>
+<blockquote>
+<p>源语言 -&gt; 语义分析 -&gt; 目标语言</p>
+<p>词法分析 -&gt; 语法分析 -&gt; 语义分析</p>
+<p>语法制导翻译：将语法分析、语义分析、目标代码生成合并到一起的编译器技术被称为”语法制导翻译“</p>
+</blockquote>
+<h3 id="词法分析概述">词法分析概述</h3>
+<blockquote>
+<p>词法分析(lexical analysis/scanning)从左到右逐行扫描源程序的字符，识别出各个词素(lexeme)序列(即单词)，确定单词的类型，将识别出的单词转化为机内表示形式-词法单元(token)的形式</p>
+<p>token的组成结构：token&lt;种别码,属性值&gt;</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">单词类型</th>
+<th>种别</th>
+<th>种别码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">关键词</td>
+<td>Select,from,where,then,if,else &hellip;</td>
+<td>一词一码</td>
+</tr>
+<tr>
+<td style="text-align:left">标识符</td>
+<td>变量名,数组名,函数名,过程名 &hellip;</td>
+<td>多次一码</td>
+</tr>
+<tr>
+<td style="text-align:left">常量</td>
+<td>整型,布尔型,浮点型,字符型 &hellip;</td>
+<td>一型一码</td>
+</tr>
+<tr>
+<td style="text-align:left">运算符</td>
+<td>算数(+ - * / %)<!-- raw HTML omitted -->关系(&gt; &lt; &gt;= &lt;= !=)<!-- raw HTML omitted -->逻辑(&amp; | !)</td>
+<td>一词一码<!-- raw HTML omitted -->或<!-- raw HTML omitted -->一型一码</td>
+</tr>
+<tr>
+<td style="text-align:left">界限符</td>
+<td>; () {} &hellip;</td>
+<td>一词一码</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<h3 id="语法分析概述">语法分析概述</h3>
+<blockquote>
+<p>语法分析器(syntax analysis/parser)从词法分析器输出的token序列中识别出各类短语，并构造语法分析树(parse tree)</p>
+<p>语法分析描述了句子的结构</p>
+<p>语法树对应句子：In the room,he broke a window with a hammer;</p>
+<p><img src="../../../images/compiler/compiler-4.png" alt="语法树"></p>
+</blockquote>
+<h3 id="语义分析概述">语义分析概述</h3>
+<blockquote>
+<p>语义分析(semantic analysis)使用语法树和符号表中的信息来检查源程序是否符合语言定义，其主要任务：</p>
+<ul>
+<li>收集标识符的属性信息
+<ul>
+<li>种属(Kind):简单变量、符合变量、过程</li>
+<li>类型(Type):整型、实型、布尔型、指针</li>
+<li>存储位置和长度</li>
+<li>值</li>
+<li>作用域</li>
+<li>参数和返回值类型</li>
+</ul>
+</li>
+<li>语义检查：是否符合语法规则</li>
+</ul>
+</blockquote>
+<h3 id="中间代码生成">中间代码生成</h3>
+<blockquote>
+<p>前端编译器完成工作通常会输出一种或多种中间代码，常用的中间代码表示形式如下</p>
+<ul>
+<li>
+<p>三地址码(每个指令最多有三个操作数(operand))</p>
+<ul>
+<li>意义: 三地址指令序列唯一确定了运算完成的顺序</li>
+<li>表示形式
+<ul>
+<li>四元式 (Quadruples): (op, y, z, x)</li>
+<li>三元式 (Triples)</li>
+<li>间接三元式 (Indirect triples)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>语法结构树/语法树(syntax trees)</p>
+</li>
+<li>
+<p>示例</p>
+<p><img src="../../../images/compiler/compiler-5.png" alt="中间代码表示示例"></p>
+</li>
+</ul>
+</blockquote>
+<h3 id="代码优化">代码优化</h3>
+<blockquote>
+<p>为改进代码所进行的等价程序变换，使其运行得更快一些、占用空间更少一些，或者二者兼顾</p>
+<ul>
+<li>
+<p>机器无关代码优化应用于中间代码阶段优化</p>
+</li>
+<li>
+<p>机器相关代码优化应用于目标代码阶段优化</p>
+</li>
+</ul>
+</blockquote>
+<h3 id="目标代码生成">目标代码生成</h3>
+<blockquote>
+<ul>
+<li>
+<p>目标代码生成以源程序的中间表示形式作为输入，并把它映射到目标语言</p>
+</li>
+<li>
+<p>目标代码生成的一个重要任务是为程序中使用的变量合理分配寄存器</p>
+</li>
+</ul>
+</blockquote>
+<h3 id="符号表symbol-table">符号表(Symbol table)</h3>
+<blockquote>
+<p>符号表数据结构为每个变量名字创建一个记录条目，记录的字段就是名字的各个属性。</p>
+</blockquote>
+<h3 id="文法">文法</h3>
+<blockquote>
+<p>文法用于描述程序设计语言的语法结构（定义语言规则），文法解决了无穷语言的有穷表示问题</p>
+</blockquote>
+<h4 id="基础概念">基础概念</h4>
+<p>∑表示字母表，字母表是一个有穷字符集合</p>
+<h5 id="乘积">乘积</h5>
+<blockquote>
+<p>字母表∑1和∑2的乘积</p>
+<ul>
+<li>
+<p>∑1∑2 = {ab|a ∈ ∑1, b ∈ ∑2}</p>
+</li>
+<li>
+<p>例：{0, 1} {a, b} ={0a, 0b, 1a, 1b}</p>
+</li>
+</ul>
+</blockquote>
+<h5 id="幂">幂</h5>
+<blockquote>
+<p>字母表∑的n次幂</p>
+<ul>
+<li>
+<p>∑0 = {ε}</p>
+</li>
+<li>
+<p>∑n =∑n-1 ∑ , n ≥ 1</p>
+</li>
+</ul>
+<p>例： {0, 1}3 ={0, 1} {0, 1} {0, 1} = {000, 001, 010, 011, 100, 101, 110, 111}</p>
+<p>字母表的n次幂：长度为n的符号串构成的集合</p>
+</blockquote>
+<h5 id="正闭包">正闭包</h5>
+<blockquote>
+<p>字母表∑的正闭包</p>
+<p>∑+ = ∑ ∪ ∑2 ∪ ∑3 ∪ …</p>
+<p>例：{a, b, c, d }+ = {a, b, c, d, aa, ab, ac, ad, ba, bb, bc, bd, …, aaa, aab, aac, aad, aba, abb, abc, …}</p>
+<p>字母表的正闭包：长度正数的符号串构成的集合</p>
+</blockquote>
+<h5 id="克林闭包">克林闭包</h5>
+<blockquote>
+<p>字母表∑的克林闭包</p>
+<p>∑* = ∑0 ∪ ∑+ = ∑0 ∪ ∑ ∪ ∑2 ∪ ∑3 ∪ …</p>
+<p>例：{a, b, c, d }* = {ε, a, b, c, d, aa, ab, ac, ad, ba, bb, bc, bd, …, aaa, aab, aac, aad, aba, abb, abc, …}</p>
+<p>字母表的克林闭包：任意符号串（长度可以为零）构成的集合</p>
+</blockquote>
+<h5 id="串">串</h5>
+<blockquote>
+<p>设∑是一个字母表，Vx∈∑*，x称为是∑上的一个串</p>
+<ul>
+<li>串是字母表中符号的一个有穷序列</li>
+</ul>
+<p>串s的长度，通常记作|s|，是指s中符号的个数</p>
+<ul>
+<li>
+<p>例: |aab|=3</p>
+</li>
+<li>
+<p>空串是长度为0的串，用 ε（epsilon）表示</p>
+</li>
+<li>
+<p>|ε|= 0</p>
+</li>
+</ul>
+<p>串的运算</p>
+<ul>
+<li>连接：如果 x和y是串，那么x和y的连接(concatenation)是把y附加到x后面而形成的串，记作xy
+<ul>
+<li>空串是连接运算的单位元( identity)，即，对于任何串s都有，εs = sε = s</li>
+<li>设x,y,z是三个字符串，如果 x=yz，则称y是x的前缀，z是x的后缀</li>
+</ul>
+</li>
+<li>幂：串s的n次幂，将n个s连接起来
+<ul>
+<li>s0= ε， sn = sn-1s, n ≥1</li>
+<li>s1 = s0 s = εs = s，s2 = ss，s3 = sss，…</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h4 id="文法的定义">文法的定义</h4>
+<blockquote>
+<ol>
+<li>
+<p>文法的形式化定义</p>
+<p>G = (Vt , Vn , P , S )</p>
+<blockquote>
+<p>Vt：终结符集合</p>
+<p>终结符（terminal symbol）是文法所定义的语言的基本符号，有时也称为token</p>
+<p>➢例: Vt = { apple, boy, eat, little }</p>
+</blockquote>
+<blockquote>
+<p>Vn：非终结符集合</p>
+<p>非终结符(nonterminal) 是用来表示语法成分的符号，有时也称为“ 语法变量”</p>
+<p>➢例: Vn = { &lt;句子&gt;, &lt;名词短语&gt;, &lt;动词短语&gt;, &lt;名词&gt;, … }</p>
+</blockquote>
+<blockquote>
+<p>P ：产生式集合</p>
+<p>产生式( production)描述了将终结符和非终结符组合成串的方法,产生式的一般形式：α→β,读作：α定义为β</p>
+<p>➢α∈(Vt∪Vn)+：且α中至少包含Vn中的一个元素：称为产生式的头 (head )或左部(left side)</p>
+<p>➢β∈(Vt∪Vn)* ：称为产生式的体(body)或右部(right side)</p>
+<p>➢例：</p>
+<p><img src="../../../images/compiler/compiler-6.png" alt="产生式集合示例"></p>
+</blockquote>
+<blockquote>
+<p>S ：开始符号</p>
+<p>S∈Vn。开始符号(start symbol)表示的是该文法中最大的语法成分</p>
+<p>➢例：S = &lt;句子&gt;</p>
+</blockquote>
+<p>Vt ∩ Vn = Φ</p>
+<p>Vt ∪ Vn ：文法符号集</p>
+</li>
+<li>
+<p>产生式的简写</p>
+<blockquote>
+<p>对一组有相同左部的α产生式: α→β1, α→β2, … , α→βn</p>
+<p>可以简记为：α→β1| β2| … | βn</p>
+<p>读作：α定义为β1，或者β2，…，或者βn</p>
+<p>β1，β2，…，βn称为α的候选式(Candidate)</p>
+</blockquote>
+</li>
+</ol>
+</blockquote>
+<h4 id="语言的定义">语言的定义</h4>
+<blockquote>
+<p>推导 (Derivations)和归约(Reductions)</p>
+<blockquote>
+<ul>
+<li>
+<p>推导</p>
+<p>给定文法G=(Vt , Vn , P , S )，如果 α→β ∈ P，那么可以将符号串γαδ中的α替换为β，也就是说，将γαδ重写(rewrite)为γβδ，记作 γαδ =&gt; γβδ。此时，称文法中的符号串 γαδ <strong>直接推导</strong>(directly derive)出 γβδ</p>
+<p>简而言之，推导就是用产生式的右部替换产生式的左部</p>
+<blockquote>
+<p>如果α0=&gt;α1，α1=&gt;α2，α2=&gt;α3，…，αn-1=&gt;αn，则可以记作α0=&gt;α1=&gt;α2=&gt;α3=&gt; …=&gt; αn-1=&gt;αn，称符号串 α0经过n步推导出αn，可简记为α0 =&gt;n αn</p>
+<p>➢ α =&gt;0 α</p>
+<p>➢ =&gt;+表示“经过正数步推导”</p>
+<p>➢ =&gt;*表示“经过若干（可以是0）步推导”</p>
+</blockquote>
+</li>
+<li>
+<p>规约</p>
+<p>规约是推导的逆过程，他是用产生式的左部替换成产生式的右部的过程</p>
+</li>
+</ul>
+</blockquote>
+<p>句型和句子</p>
+<blockquote>
+<ul>
+<li>
+<p>句型：如果 S =&gt;* α，α∈(VT∪VN)*，则称α是G的一个句型(sentential form),一个句型中既可以包含终结符，又可以包含非终结符，也可能是空串</p>
+</li>
+<li>
+<p>句子：如果 S =&gt;* w，w ∈ Vt*，则称w是G的一个句子(sentence),句子是不包含非终结符的句型</p>
+</li>
+</ul>
+</blockquote>
+<p>语言</p>
+<blockquote>
+<ul>
+<li>
+<p>形式化定义</p>
+<p>由文法G的开始符号S推导出的所有句子构成的集合称为文法G生成的语言，记为L(G)。即L(G) = {w | S =&gt;* w,w∈Vt* }</p>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>
+<p>语言的运算</p>
+<p><img src="../../../images/compiler/compiler-7.png" alt="语言的运算"></p>
+</li>
+</ul>
+</blockquote>
+</blockquote>
+<h4 id="文法分类">文法分类</h4>
+<blockquote>
+<p>Chomsky文法分类体系</p>
+<blockquote>
+<ul>
+<li>
+<p>0型文法 (Type-0 Grammar)</p>
+<blockquote>
+<p>无限制文法(Unrestricted Grammar)/短语结构文法(Phrase Structure Grammar, PSG )</p>
+<p>∀α → β∈P，α中至少包含1个非终结符</p>
+<p>0型语言: 由0型文法G生成的语言L(G)</p>
+</blockquote>
+</li>
+<li>
+<p>1型文法 (Type-1 Grammar)</p>
+<blockquote>
+<p>上下文有关文法(Context-Sensitive Grammar,CSG)</p>
+<p>∀α → β∈P，｜α｜≤｜β｜(在0型文法基础上要求左部长度小于等于右部长度)</p>
+<p>产生式的一般形式： α1Aα2 → α1βα2 (β≠ε) (即CSG中不包含ε产生式)</p>
+<p>上下文有关语言（1型语言）: 由上下文有关文法(1型文法)G生成的语言L(G)</p>
+</blockquote>
+</li>
+<li>
+<p>2型文法 (Type-2 Grammar)</p>
+<blockquote>
+<p>上下文无关文法 (Context-Free Grammar, CFG)</p>
+<p>∀α → β∈P，α ∈ Vn (左部必须是一个非终结符)</p>
+<p>产生式的一般形式：A→β</p>
+<p>上下文无关语言（2型语言）: 由上下文无关文法 (2型文法) G生成的语言L(G)</p>
+</blockquote>
+</li>
+<li>
+<p>3型文法 (Type-3 Grammar)</p>
+<blockquote>
+<p>正则文法 (Regular Grammar, RG)</p>
+<p>右线性(Right Linear)文法： A→wB 或 A→w (满足2型文法)</p>
+<p>左线性(Left Linear) 文法： A→Bw 或 A→w (满足2型文法)</p>
+<p>左线性文法和右线性文法都称为正则文法</p>
+<p>正则语言（3型语言）: 由正则文法 (3型文法) G生成的语言L(G)</p>
+<p>​	<strong>正则文法能描述程序设计语言的多数单词</strong></p>
+</blockquote>
+</li>
+<li>
+<p>四种文法之间的关系</p>
+<p><img src="../../../images/compiler/compiler-8.png" alt="文法关系"></p>
+</li>
+</ul>
+</blockquote>
+</blockquote>
+<h4 id="上下文无关文法分析树">上下文无关文法分析树</h4>
+<blockquote>
+<p>上下文无关文法用于描述语言的语法构造，也是应用最广发的一种文法</p>
+<ul>
+<li>
+<p>CFG分析树定义</p>
+<p><img src="../../../images/compiler/compiler-9.png" alt="CFG tree"></p>
+</li>
+<li>
+<p>分析树是推导的图形化表示</p>
+<p>给定一个推导 S =&gt; α1 =&gt; α2 =&gt; … =&gt; αn ，对于推导过程中得到的每一个句型αi，都可以构造出一个边缘为αi的分析树</p>
+<ul>
+<li>
+<p>例</p>
+<p><img src="../../../images/compiler/compiler-10.png" alt="例10"></p>
+</li>
+</ul>
+</li>
+<li>
+<p>(句型的）短语</p>
+<p>给定一个句型，其分析树中的每一棵子树的边缘称为该句型的一个短语(phrase)，如果子树只有父子两代结点，那么这棵子树的边缘称为该句型的一个直接短语(immediate phrase)。</p>
+<p><img src="../../../images/compiler/compiler-12.png" alt="例11"></p>
+<ul>
+<li>
+<p>例</p>
+<p><img src="../../../images/compiler/compiler-12.png" alt="例12"></p>
+</li>
+</ul>
+</li>
+<li>
+<p>二义性文法(Ambiguous Grammar)</p>
+<p>如果一个文法可以为某个句子生成多棵分析树，则称这个文法是二义性的</p>
+<ul>
+<li>
+<p>例</p>
+<p><img src="../../../images/compiler/compiler-13.png" alt="例13"></p>
+<p><img src="../../../images/compiler/compiler-14.png" alt="例14"></p>
+<ul>
+<li>对于任意一个上下文无关文法，不存在一个算法，判定它是无二义性的；但能给出一组充分条件，满足这组充分条件的文法是无二义性的
+<ul>
+<li>满足，肯定无二义性</li>
+<li>不满足，也未必就是有二义性的</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h2 id="第二章-词法分析">第二章 词法分析</h2>
+<h3 id="正则表达式">正则表达式</h3>
+<blockquote>
+<p>正则表达式(Regular Expression，RE )是一种用来描述正则语言的更紧凑的表示方法</p>
+<p>正则表达式可以由较小的正则表达式按照特定规则递归地构建。每个正则表达式 r定义（表示）一个语言，记为L(r)。这个语言也是根据r的子表达式所表示的语言递归定义的</p>
+<blockquote>
+<ul>
+<li>
+<p>正则表达式的定义</p>
+<p><img src="../../../images/compiler/compiler-15.png" alt="正则表达式定义"></p>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>
+<p>正则语言</p>
+<p>可以用RE定义的语言叫做正则语言(regular language)或正则集合(regular set)</p>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>
+<p>RE代数定律</p>
+<p><img src="../../../images/compiler/compiler-16.png" alt="代数定律"></p>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>
+<p>正则文法和正则表达式是相互等价的</p>
+<p>对任何正则文法G，存在定义同一语言的正则表达式r</p>
+<p>对任何正则表达式r，存在生成同一语言的正则文法G</p>
+</li>
+</ul>
+</blockquote>
+</blockquote>
+<blockquote>
+<ul>
+<li>
+<p>正则定义（Regular Definition）</p>
+<p>给一些RE命名，并在之后的RE中想使用字符表中的符号一样使用这些名字</p>
+<p><img src="../../../images/compiler/compiler-17.png" alt="Regular Definition"></p>
+</li>
+</ul>
+</blockquote>
+<h3 id="有穷自动机fa">有穷自动机(FA)</h3>
+<blockquote>
+<p>有穷自动机 ( Finite Automata，FA )由两位神经物理学家MeCuloch和Pitts于1948年首先提出，是对一类处理系统建立的数学模型</p>
+<p>这类系统具有一系列离散的输入输出信息和有穷数目的内部状态（状态：概括了对过去输入信息处理的状况）</p>
+<p>系统只需要根据当前所处的状态和当前面临的输入信息就可以决定系统的后继行为。每当系统处理了当前的输入后，系统的内部状态也将发生改变</p>
+</blockquote>
+<blockquote>
+<ul>
+<li>
+<p>FA模型</p>
+<p><img src="../../../images/compiler/compiler-18.png" alt="FA模型"></p>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>
+<p>FA的表示</p>
+<p>转换图 (Transition Graph)</p>
+<ul>
+<li>
+<p>结点：FA的状态</p>
+<ul>
+<li>初始状态（开始状态）：只有一个，由start箭头指向</li>
+<li>终止状态（接收状态）：可以有多个，用双圈表示</li>
+</ul>
+</li>
+<li>
+<p>带标记的有向边：如果对于输入a，存在一个从状态p到状态q的转换，就在p、q之间画一条有向边，并标记上a</p>
+</li>
+</ul>
+<p><img src="../../../images/compiler/compiler-19.png" alt="例19"></p>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>
+<p>FA定义（接收）的语言</p>
+<p>给定输入串x，如果存在一个对应于串x的从初始状态到某个终止状态的转换序列，则称串x被该FA接收</p>
+<p>由一个有穷自动机M接收的所有串构成的集合称为是该FA定义（或接收）的语言，记为L(M)</p>
+<p><img src="../../../images/compiler/compiler-20.png" alt="例20"></p>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>
+<p>最长子串匹配原则(Longest String Matching Principle)</p>
+<p>当输入串的多个前缀与一个或多个模式匹配时，总是选择最长的前缀进行匹配</p>
+<p><img src="../../../images/compiler/compiler-21.png" alt="例21"></p>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>
+<p>有穷状态机的分类</p>
+<ul>
+<li>
+<p>两种分类</p>
+<blockquote>
+<p>确定的FA (Deterministic finite automata, DFA)</p>
+<p>非确定的FA (Nondeterministic finite automata, NFA)</p>
+</blockquote>
+</li>
+<li>
+<p>确定的有穷自动机(DFA)</p>
+<blockquote>
+<p>形式化定义：目标状态确定唯一</p>
+<p><img src="../../../images/compiler/compiler-22.png" alt="DFA定义"></p>
+<p>例：</p>
+<p>​	<img src="../../../images/compiler/compiler-23.png" alt="例23"></p>
+<pre><code>  - DFA既可以用转换图表示，也可以用转换表表示，转换图和转换表的功能是等价的
+</code></pre>
+</blockquote>
+</li>
+<li>
+<p>非确定的有穷自动机(NFA)</p>
+<blockquote>
+<p>形式化定义：目标状态不唯一，是一个集合</p>
+<p><img src="../../../images/compiler/compiler-24.png" alt="NFA定义"></p>
+<p>例：</p>
+<p>​	<img src="../../../images/compiler/compiler-25.png" alt="例25"></p>
+</blockquote>
+<blockquote>
+<p>带有“ε-边”的NFA</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-27.png" alt="定义"></p>
+<ul>
+<li>
+<p>带有和不带有“ε-边”的NFA的等价性</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-28.png" alt="例28"></p>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+</blockquote>
+</li>
+<li>
+<p>DFA和NFA的等价性</p>
+<blockquote>
+<ul>
+<li>
+<p><strong>对任何非确定的有穷自动机N ，存在定义同一语言的确定的有穷自动机D</strong></p>
+</li>
+<li>
+<p><strong>对任何确定的有穷自动机D ，存在定义同一语言的非确定的有穷自动机N</strong></p>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>DFA和NFA可以识别相同的语言</p>
+<p>例：</p>
+<p>​	<img src="../../../images/compiler/compiler-26.png" alt="例26"></p>
+<blockquote>
+<ul>
+<li>
+<p>正则文法和正则表达式是等价的</p>
+</li>
+<li>
+<p>正则表达式和NFA是等价的</p>
+</li>
+<li>
+<p>正则文法和NFA是等价的</p>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>等价的NFA和DFA都可以识别同一语言，但是从表现形式上看，NFA要比DFA更直观，但是从计算机实现上来看，DFA要比NFA容易实现</p>
+<blockquote>
+<p>DFA的算法实现</p>
+<p><img src="../../../images/compiler/compiler-29.png" alt="例29"></p>
+</blockquote>
+</blockquote>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h3 id="从正则表达式到有穷自动机">从正则表达式到有穷自动机</h3>
+<blockquote>
+<p>正则表达式可以很容易描述符号序列，但是在真正构造分析器时实际上模拟的是DFA，因此这就涉及到了从正则表达式到有穷自动机的转换。</p>
+<p><img src="../../../images/compiler/compiler-30.png" alt="re-&gt;fa"></p>
+<ul>
+<li>从正则表达式直接构造DFA是比较困难的；</li>
+<li>NFA相对于DFA比较直观，因此我们先从RE转换成等价的NFA；然后再将等价的NFA转换成DFA</li>
+</ul>
+<blockquote>
+<ol>
+<li>
+<p>根据RE构造NFA</p>
+<p><img src="../../../images/compiler/compiler-31.png" alt="re-&gt;nfa"></p>
+<p><img src="../../../images/compiler/compiler-32.png" alt="例32"></p>
+<pre><code>- RE构造NFA可以逐步分解达成
+</code></pre>
+</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="2">
+<li>
+<p>根据NFA构造DFA</p>
+<p>子集构造法（subset construction）实现从NFA到DFA的转换(DFA中每个状态都是NFA状态子集)，算法如下：</p>
+<p><img src="../../../images/compiler/compiler-34.png" alt="subset-construction"></p>
+<p>计算 ε-closure (T)：</p>
+<p><img src="../../../images/compiler/compiler-35.png" alt="ε-closure (T)"></p>
+<p>例：</p>
+<p><img src="../../../images/compiler/compiler-33.png" alt="nfa-&gt;dfa"></p>
+</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="3">
+<li>
+<p>从RE-&gt;NFA-&gt;DFA示例</p>
+<p><img src="../../../images/compiler/compiler-36.png" alt="re-nfa-dfa"></p>
+<hr>
+<p><img src="../../../images/compiler/compiler-37.png" alt="token"></p>
+</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="4">
+<li>
+<p>词法分析阶段的错误处理</p>
+<p>如果当前状态与当前输入符号在转换表对应项中的信息为空，而当前状态又不是终止状态，则调用错误处理程序，查找已扫描字符串中最后一个对应于某终态的字符</p>
+<ul>
+<li>
+<p>如果找到了，将该字符与其前面的字符识别成一个单词。然后将输入指针退回到该字符，扫描器重新回到初始状态，继续识别下一个单词</p>
+</li>
+<li>
+<p>如果没找到，则确定出错，采用错误恢复策略</p>
+</li>
+</ul>
+<p>错误恢复策略</p>
+<ul>
+<li>恐慌模式(panic mode)</li>
+</ul>
+</li>
+</ol>
+</blockquote>
+</blockquote>
+<h2 id="第三章-语法分析">第三章 语法分析</h2>
+<p>语法分析的任务就是根据给定的文法识别输入串中的短语并构造分析树的过程，当各个短语分别分散在分析树的各个叶子节点，我们说输入的串构成一个句子。构造分析树通常有以下两种方法：</p>
+<ul>
+<li>自顶向下的语法分析(Top-Down Parsing)</li>
+<li>自底向上的语法分析(Down-Up Parsing)</li>
+</ul>
+<h3 id="自顶向下的语法分析top-down-parsing">自顶向下的语法分析(Top-Down Parsing)</h3>
+<blockquote>
+<p>从分析树的顶部（根节点）向底部（叶节点）方向构造分析树（<strong>通过文法匹配串</strong>）</p>
+<p>可以看成是从文法开始符号S推导出词串w的过程，例：</p>
+<p><img src="../../../images/compiler/compiler-38.png" alt="例38"></p>
+<p>每一步推导中，都需要做两个选择</p>
+<ul>
+<li>
+<p>替换当前句型中的哪个非终结符</p>
+</li>
+<li>
+<p>用该非终结符的哪个候选式进行替换</p>
+</li>
+</ul>
+<p>为了解决这个问题，下面让我们看两个概念：</p>
+<ol>
+<li>最左推导(Left-most Derivation)</li>
+</ol>
+<blockquote>
+<p>在最左推导中，总是选择每个句型的最左非终结符进行替换，例：</p>
+<p><img src="../../../images/compiler/compiler-39.png" alt="例39"></p>
+<ul>
+<li>最右规约是最左推导的逆过程</li>
+</ul>
+<p>如果 S =&gt;*lm α，则称α是当前文法的最左句型(left-sentential form)</p>
+</blockquote>
+<ol start="2">
+<li>最右推导(Right-most Derivation)</li>
+</ol>
+<blockquote>
+<p>在最右推导中，总是选择每个句型的最右非终结符进行替换</p>
+<p><img src="../../../images/compiler/compiler-40.png" alt="例40"></p>
+<ul>
+<li>最左规约是最右推导的逆过程</li>
+</ul>
+</blockquote>
+<ul>
+<li>注：在自底向上的分析中，总是采用最左归约的方式，因此把最左归约称为规范归约，而最右推导相应地称为规范推导</li>
+</ul>
+<p>最左推导和最右推导的唯一性</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-41.png" alt="例41"></p>
+<ul>
+<li>分析树的推导结果是不唯一的，但是最左推导和最右推导结果是唯一的，因为最左/最右非终结符始终是唯一的</li>
+</ul>
+</blockquote>
+<p><strong>自顶向下</strong>的语法分析采用<strong>最左推导</strong>方式</p>
+<blockquote>
+<ul>
+<li>
+<p>总是选择每个句型的最左非终结符进行替换</p>
+</li>
+<li>
+<p>根据输入流中的下一个终结符，选择最左非终结符的一个候选式</p>
+</li>
+</ul>
+<p><img src="../../../images/compiler/compiler-42.png" alt="例42"></p>
+</blockquote>
+<p>自顶向下语法分析的通用形式（计算机实现方式）</p>
+<blockquote>
+<p>递归下降分析 (Recursive-Descent Parsing)</p>
+<ul>
+<li>
+<p>由一组<strong>过程</strong>组成，每个过程对应一个<strong>非终结符</strong>（即：文法中有多少个非终结符就有多少个过程）</p>
+</li>
+<li>
+<p>从文法开始符号S对应的过程开始，其中递归调用文法中其它非终结符对应的过程。如果S对应的过程体恰好扫描了整个输入串，则成功完成语法分析</p>
+</li>
+</ul>
+<p>过程A示例：</p>
+<p><img src="../../../images/compiler/compiler-43.png" alt="例43"></p>
+<ul>
+<li>回溯会影响分析器的效率，需要回溯的分析器成为不确定的分析器</li>
+</ul>
+</blockquote>
+<p>预测分析(Predictive Parsing)</p>
+<blockquote>
+<ul>
+<li>
+<p>预测分析是递归下降分析技术的一个特例，通过在输入中向前看固定个数（通常是一个）符号来选择正确的A-产生式。</p>
+<ul>
+<li>可以对某些文法构造出向前看k个输入符号的预测分析器，该类文法有时也称为LL(k) 文法类</li>
+</ul>
+</li>
+<li>
+<p>预测分析不需要回溯，是一种确定的自顶向下分析方法</p>
+</li>
+</ul>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>自定向下分析遇到的问题？</p>
+<p>并不是所有文法都适合自顶向下分析方法，为了适应自顶向下分析方法，有时我们需要对文法进行改造。</p>
+<ol>
+<li>
+<p>问题1：同一非终结符的多个候选式存在共同前缀，将导致回溯现象</p>
+<p><img src="../../../images/compiler/compiler-44.png" alt="问题1"></p>
+<p>解决方法：提取左公因子(Left Factoring)</p>
+<blockquote>
+<p>算法：<img src="../../../images/compiler/compiler-50.png" alt="Left Factoring"></p>
+<p>例：<img src="../../../images/compiler/compiler-51.png" alt="例51"></p>
+</blockquote>
+</li>
+<li>
+<p>问题2：左递归文法会使递归下降分析器陷入无限循环</p>
+<p><img src="../../../images/compiler/compiler-45.png" alt="问题2"></p>
+</li>
+</ol>
+<ul>
+<li>
+<p>左递归定义：产生式右部最左非终结符和左部相同就会产生左递归</p>
+<blockquote>
+<p>含有A→Aα形式产生式的文法称为是直接左递归的 (immediate left recursive)</p>
+<p>如果一个文法中有一个非终结符A使得对某个串α存在一个推导A=&gt;+Aα ，那么这个文法就是左递归的</p>
+<p>经过两步或两步以上推导产生的左递归称为是间接左递归的</p>
+</blockquote>
+<p>解决方法：消除左递归</p>
+<ul>
+<li>
+<p>消除左递归算法</p>
+<p><img src="../../../images/compiler/compiler-46.png" alt="消除左递归算法"></p>
+<p>消除直接左递归</p>
+<p>​	一般形式：<img src="../../../images/compiler/compiler-48.png" alt="消除直接左递归"></p>
+<p>​	例(消除直接左递归)：<img src="../../../images/compiler/compiler-47.png" alt="例47"></p>
+<p>​	例(消除间接左递归-带入方法)：<img src="../../../images/compiler/compiler-49.png" alt="例49"></p>
+</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h3 id="ll1文法应用预测分析技术">LL(1)文法(应用预测分析技术)</h3>
+<blockquote>
+<p>S_文法</p>
+<ul>
+<li>
+<p>预测分析法的工作过程</p>
+<p>从文法开始符号出发，在每一步推导过程中根据当前句型的最左非终结符A和当前输入符号a，选择正确的A-产生式。为保证分析的确定性，选出的候选式必须是唯一的。</p>
+</li>
+<li>
+<p>S_文法（简单的确定性文法，Korenjak &amp; Hopcroft，1966）</p>
+<ul>
+<li>
+<p>每个产生式的右部都以终结符开始</p>
+</li>
+<li>
+<p>同一非终结符的各个候选式的首终结符都不同</p>
+</li>
+<li>
+<p>S_文法不含ε产生式</p>
+<ul>
+<li>
+<p>为什么不能应用ε产生式：<img src="../../../images/compiler/compiler-52.png" alt="例52"></p>
+<p><em>ε产生式的使用取决于当前非终结符后边可以跟随哪些终结符</em></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>非终结符的后继符号集(follow集)</p>
+<p>​	可能在某个句型中紧跟在A后边的终结符a的集合，记为FOLLOW(A)，FOLLOW(A)={a| S =&gt;* αAaβ, a∈Vt，α,β∈(Vt ∪ Vn)*}</p>
+<p>​	例：<img src="../../../images/compiler/compiler-53.png" alt="例53"></p>
+<p>产生式的可选集</p>
+<p>​	产生式A→β的可选集是指可以选用该产生式进行推导时对应的输入符号的集合，记为SELECT(A→β)</p>
+<p>​		<em>即遇到这些非终结符可以使用该产生式</em></p>
+<ul>
+<li>
+<p>SELECT(A→aβ) = {a}</p>
+</li>
+<li>
+<p>SELECT(A→ε)=FOLLOW(A)</p>
+</li>
+</ul>
+<p>q_文法</p>
+<blockquote>
+<p>每个产生式的右部或为ε，或以终结符开始</p>
+<p>具有相同左部的产生式有不相交的可选集</p>
+<p><strong>q_文法不含右部以非终结符打头的产生式</strong></p>
+</blockquote>
+<p>串首终结符集(first集)</p>
+<p><strong>串首终结符:串首第一个符号，并且是终结符,简称首终结符</strong></p>
+<p><img src="../../../images/compiler/compiler-54.png" alt="串首终结符"></p>
+<p><strong>LL(1)文法</strong></p>
+<p><img src="../../../images/compiler/compiler-55.png" alt="LL(1)文法"></p>
+<blockquote>
+<p>第一个“L”表示从左向右扫描输入</p>
+<p>第二个“ L”表示产生最左推导</p>
+<p>“1”表示在每一步中只需要向前看一个输入符号来决定语法分析动作</p>
+</blockquote>
+<ul>
+<li><strong>同一非终结符的各个产生式的可选集互不相交可以为LL(1)文法构造预测分析器</strong></li>
+</ul>
+</blockquote>
+<h3 id="first集follow集select集预测分析表的构建方法">FIRST集/FOLLOW集/SELECT集/预测分析表的构建方法</h3>
+<blockquote>
+<p>问题1:<strong>计算文法符号X的FIRST(X)</strong></p>
+<p>定义：</p>
+<blockquote>
+<p>FIRST(X)：可以从X推导出的所有串首终结符构成的集合,如果 X =&gt;* ε，那么 ε ∈ FIRST(X)</p>
+</blockquote>
+<p>算法：</p>
+<blockquote>
+<p><strong>不断应用下列规则，直到没有新的终结符或ε可以被加入到任何FIRST集合中为止</strong></p>
+<ul>
+<li>
+<p>如果X是一个终结符，那么FIRST(X) = {X}</p>
+</li>
+<li>
+<p>如果X是一个非终结符，且X→Y1…Yk∈P(k≥1)，那么如果对于某个i，a在FIRST(Yi)中且ε在所有的FIRST(Y1),…,FIRST(Yi-1)中(即Y1&hellip;Yi-1 =&gt;* ε)，就把a加入到FIRST(X)中。如果对于所有的j=1,2,&hellip;,k，ε在FIRST(Yj)中，那么将ε加入到FIRST(X)</p>
+</li>
+<li>
+<p>如果X→ε ∈ P，那么将ε加入到FIRST(X)中</p>
+</li>
+</ul>
+</blockquote>
+<p>例：计算下面算术表达式文法每个非终结符的FIRST集？</p>
+<p><img src="../../../images/compiler/compiler-56.png" alt="例56"></p>
+<p>问题2:<strong>计算串X1X2…Xn的FIRST集合</strong></p>
+<blockquote>
+<ul>
+<li>
+<p>向FIRST(X1X2…Xn)加入FIRST(X1)中所有的非ε符号</p>
+</li>
+<li>
+<p>如果ε在FIRST(X1)中，再加入FIRST(X2)中的所有非ε符号；</p>
+<p>如果ε在FIRST(X1)和FIRST(X2)中，再加入FIRST(X3)中的所有非ε符号，以此类推</p>
+</li>
+<li>
+<p>最后，如果对所有的i，ε都在FIRST(Xi)中，那么将ε加入到FIRST(X1X2…Xn)中</p>
+</li>
+</ul>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>问题3:<strong>计算非终结符A的FOLLOW(A)</strong></p>
+<p>定义：</p>
+<blockquote>
+<p>FOLLOW(A)：可能在某个句型中紧跟在A后边的终结符a的集合</p>
+<ul>
+<li>FOLLOW(A)={a|S =&gt;* αAaβ, a ∈ Vt，α,β ∈ (Vt ∪ Vn)*}</li>
+</ul>
+<p>如果A是某个句型的的最右符号，则将结束符“$”添加到FOLLOW(A)中</p>
+</blockquote>
+<p>算法：</p>
+<blockquote>
+<p><strong>不断应用下列规则，直到没有新的终结符可以被加入到任何FOLLOW集合中为止</strong></p>
+<blockquote>
+<p>将$放入FOLLOW(S)中，其中S是开始符号，$是输入右端的结束标记</p>
+<p>如果存在一个产生式A→αBβ，那么FIRST(β)中除ε之外的所有符号都在FOLLOW( B )中</p>
+<p>如果存在一个产生式A→αB，或存在产生式A→αBβ且FIRST(β) 包含ε，那么 FOLLOW(A)中的所有符号都在FOLLOW(B)中</p>
+</blockquote>
+</blockquote>
+<p>例：计算下面算术表达式文法每个非终结符的FOLLOW集？</p>
+<p><img src="../../../images/compiler/compiler-57.png" alt="例57"></p>
+<ul>
+<li><em>一个终结符中的follow集合可能会依赖于另一个非终结符中的follow集合，比如E`的follow集合依赖于E的follow集合</em></li>
+</ul>
+</blockquote>
+<blockquote>
+<p>问题4:<strong>计算产生式的SELECT集</strong></p>
+<p><em>产生式的SELECT集合算法依赖于FIRST集合和FOLLOW集合</em></p>
+<p>例：算术表达式文法各产生式的SELECT集？</p>
+<p><img src="../../../images/compiler/compiler-58.png" alt="例58"></p>
+<ul>
+<li>第2个产生式和第3个产生式的产生式具有相同的左部，select集合不相交</li>
+<li>第5个产生式和第6个产生式的产生式具有相同的左部，select集合不相交</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>问题5:<strong>构建LL(1)文法的预测分析表</strong></p>
+<p>对于LL(1)文法，可以根据产生式的select集合构造文法的预测分析表。</p>
+<p>例：算术表达式LL(1)文法的预测分析表</p>
+<p><img src="../../../images/compiler/compiler-59.png" alt="例59"></p>
+</blockquote>
+<h3 id="ll1文法的分析方法">LL(1)文法的分析方法</h3>
+<h4 id="递归的预测分析法">递归的预测分析法</h4>
+<p>定义</p>
+<blockquote>
+<ul>
+<li>
+<p>递归的预测分析法是指：在递归下降分析中，根据预测分析表进行产生式的选择</p>
+</li>
+<li>
+<p>根据每个非终结符的产生式和LL(1)文法的预测分析表，为每个非终结符编写对应的过程</p>
+<p><img src="../../../images/compiler/compiler-60.png" alt="例60"></p>
+</li>
+</ul>
+</blockquote>
+<p>算法示例</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-61.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-62.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-63.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-64.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-65.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-66.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-67.png" alt="示例"></p>
+</blockquote>
+<h4 id="非递归的预测分析法">非递归的预测分析法</h4>
+<p>定义</p>
+<blockquote>
+<p>非递归的预测分析不需要为每个非终结符编写递归下降过程，而是根据预测分析表构造一个自动机，也叫表驱动的预测分析</p>
+<p><img src="../../../images/compiler/compiler-68.png" alt="下推自动机原理图"></p>
+</blockquote>
+<p>下推自动机算法示例</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-69.png" alt="示例"></p>
+<p><em>输出对应着最左推导</em></p>
+</blockquote>
+<p>表驱动的预测分析法</p>
+<blockquote>
+<p>输入：一个串w和文法G的分析表 M</p>
+<p>输出：如果w在L(G )中，输出w的最左推导；否则给出错误指示</p>
+<p>方法：最初，语法分析器的格局如下：输入缓冲区中是w$，G的开始符号位于栈顶，其下面是$。下面的程序使用预测分析表M生成了处理这个输入的预测分析过程</p>
+<p><img src="../../../images/compiler/compiler-70.png" alt="算法"></p>
+</blockquote>
+<p>递归的预测分析法VS非递归的预测分析法</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-71.png" alt="对比71"></p>
+</blockquote>
+<p>预测分析法实现步骤</p>
+<blockquote>
+<p>1）构造文法</p>
+<p>2）改造文法：消除二义性、消除左递归、消除回溯</p>
+<p>3）求每个变量的FIRST集和FOLLOW集，从而求得每个候选式的SELECT集</p>
+<p>4）检查是不是LL(1)文法。若是，构造预测分析表</p>
+<p>5）对于递归的预测分析，根据预测分析表为每一个非终结符编写一个过程；对于非递归的预测分析，实现表驱动的预测分析算法</p>
+</blockquote>
+<h4 id="预测分析中的错误处理">预测分析中的错误处理</h4>
+<p>预测分析中的错误检测</p>
+<blockquote>
+<p>两种情况下可以检测到错误</p>
+<ul>
+<li>
+<p>栈顶的终结符和当前输入符号不匹配</p>
+</li>
+<li>
+<p>栈顶非终结符与当前输入符号在预测分析表对应项中的信息为空</p>
+</li>
+</ul>
+</blockquote>
+<p>预测分析中的错误恢复</p>
+<blockquote>
+<p>恐慌模式</p>
+<blockquote>
+<ul>
+<li>忽略输入中的一些符号，直到输入中出现由设计者选定的同步词法单元(synchronizing token)集合中的某个词法单元
+<ul>
+<li>其效果依赖于同步集合的选取。集合的选取应该使得语法分析器能从实际遇到的错误中快速恢复</li>
+<li>例如可以把FOLLOW(A)中的所有终结符放入非终结符A的同步记号集合</li>
+</ul>
+</li>
+<li>如果终结符在栈顶而不能匹配，一个简单的办法就是弹出此终结符</li>
+</ul>
+</blockquote>
+<hr>
+<p>例-构造同步词法单元</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-72.png" alt="例72"></p>
+<p>​	<em>Synch表示根据相应非终结符的FOLLOW集得到的同步词法单元</em></p>
+<hr>
+<p>分析表的使用方法</p>
+<blockquote>
+<p>如果M[A,a]是空，表示检测到错误，根据恐慌模式，忽略输入符号a</p>
+<p>如果M[A,a]是synch，则弹出栈顶的非终结符A，试图继续分析后面的语法成分</p>
+<p>如果栈顶的终结符和输入符号不匹配，则弹出栈顶的终结符</p>
+</blockquote>
+<hr>
+<p>例：分析表工作原理</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-73.png" alt="例73"></p>
+</blockquote>
+</blockquote>
+</blockquote>
+<h3 id="自底向上语法分析down-up-parsing">自底向上语法分析(Down-Up Parsing)</h3>
+<h4 id="自底向上语法分析概述">自底向上语法分析概述</h4>
+<blockquote>
+<p>从分析树的底部(叶节点)向顶部(根节点)方向构造分析树</p>
+<p>可以看成是将输入串w归约为文法开始符号S的过程</p>
+<p>自顶向下的语法分析采用最左推导方式</p>
+<ul>
+<li>自底向上的语法分析采用最左归约方式（反向构造最右推导）</li>
+</ul>
+<p>自底向上语法分析的通用框架</p>
+<ul>
+<li>移入-归约分析(Shift-Reduce Parsing)</li>
+</ul>
+<p>例(移入-归约分析)：</p>
+<p><img src="../../../images/compiler/compiler-74.png" alt="例74"></p>
+<p>​	<em>栈内符号串 + 剩余输入 = “规范句型”</em></p>
+<p>移入-归约分析的工作过程</p>
+<blockquote>
+<p>在对输入串的一次从左到右扫描过程中，语法分析器将零个或多个输入符号移入到栈的顶端，直到它可以对栈顶的一个文法符号串β进行归约为止</p>
+<p>然后，它将β归约为某个产生式的左部</p>
+<p>语法分析器不断地重复这个循环，直到它检测到一个语法错误，或者栈中包含了开始符号且输入缓冲区为空(当进入这样的格局时，语法分析器停止运行，并宣称成功完成了语法分析)为止</p>
+</blockquote>
+<p>移入-归约分析器可采取的4种动作</p>
+<blockquote>
+<p>移入：将下一个输入符号移到栈的顶端</p>
+<p>归约：被归约的符号串的右端必然处于栈顶。语法分析器在栈中确定这个串的左端，并决定用哪个非终结符来替换这个串</p>
+<p>接收：宣布语法分析过程成功完成</p>
+<p>报错：发现一个语法错误，并调用错误恢复子例程</p>
+</blockquote>
+<p>移入-归约分析中存在的问题</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-75.png" alt="规约失败例"></p>
+<p><img src="../../../images/compiler/compiler-76.png" alt="规约失败例"></p>
+<p><em>移入-归约分析中每次规约的应该是直接短语</em></p>
+<blockquote>
+<p>直接短语：高度为2的子树，直接短语一定是某个产生式的右部，但是产生式的右部不一定是直接短语</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<h4 id="lr分析法概述">LR分析法概述</h4>
+<p>LR分析法</p>
+<blockquote>
+<p>LR文法(Knuth, 1963) 是最大的、可以构造出相应移入-归约语法分析器的文法类</p>
+<ul>
+<li>
+<p>L: 对输入进行从左到右的扫描</p>
+</li>
+<li>
+<p>R: 反向构造出一个最右推导序列</p>
+</li>
+</ul>
+<p>LR(k)分析</p>
+<ul>
+<li>需要向前查看k个输入符号的LR分析</li>
+<li>k = 0 和 k = 1 这两种情况具有实践意义当省略(k)时，表示k=1</li>
+</ul>
+</blockquote>
+<p>LR分析法的基本原理</p>
+<blockquote>
+<p>如何正确识别句柄？</p>
+<ul>
+<li>
+<p>句柄是逐步形成的，用“状态”表示句柄识别的进展程度</p>
+<p><img src="../../../images/compiler/compiler-77.png" alt="例77"></p>
+</li>
+</ul>
+</blockquote>
+<p>LR分析器(自动机)的总体结构</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-78.png" alt="总体结构"></p>
+<ul>
+<li>例：LR分析表的结构
+<ul>
+<li><img src="../../../images/compiler/compiler-79.png" alt="LR分析表的结构"></li>
+<li><img src="../../../images/compiler/compiler-80.png" alt="LR分析表的结构"></li>
+<li><img src="../../../images/compiler/compiler-81.png" alt="LR分析表的结构"></li>
+<li><img src="../../../images/compiler/compiler-82.png" alt="LR分析表的结构"></li>
+<li><img src="../../../images/compiler/compiler-83.png" alt="LR分析表的结构"></li>
+<li><img src="../../../images/compiler/compiler-84.png" alt="LR分析表的结构"></li>
+</ul>
+</li>
+<li>LR分析器的工作过程
+<ul>
+<li><img src="../../../images/compiler/compiler-85.png" alt="LR分析器的工作过程"></li>
+<li><img src="../../../images/compiler/compiler-86.png" alt="LR分析器的工作过程"></li>
+<li><img src="../../../images/compiler/compiler-87.png" alt="LR分析器的工作过程"></li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>LR分析算法</p>
+<blockquote>
+<p>输入：串w和LR语法分析表，该表描述了文法G的ACTION函数和GOTO函数。</p>
+<p>输出：如果w在 L(G)中，则输出w的自底向上语法分析过程中的归约步骤；否则给出一个错误指示。</p>
+<p>方法：初始时，语法分析器栈中的内容为初始状态s0，输入缓冲区中的内容为w$。然后，语法分析器执行下面的程序：</p>
+<p><img src="../../../images/compiler/compiler-88.png" alt="LR分析算法"></p>
+<p>​	<em>LR分析算法最关键点在于分析表的构造</em></p>
+</blockquote>
+<p>LR(0)分析</p>
+<blockquote>
+<p>LR(0)项目</p>
+<blockquote>
+<p>右部某位置标有圆点的产生式称为相应文法的一个LR(0)项目（简称为项目）: A → α1·α2</p>
+<p><img src="../../../images/compiler/compiler-89.png" alt="LR(0)项目"></p>
+</blockquote>
+<p>增广文法(Augmented Grammar)</p>
+<blockquote>
+<p>如果G是一个以S为开始符号的文法，则G的增广文法G&rsquo;就是在G中加上新开始符号S&rsquo;和产生式S&rsquo; → S而得到的文法</p>
+<p><img src="../../../images/compiler/compiler-90.png" alt="增广文法"></p>
+<p><em>引入这个新的开始产生式的目的是使得文法开始符号仅出现在一个产生式的左边，从而使得分析器只有一个接受状态</em></p>
+</blockquote>
+<p>文法中的项目</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-91-1.png" alt="文法中的项目"></p>
+<blockquote>
+<p>后继项目（Successive Item）</p>
+<p>同属于一个产生式的项目，但圆点的位置只相差一个符号，则称后者是前者的后继项目</p>
+<p>A→α·Xβ的后继项目是A→αX·β</p>
+</blockquote>
+<ul>
+<li>
+<p>这15个项目中是否会有某些项目是等价的？</p>
+<p><img src="../../../images/compiler/compiler-92-2.png" alt="文法中的项目"></p>
+<p>​	<em>在一个项目中，原点后边存在非终结符时就存在等价项目</em></p>
+<p>​	<em>可以把等价的项目组成一个项目集(I) ，称为项目集闭包(Closure of Item Sets)，每个项目集闭包对应着自动机的一个状态</em></p>
+</li>
+</ul>
+</blockquote>
+<p>例：LR(0)自动机(如何根据文法构造LR0自动机？)</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-94.png" alt="LR(0)自动机"></p>
+</blockquote>
+<p>LR(0)分析表构造算法</p>
+<ol>
+<li>两个基本算法：</li>
+</ol>
+<blockquote>
+<p>CLOSURE()函数(LR(0)每个状态都是项目集闭包)</p>
+<ul>
+<li>
+<p>计算给定项目集I的闭包: CLOSURE(I) = I ∪ {B→·γ | A→α·Bβ ∈ CLOSURE(I),B→γ∈P}</p>
+<p><img src="../../../images/compiler/compiler-95.png" alt="算法"></p>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>GOTO()函数</p>
+<ul>
+<li>
+<p>返回项目集I对应于文法符号X的后继项目集闭包: GOTO(I, X)=CLOSURE({A→αX·β | A→α·Xβ∈I})</p>
+<p><img src="../../../images/compiler/compiler-96.png" alt="算法"></p>
+</li>
+</ul>
+</blockquote>
+<ol start="2">
+<li>构造LR(0)自动机的状态集</li>
+</ol>
+<blockquote>
+<p>规范LR(0)项集族(Canonical LR(0) Collection) C={I0}∪{I | 3J ∈ C, X ∈ Vn ∪ Vt, I=GOTO(J,X)}</p>
+<p><img src="../../../images/compiler/compiler-97.png" alt="算法"></p>
+</blockquote>
+<ol start="3">
+<li>LR(0)分析表构造算法</li>
+</ol>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-98.png" alt="算法"></p>
+</blockquote>
+<ol start="4">
+<li>LR(0)自动机的形式化定义</li>
+</ol>
+<p><img src="../../../images/compiler/compiler-99.png" alt="定义"></p>
+<ol start="5">
+<li>LR(0)分析过程中的冲突</li>
+</ol>
+<blockquote>
+<ul>
+<li>
+<p>移进/归约冲突</p>
+<p><img src="../../../images/compiler/compiler-100.png" alt="移进/归约冲突"></p>
+<p><img src="../../../images/compiler/compiler-101.png" alt="移进/归约冲突"></p>
+</li>
+<li>
+<p>归约/归约冲突</p>
+<p><img src="../../../images/compiler/compiler-102.png" alt="移进/归约冲突"></p>
+</li>
+</ul>
+</blockquote>
+<p><em>LR(0)存在冲突的根本原因是该文法并不会向前看多个字符，进而导致多分支冲突</em></p>
+</blockquote>
+<p>SLR分析</p>
+<blockquote>
+<ul>
+<li>
+<p>LR(0)分析过程中的冲突</p>
+<p><img src="../../../images/compiler/compiler-103.png" alt="移进/归约冲突"></p>
+</li>
+<li>
+<p>SLR分析法的基本思想</p>
+<p><img src="../../../images/compiler/compiler-104.png" alt="移进/归约冲突"></p>
+</li>
+<li>
+<p>例子中的表达式文法的SLR分析表</p>
+<p><img src="../../../images/compiler/compiler-105.png" alt="移进/归约冲突"></p>
+</li>
+<li>
+<p>SLR分析法示例2</p>
+<p><img src="../../../images/compiler/compiler-106.png" alt="移进/归约冲突"></p>
+</li>
+<li>
+<p>SLR分析表构造算法</p>
+<p><img src="../../../images/compiler/compiler-107.png" alt="移进/归约冲突"></p>
+</li>
+<li>
+<p>SLR 分析中的冲突</p>
+<p><img src="../../../images/compiler/compiler-108.png" alt="移进/归约冲突"></p>
+<p><em>通过示例可以看到，SLR 分析仅利用follow集来处理冲突是不够的！</em></p>
+</li>
+<li>
+<p>SLR分析存在的问题</p>
+<p>SLR只是简单地考察下一个输入符号b是否属于与归约项目A→α相关联的FOLLOW(A)，但b∈FOLLOW(A)只是归约α的一个必要条件，而非充分条件</p>
+</li>
+</ul>
+</blockquote>
+<p>LR(1)分析</p>
+<blockquote>
+<ul>
+<li>
+<p>LR(1)分析法的提出</p>
+<p><img src="../../../images/compiler/compiler-109.png" alt="LR(1)分析法的提出"></p>
+<p><em>LR(1)分析法引入了特定位置A的后继符集合概念</em></p>
+</li>
+<li>
+<p>规范LR(1)项目</p>
+<p><img src="../../../images/compiler/compiler-110.png" alt="规范LR(1)项目"></p>
+</li>
+<li>
+<p>等价LR(1)项目</p>
+<p><img src="../../../images/compiler/compiler-111.png" alt="等价LR(1)项目"></p>
+</li>
+<li>
+<p>示例：LR(1)自动机(如果给给定文法构造LR(1)自动机？)</p>
+<p><img src="../../../images/compiler/compiler-112.png" alt="例112"></p>
+<p><img src="../../../images/compiler/compiler-113.png" alt="例113"></p>
+<p><em>如果除展望符外，两个LR(1)项目集是相同的，则称这两个LR(1)项目集是同心的</em></p>
+</li>
+<li>
+<p>LR(1)项目集闭包</p>
+<p><img src="../../../images/compiler/compiler-114.png" alt="例114"></p>
+</li>
+<li>
+<p>LR(1)GOTO函数</p>
+<p><img src="../../../images/compiler/compiler-115.png" alt="例115"></p>
+</li>
+<li>
+<p>为文法G&rsquo;构造LR(1)项集族</p>
+<p><img src="../../../images/compiler/compiler-116.png" alt="例116"></p>
+</li>
+<li>
+<p>LR(1)自动机的形式化定义</p>
+<p><img src="../../../images/compiler/compiler-117.png" alt="例117"></p>
+</li>
+<li>
+<p>LR分析表构造算法</p>
+<p><img src="../../../images/compiler/compiler-118.png" alt="例118"></p>
+</li>
+</ul>
+</blockquote>
+<p>LALR分析法</p>
+<blockquote>
+<ul>
+<li>
+<p>LALR(lookahead-LR)分析的基本思想</p>
+<p><img src="../../../images/compiler/compiler-119.png" alt="例119"></p>
+</li>
+<li>
+<p>例：合并同心项集</p>
+<p><img src="../../../images/compiler/compiler-120.png" alt="例120"></p>
+</li>
+<li>
+<p>示例：合并同心项目集产生问题案例</p>
+<p><img src="../../../images/compiler/compiler-121.png" alt="例121"></p>
+<p><img src="../../../images/compiler/compiler-122.png" alt="例122"></p>
+</li>
+<li>
+<p>LALR(1)的特点</p>
+<ul>
+<li>
+<p>形式上与LR(1)相同</p>
+</li>
+<li>
+<p>大小上与LR(0)/SLR相当</p>
+</li>
+<li>
+<p>分析能力介于SLR和LR(1)二者之间</p>
+<p>SLR&lt;LALR(1)&lt;LR(1)</p>
+</li>
+<li>
+<p>合并后的展望符集合仍为FOLLOW集的子集</p>
+</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>二义性文法的LR分析</p>
+<blockquote>
+<ul>
+<li>
+<p>二义性文法的特点</p>
+<p><img src="../../../images/compiler/compiler-123.png" alt="例123"></p>
+</li>
+<li>
+<p>例1：二义性算术表达式文法</p>
+<p><img src="../../../images/compiler/compiler-124.png" alt="例124"></p>
+<p><img src="../../../images/compiler/compiler-125.png" alt="例125"></p>
+</li>
+<li>
+<p>例2：二义性if语句文法的LR分析</p>
+<p><img src="../../../images/compiler/compiler-126.png" alt="例126"></p>
+<p><img src="../../../images/compiler/compiler-127.png" alt="例127"></p>
+<p><img src="../../../images/compiler/compiler-128.png" alt="例128"></p>
+</li>
+<li>
+<p>二义性文法的使用</p>
+<p>应该保守地使用二义性文法，并且必须在严格控制之下使用，因为稍有不慎就会导致语法分析器所识别的语言出现偏差</p>
+</li>
+</ul>
+</blockquote>
+<p>LR分析中的错误处理</p>
+<blockquote>
+<ul>
+<li>
+<p>语法错误的检测</p>
+<p>当LR分析器在查询分析表并发现一个报错条目时，就检测到了一个语法错误</p>
+</li>
+<li>
+<p>错误恢复策略</p>
+<ul>
+<li>
+<p>恐慌模式错误恢复</p>
+</li>
+<li>
+<p>短语层次错误恢复</p>
+</li>
+</ul>
+</li>
+<li>
+<p>恐慌模式错误恢复</p>
+<p><img src="../../../images/compiler/compiler-129.png" alt="例129"></p>
+</li>
+<li>
+<p>短语层次错误恢复</p>
+<ul>
+<li>
+<p>检查LR分析表中的每一个报错条目，并根据语言的使用方法来决定程序员所犯的何种错误最有可能引起这个语法错误</p>
+</li>
+<li>
+<p>然后构造出适当的恢复过程</p>
+</li>
+</ul>
+<p><img src="../../../images/compiler/compiler-130.png" alt="例130"></p>
+<p><img src="../../../images/compiler/compiler-131.png" alt="例131"></p>
+</li>
+</ul>
+</blockquote>
+<h2 id="第四章-语法制导翻译">第四章 语法制导翻译</h2>
+<h3 id="概念">概念</h3>
+<blockquote>
+<ul>
+<li>
+<p>什么是语法制导翻译?</p>
+<p><img src="../../../images/compiler/compiler-132.png" alt="例132"></p>
+</li>
+<li>
+<p>语法制导翻译的基本思想</p>
+<ul>
+<li>
+<p>如何表示语义信息？</p>
+<ul>
+<li>为CFG中的文法符号设置语义属性，用来表示语法成分对应的语义信息</li>
+</ul>
+</li>
+<li>
+<p>如何计算语义属性？</p>
+<ul>
+<li>文法符号的语义属性值是用与文法符号所在产生式（语法规则）相关联的语义规则来计算的</li>
+<li>对于给定的输入串x ，构建x的语法分析树，并利用与产生式（语法规则）相关联的语义规则来计算分析树中各结点对应的语义属性值</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>两个概念</p>
+<p>将语义规则同语法规则（产生式）联系起来要涉及两个概念</p>
+<ul>
+<li>
+<p>语法制导定义(Syntax-Directed Definitions, SDD)</p>
+</li>
+<li>
+<p>语法制导翻译方案 (Syntax-Directed Translation Scheme , SDT)</p>
+</li>
+</ul>
+</li>
+<li>
+<p>语法制导定义(SDD)</p>
+<ul>
+<li>
+<p>SDD是对CFG的推广</p>
+<ul>
+<li>将每个文法符号和一个语义属性集合相关联</li>
+<li>将每个产生式和一组语义规则相关联，这些规则用于计算该产生式中各文法符号的属性值</li>
+</ul>
+</li>
+<li>
+<p>如果X是一个文法符号，a是X的一个属性，则用X.a表示属性a在某个标号为X的分析树结点上的值</p>
+</li>
+</ul>
+<p><img src="../../../images/compiler/compiler-133.png" alt="例133"></p>
+</li>
+<li>
+<p>语法制导翻译方案(SDT)</p>
+<p>SDT是在产生式右部嵌入了程序片段的CFG，这些程序片段称为语义动作。按照惯例，语义动作放在花括号内</p>
+<p><img src="../../../images/compiler/compiler-134.png" alt="例134"></p>
+<p><em>一个语义动作在产生式中的位置决定了这个动作的执行时间</em></p>
+</li>
+<li>
+<p>SDD与SDT</p>
+<ul>
+<li>
+<p>SDD</p>
+<ul>
+<li>是关于语言翻译的高层次规格说明</li>
+<li>隐蔽了许多具体实现细节，使用户不必显式地说明翻译发生的顺序</li>
+</ul>
+</li>
+<li>
+<p>SDT</p>
+<ul>
+<li>可以看作是对SDD的一种补充，是SDD的具体实施方案</li>
+<li>显式地指明了语义规则的计算顺序，以便说明某些实现细节</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h3 id="语法制导定义sdd">语法制导定义SDD</h3>
+<blockquote>
+<p>语法制导定义SDD是对CFG的推广</p>
+<ul>
+<li>
+<p>将每个文法符号和一个语义属性集合相关联</p>
+</li>
+<li>
+<p>将每个产生式和一组语义规则相关联，用来计算该产生式中各文法符号的属性值</p>
+</li>
+</ul>
+<p>文法符号的属性</p>
+<ul>
+<li>综合属性 (synthesized attribute)</li>
+<li>继承属性 (inherited attribute)</li>
+</ul>
+<p>综合属性(synthesized attribute)</p>
+<p><img src="../../../images/compiler/compiler-135.png" alt="例135"></p>
+<p>例：<img src="../../../images/compiler/compiler-137.png" alt="例137"></p>
+<p>继承属性(inherited attribute)</p>
+<p><img src="../../../images/compiler/compiler-136.png" alt="例136"></p>
+<p>例：<img src="../../../images/compiler/compiler-138.png" alt="例138"></p>
+<p>属性文法 (Attribute Grammar)</p>
+<p>一个没有副作用的SDD有时也称为属性文法</p>
+<ul>
+<li>属性文法的规则仅仅通过其它属性值和常量来定义一个属性值</li>
+</ul>
+<p><img src="../../../images/compiler/compiler-139.png" alt="例139"></p>
+</blockquote>
+<p>SDD的求值顺序</p>
+<blockquote>
+<p>SDD为CFG中的文法符号设置语义属性。对于给定的输入串x，应用语义规则计算分析树中各结点对应的属性值</p>
+<p>按照什么顺序计算属性值？</p>
+<ul>
+<li>语义规则建立了属性之间的依赖关系，在对语法分析树节点的一个属性求值之前，必须首先求出这个属性值所依赖的所有属性值</li>
+</ul>
+<p>依赖图(Dependency Graph)</p>
+<ul>
+<li>
+<p>依赖图是一个描述了分析树中结点属性间依赖关系的有向图</p>
+</li>
+<li>
+<p>分析树中每个标号为X的结点的每个属性a都对应着依赖图中的一个结点</p>
+</li>
+<li>
+<p>如果属性X.a的值依赖于属性Y.b的值，则依赖图中有一条从Y.b的结点指向X.a的结点的有向边</p>
+</li>
+</ul>
+<p>例:<img src="../../../images/compiler/compiler-140.png" alt="例140"></p>
+<p>属性值的计算顺序</p>
+<ul>
+<li>
+<p>可行的求值顺序是满足下列条件的结点序列N1, N2, … , Nk ：如果依赖图中有一条从结点Ni到 Nj的边(Ni→Nj), 那么i &lt; j（即：在节点序列中，Ni排在Nj 前面）</p>
+</li>
+<li>
+<p>这样的排序将一个有向图变成了一个线性排序，这个排序称为这个图的拓扑排序(topological sort)</p>
+</li>
+</ul>
+<p>例:<img src="../../../images/compiler/compiler-141.png" alt="例141"></p>
+<p>对于只具有综合属性的SDD ，可以按照任何自 底向上的顺序计算它们的值</p>
+<p>对于同时具有继承属性和综合属性的SDD，不 能保证存在一个顺序来对各个节点上的属性进行求值</p>
+<p><img src="../../../images/compiler/compiler-142.png" alt="例142"></p>
+<blockquote>
+<ul>
+<li>
+<p>从计算的角度看，给定一个SDD，很难确定是否存在某棵语法分析树，使得SDD的属性之间存在循环依赖关系</p>
+</li>
+<li>
+<p>幸运的是，存在一个SDD的有用子类，它们能够保证对每棵语法分析树都存在一个求值顺序，因为它们不允许产生带有环的依赖图</p>
+</li>
+<li>
+<p>不仅如此，接下来介绍的两类SDD可以和自顶向下及自底向上的语法分析过程一起高效地实现</p>
+<ul>
+<li>S-属性定义 (S-Attributed Definitions, S-SDD)</li>
+<li>L-属性定义 (L-Attributed Definitions, L-SDD)</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+</blockquote>
+<p>S-属性定义与L-属性定义</p>
+<blockquote>
+<ul>
+<li>
+<p>S-属性定义</p>
+<p><img src="../../../images/compiler/compiler-143.png" alt="例143"></p>
+</li>
+<li>
+<p>L-属性定义</p>
+<blockquote>
+<p>L-属性定义(也称为L属性的SDD或L-SDD)的直观含义：在一个产生式所关联的各属性之间，依赖图的边可以从左到右，但不能从右到左(因此称为L属性的，L是Left的首字母)</p>
+</blockquote>
+<blockquote>
+<p>一个SDD是L-属性定义，当且仅当它的每个属性要么是一个综合属性，要么是满足如下条件的继承属性：假设存在一个产生式A→X1X2…Xn，其右部符号Xi (1&lt;= i &lt;= n)的继承属性仅依赖于下列属性：</p>
+<ul>
+<li>
+<p>A的继承属性</p>
+</li>
+<li>
+<p>产生式中Xi左边的符号 X1, X2, … , Xi-1 的属性</p>
+</li>
+<li>
+<p>Xi本身的属性，但Xi 的全部属性不能在依赖图中形成环路</p>
+</li>
+</ul>
+<p><em>每个S-属性定义都是L-属性定义</em></p>
+</blockquote>
+<p>例1：<img src="../../../images/compiler/compiler-144.png" alt="例144"></p>
+<p>例2：<img src="../../../images/compiler/compiler-145.png" alt="例145"></p>
+</li>
+</ul>
+</blockquote>
+<h3 id="语法制导翻译方案sdt">语法制导翻译方案SDT</h3>
+<blockquote>
+<p><strong>SDT</strong></p>
+<ul>
+<li>
+<p>语法制导翻译方案(SDT )是在产生式右部中嵌入了程序片段(称为语义动作)的CFG</p>
+<p><img src="../../../images/compiler/compiler-146.png" alt="例146"></p>
+</li>
+<li>
+<p>SDT可以看作是SDD的具体实施方案</p>
+</li>
+<li>
+<p>本节主要关注如何使用SDT来实现两类重要的SDD，因为在这两种情况下，SDT可在语法分析过程中实现</p>
+<ul>
+<li>基本文法可以使用LR分析技术，且SDD是S属性的</li>
+<li>基本文法可以使用LL分析技术，且SDD是L属性的</li>
+</ul>
+</li>
+</ul>
+<p><strong>将S-SDD转换为SDT</strong></p>
+<p>​	<img src="../../../images/compiler/compiler-147.png" alt="例147"></p>
+<p>S-属性定义的SDT实现</p>
+<p>​	<img src="../../../images/compiler/compiler-148.png" alt="例148"></p>
+<p>扩展的LR语法分析栈</p>
+<p>​	<img src="../../../images/compiler/compiler-149.png" alt="例149"></p>
+<p>将语义动作中的抽象定义式改写成具体可执行的栈操作</p>
+<p>​	<img src="../../../images/compiler/compiler-150.png" alt="例150"></p>
+<p>示例：在自底向上语法分析栈中实现桌面计算器</p>
+<ul>
+<li>
+<p><img src="../../../images/compiler/compiler-151.png" alt="桌面计算器"></p>
+</li>
+<li>
+<p><img src="../../../images/compiler/compiler-152.png" alt="桌面计算器"></p>
+</li>
+<li>
+<p><img src="../../../images/compiler/compiler-153.png" alt="桌面计算器"></p>
+</li>
+<li>
+<p><img src="../../../images/compiler/compiler-154.png" alt="桌面计算器"></p>
+</li>
+<li>
+<p><img src="../../../images/compiler/compiler-155.png" alt="桌面计算器"></p>
+</li>
+<li>
+<p><img src="../../../images/compiler/compiler-156.png" alt="桌面计算器"></p>
+</li>
+<li>
+<p><img src="../../../images/compiler/compiler-157.png" alt="桌面计算器"></p>
+</li>
+<li>
+<p><img src="../../../images/compiler/compiler-158.png" alt="桌面计算器"></p>
+</li>
+<li>
+<p><img src="../../../images/compiler/compiler-159.png" alt="桌面计算器"></p>
+</li>
+<li>
+<p><img src="../../../images/compiler/compiler-160.png" alt="桌面计算器"></p>
+</li>
+</ul>
+<p><strong>将L-SDD转换为SDT</strong></p>
+<blockquote>
+<p>将L-SDD转换为SDT的规则</p>
+<ul>
+<li>将计算某个非终结符号A的继承属性的动作插入到产生式右部中紧靠在A的本次出现之前的位置上</li>
+<li>将计算一个产生式左部符号的综合属性的动作放置在这个产生式右部的最右端</li>
+</ul>
+<p>例：<img src="../../../images/compiler/compiler-161.png" alt="例161"></p>
+</blockquote>
+<p>L-属性定义的SDT实现</p>
+<blockquote>
+<p>如果一个L-SDD的基本文法可以使用LL分析技术，那么它的SDT可以在LL或LR语法分析过程中实现</p>
+<p>例：<img src="../../../images/compiler/compiler-162.png" alt="例162"></p>
+<ul>
+<li>
+<p>LL-在非递归的预测分析过程中进行语义翻译</p>
+</li>
+<li>
+<p>LL-在递归的预测分析过程中进行语义翻译</p>
+</li>
+<li>
+<p>LR-在LR分析过程中进行语义翻译</p>
+</li>
+</ul>
+</blockquote>
+</blockquote>
+<p>在非递归的LL预测分析过程中进行翻译</p>
+<blockquote>
+<p>首先需要扩展语法分析栈</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-163.png" alt="例163"></p>
+</blockquote>
+<p>示例：</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-164.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-165.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-166.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-167.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-168.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-169.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-170.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-171.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-172.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-173.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-174.png" alt="示例"></p>
+</blockquote>
+<p>分析栈中的每一个记录都对应着一段执行代码</p>
+<blockquote>
+<p>综合记录出栈时，要将综合属性值复制给后面特定的语义动作</p>
+<p>变量展开时（即变量本身的记录出栈时），如果其含有继承属性，则要将继承属性值复制给后面特定的语义动作</p>
+<p>示例：语义动作可以直接定义成代码片段</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-175.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-176.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-177.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-178.png" alt="示例"></p>
+</blockquote>
+</blockquote>
+</blockquote>
+<p>在递归的LL预测分析过程中进行翻译</p>
+<blockquote>
+<p>算法</p>
+<blockquote>
+<ul>
+<li>
+<p>为每个非终结符A构造一个函数，A的每个继承属性对应该函数的一个形参，函数的返回值是A的综合属性值。对出现在A产生式中的每个文法符号的每个属性都设置一个局部变量</p>
+</li>
+<li>
+<p>非终结符A的代码根据当前的输入决定使用哪个产生式</p>
+</li>
+<li>
+<p>与每个产生式有关的代码执行如下动作：从左到右考虑产生式右部的词法单元、非终结符及语义动作</p>
+<ul>
+<li>
+<p>对于带有综合属性x的词法单元 X，把x的值保存在局部变量X.x中；然后产生一个匹配 X的调用，并继续输入</p>
+</li>
+<li>
+<p>对于非终结符B，产生一个右部带有函数调用的赋值语句c := B(b1 , b2 , …, bk)，其中， b1 , b2 , …, bk是代表B的继承属性的变量，c是代表B的综合属性的变量</p>
+</li>
+<li>
+<p>对于每个动作，将其代码复制到语法分析器，并把对属性的引用改为对相应变量的引用</p>
+</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>示例</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-179.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-180.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-181.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-182.png" alt="示例"></p>
+</blockquote>
+</blockquote>
+<p>L-属性定义的自底向上翻译</p>
+<blockquote>
+<p><strong>给定一个以LL文法为基础的L-SDD，可以修改这个文法，并在LR语法分析过程中计算这个新文法之上的SDD</strong></p>
+<p>示例</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-183.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-184.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-185.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-186.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-187.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-188.png" alt="示例"></p>
+</blockquote>
+<p>将语义动作改写为可执行的栈操作</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-189.png" alt="示例"></p>
+<ul>
+<li>给定一个以LL文法为基础的L-属性定义，可以修改这个文法，并在LR语法分析过程中计算这个新文法之上的SDD
+<ul>
+<li>首先构造SDT，在各个非终结符之前放置语义动作来计算它的继承属性，并在产生式后端放置语义动作计算综合属性</li>
+<li>对每个内嵌的语义动作，向文法中引入一个标记非终结符来替换它。每个这样的位置都有一个不同的标记，并且对于任意一个标记M都有一个产生式M→ε</li>
+<li>如果标记非终结符M在某个产生式A→α{a}β中替换了语义动作a，对a进行修改得到a&rsquo; ，并且将a&rsquo;关联到M→ε 上。动作a'
+<ul>
+<li>(a) 将动作a需要的A或α中符号的任何属性作为M的继承属性进行复制</li>
+<li>(b) 按照a中的方法计算各个属性，但是将计算得到的这些属性作为M的综合属性</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+</blockquote>
+<h2 id="第五章-中间代码生成">第五章 中间代码生成</h2>
+<p>中间代码输入程序片段，输出3地址码。</p>
+<h3 id="类型表达式">类型表达式</h3>
+<blockquote>
+<ul>
+<li>
+<p>基本类型表达式</p>
+<p>integer</p>
+<p>real</p>
+<p>char</p>
+<p>boolean</p>
+<p>type_error (出错类型)</p>
+<p>void (无类型)</p>
+</li>
+<li>
+<p>类型名类型表达式</p>
+<p>可以为类型表达式命名，类型名也是类型表达式</p>
+</li>
+<li>
+<p>类型构造符(type constructor)类型表达式</p>
+<p>将类型构造符(type constructor)作用于类型表达式可以构成新的类型表达式</p>
+<ul>
+<li>
+<p>数组构造符array</p>
+<p>若T是类型表达式，则array(I,T)是类型表达式(I是一个整数)</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>类型表达式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>int[3]</td>
+<td>array(3,int)</td>
+</tr>
+<tr>
+<td>int[2][3]</td>
+<td>array(2,array(3,int))</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>指针构造符pointer</p>
+<p>若T是类型表达式，则pointer(T)是类型表达式，它表示一个指针类型</p>
+</li>
+<li>
+<p>笛卡尔乘积构造符X</p>
+<p>若T1和T2是类型表达式，则笛卡尔乘积T1XT2是类型表达式</p>
+</li>
+<li>
+<p>函数构造符→</p>
+<p>若T1、T2、…、Tn和R是类型表达式，则T1xT2x…xTn→R是类型表达式</p>
+</li>
+<li>
+<p>记录构造符record</p>
+<p>若有标识符N1、N2、…、Nn与类型表达式T1、T2、…、Tn，则record((N1 x T1 ) x ( N2 x T2 ) x … x (Nn x Tn))是一个类型表达式</p>
+</li>
+</ul>
+</li>
+<li>
+<p>例</p>
+<p><img src="../../../images/compiler/compiler-190.png" alt="例190"></p>
+</li>
+</ul>
+</blockquote>
+<h3 id="声明语句的翻译">声明语句的翻译</h3>
+<blockquote>
+<ul>
+<li>
+<p>局部变量的存储分配</p>
+<blockquote>
+<p>对于声明语句，语义分析的主要任务就是收集标识符的类 型等属性信息，并为每一个名字分配一个相对地址</p>
+<ul>
+<li>
+<p>从类型表达式可以知道该类型在运行时刻所需的存储单元数量称为类型的宽度(width)</p>
+</li>
+<li>
+<p>在编译时刻，可以使用类型的宽度为每一个名字分配一个相对地址</p>
+</li>
+</ul>
+<p>名字的类型和相对地址信息保存在相应的符号表记录中</p>
+</blockquote>
+</li>
+<li>
+<p>变量声明语句的SDT</p>
+<p><img src="../../../images/compiler/compiler-191.png" alt="例191"></p>
+</li>
+<li>
+<p>示例</p>
+<p><img src="../../../images/compiler/compiler-192.png" alt="例191"></p>
+<p><img src="../../../images/compiler/compiler-193.png" alt="例191"></p>
+</li>
+</ul>
+</blockquote>
+<h3 id="简单赋值语句的翻译">简单赋值语句的翻译</h3>
+<blockquote>
+<ul>
+<li>
+<p>赋值语句的基本文法</p>
+<blockquote>
+<p>① S → id = E；</p>
+<p>② E → E1 + E2</p>
+<p>③ E → E1 * E2</p>
+<p>④ E → -E1</p>
+<p>⑤ E → (E1)</p>
+<p>⑥ E → id</p>
+</blockquote>
+</li>
+<li>
+<p>赋值语句翻译的任务</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-194.png" alt="例194"></p>
+</blockquote>
+</li>
+<li>
+<p>赋值语句的SDT</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-195.png" alt="例195"></p>
+</blockquote>
+</li>
+<li>
+<p>增量翻译(Incremental Translation)</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-196.png" alt="例196"></p>
+</blockquote>
+</li>
+<li>
+<p>示例</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-197.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-198.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-199.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-200.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-201.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-202.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-203.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-204.png" alt="示例"></p>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<h3 id="数组引用的翻译">数组引用的翻译</h3>
+<blockquote>
+<ul>
+<li>
+<p>赋值语句的基本文法</p>
+<blockquote>
+<p>S → id = E; | L = E;</p>
+<p>E → E1 + E2 | -E1 | (E1) | id | L</p>
+<p>L → id[E] | L1[E]</p>
+</blockquote>
+</li>
+<li>
+<p>数组引用的翻译的目标</p>
+<blockquote>
+<p>将数组引用翻译成三地址码时要解决的主要问题是确定数组元素的存放地址，也就是数组元素的寻址</p>
+</blockquote>
+</li>
+<li>
+<p>数组元素寻址(Addressing Array Elements)</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-205.png" alt="示例"></p>
+</blockquote>
+</li>
+<li>
+<p>示例</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-206.png" alt="示例"></p>
+</blockquote>
+</li>
+<li>
+<p>带有数组引用的赋值语句的翻译</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-207.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-208.png" alt="示例"></p>
+</blockquote>
+</li>
+<li>
+<p>数组引用的SDT</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-209.png" alt="示例"></p>
+<p><img src="../../../images/compiler/compiler-210.png" alt="示例"></p>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<h3 id="控制流语句的翻译">控制流语句的翻译</h3>
+<blockquote>
+<ul>
+<li>
+<p>控制流语句的基本文法</p>
+<blockquote>
+<p>P → S</p>
+<p>S → S1S2</p>
+<p>S → id = E; | L = E;</p>
+<p>S → if B then S1</p>
+<p>| if B then S1 else S2</p>
+<p>| while B do S1</p>
+</blockquote>
+</li>
+<li>
+<p>控制流语句的代码结构</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-211.png" alt="示例"></p>
+</blockquote>
+</li>
+<li>
+<p>控制流语句的SDT</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-212.png" alt="控制流语句的SDT"></p>
+<p><img src="../../../images/compiler/compiler-213.png" alt="控制流语句的SDT"></p>
+<p><img src="../../../images/compiler/compiler-214.png" alt="控制流语句的SDT"></p>
+<p><img src="../../../images/compiler/compiler-215.png" alt="控制流语句的SDT"></p>
+</blockquote>
+</li>
+<li>
+<p>布尔表达式及其SDT</p>
+<blockquote>
+<ul>
+<li>
+<p>布尔表达式的基本文法</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-216.png" alt="布尔表达式的基本文法"></p>
+<p><img src="../../../images/compiler/compiler-217.png" alt="布尔表达式的基本文法"></p>
+</blockquote>
+</li>
+<li>
+<p>布尔表达式的SDT</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-218.png" alt="布尔表达式的SDT"></p>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+</li>
+<li>
+<p>小结</p>
+<blockquote>
+<p>任何SDT都可以通过下面的方法实现</p>
+<ul>
+<li>首先建立一棵语法分析树，然后按照从左到右的深度优先顺序来执行这些动作</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>控制流语句SDT</p>
+<blockquote>
+<p><img src="../../../images/compiler/compiler-219.png" alt="控制流语句SDT"></p>
+</blockquote>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">ChavinKing</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-04-15 01:37
+        
+    </span>
+  </p>
+  
+  
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">赞赏支持</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wx.png">
+        <span>微信打赏</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/zfb.png">
+        <span>支付宝打赏</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/%E7%BC%96%E8%AF%91/">编译</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/dw/%E5%A2%9E%E9%87%8FETL-%E9%95%BF%E5%91%A8%E6%9C%9F%E6%8C%87%E6%A0%87-%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">增量ETL (长周期指标) 优化方案</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/other/%E5%9F%BA%E4%BA%8EMacM1%E5%A4%84%E7%90%86%E5%99%A8%E7%9A%84github%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/">
+            <span class="next-text nav-default">基于Mac M1处理器的github博客搭建</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="http://www.cnblogs.com/wcwen1990" class="iconfont icon-cnblogs" title="cnblogs"></a>
+      <a href="mailto:chavinking1990@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/chavinking" class="iconfont icon-github" title="github"></a>
+  <a href="https://chavinking.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2020 - 
+    2022
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">ChavinKing</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.30dad356188cdaba5047112eaa8bf5e85cb14ae7e803337403591fce94a531a0.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-138883536-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

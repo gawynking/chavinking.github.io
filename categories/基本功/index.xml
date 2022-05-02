@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>基本功 on ChavinKing</title>
+    <link>https://chavinking.github.io/categories/%E5%9F%BA%E6%9C%AC%E5%8A%9F/</link>
+    <description>Recent content in 基本功 on ChavinKing</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Wed, 15 Apr 2020 01:37:56 +0800</lastBuildDate><atom:link href="https://chavinking.github.io/categories/%E5%9F%BA%E6%9C%AC%E5%8A%9F/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>编译原理知识点整理</title>
+      <link>https://chavinking.github.io/post/base/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%861/</link>
+      <pubDate>Wed, 15 Apr 2020 01:37:56 +0800</pubDate>
+      
+      <guid>https://chavinking.github.io/post/base/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%861/</guid>
+      <description>第一章 绪论 计算机语言发展历程 第一代语言：机器语言 第二代语言：汇编语言 第三代语言：高级语言(如C，C++，Java等) 第四代语言：极高级领域语</description>
+    </item>
+    
+  </channel>
+</rss>

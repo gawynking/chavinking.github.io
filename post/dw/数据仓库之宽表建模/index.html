@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>数据仓库之宽表建模 - ChavinKing</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="ChavinKing" /><meta name="description" content="​ 数据仓库理论经过最近这三十年的发展，到目前为止主要有两大主流门派，范式建模和维度建模，然而随着国内大数据技术的应用普及，在国内衍生出了另外" /><meta name="keywords" content="data warehouse, Github, flink, java, spark, ETL" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.96.0 with theme even" />
+
+
+<link rel="canonical" href="https://chavinking.github.io/post/dw/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E4%B9%8B%E5%AE%BD%E8%A1%A8%E5%BB%BA%E6%A8%A1/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<link href="/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/reset-even.css">
+
+
+<meta property="og:title" content="数据仓库之宽表建模" />
+<meta property="og:description" content="​ 数据仓库理论经过最近这三十年的发展，到目前为止主要有两大主流门派，范式建模和维度建模，然而随着国内大数据技术的应用普及，在国内衍生出了另外" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://chavinking.github.io/post/dw/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E4%B9%8B%E5%AE%BD%E8%A1%A8%E5%BB%BA%E6%A8%A1/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2022-04-11T01:37:56+08:00" />
+<meta property="article:modified_time" content="2022-04-11T01:37:56+08:00" />
+
+<meta itemprop="name" content="数据仓库之宽表建模">
+<meta itemprop="description" content="​ 数据仓库理论经过最近这三十年的发展，到目前为止主要有两大主流门派，范式建模和维度建模，然而随着国内大数据技术的应用普及，在国内衍生出了另外"><meta itemprop="datePublished" content="2022-04-11T01:37:56+08:00" />
+<meta itemprop="dateModified" content="2022-04-11T01:37:56+08:00" />
+<meta itemprop="wordCount" content="1872">
+<meta itemprop="keywords" content="ETL,数据仓库," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="数据仓库之宽表建模"/>
+<meta name="twitter:description" content="​ 数据仓库理论经过最近这三十年的发展，到目前为止主要有两大主流门派，范式建模和维度建模，然而随着国内大数据技术的应用普及，在国内衍生出了另外"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">ChavinKing</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于我</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">ChavinKing</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于我</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">数据仓库之宽表建模</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2022-04-11 01:37 </span>
+        <div class="post-category">
+            <a href="/categories/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/"> 数据仓库 </a>
+            </div>
+          <span class="more-meta"> 约 1872 字 </span>
+          <span class="more-meta"> 预计阅读 4 分钟 </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-为什么主张宽表建模">1 为什么主张宽表建模？</a></li>
+    <li><a href="#2-为什么不能用宽表建模">2 为什么不能用宽表建模？</a></li>
+    <li><a href="#3-什么时候可以采用宽表建模">3 什么时候可以采用宽表建模？</a></li>
+    <li><a href="#附录">附录</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <hr>
+<p>​	数据仓库理论经过最近这三十年的发展，到目前为止主要有两大主流门派，范式建模和维度建模，然而随着国内大数据技术的应用普及，在国内衍生出了另外一种数仓建模思想-宽表建模，在笔者的数据工作生涯中，接触过的主张以“宽表建模”方法建仓的数仓工程师并不少，或者说更大部分的数据开发都支持宽表建模也不过分，这其中不乏很多大厂员工亦是如此。今天在这里笔者根据自己的工作经验对宽表建模这一流派谈一谈个人的看法。</p>
+<h2 id="1-为什么主张宽表建模">1 为什么主张宽表建模？</h2>
+<p>​	根据经验来说，主张宽表建模的人群一般都对范式建模或维度建模理解不够深刻，更有甚者对于一些数仓基础概念都不能清晰掌握。因为对主流建仓模型理解上有偏差，所以也很容易接受更简单、理解更容易的宽表设计方案。如果对这类人群进行细分，通常情况刚入门的同学或者技术转数仓的同学更主张宽表建模，但是这两类人群出发点有所不同。除去上述原因外，其中新人主张宽表建模多半来自设计压力和引导人水平等有关系。新人本身刚入行，引导人水平又有限，这种情况很容易失去对于正确方向的把控能力，然而团队又不具备一定的纠错能力，久而久之数仓模型就会变得异常臃肿且难以维护；另一种人群可能本身具备一定的技术积累，也有数据仓库实际设计经验，但由于以往团队的不专业，再加上个人对于数据模型这种玄而又玄的概念性的知识不感冒，个人没有投入精力去理解标准模型理论，久而久之也就形成了宽表建模才是数仓建模的最优解法的思路（这类人群技术不差，数仓设计水平天花板到小学六年级的样子）。不管是哪一类人群，对于一个正确建仓的团队而言都不是好事，毕竟如果数仓建模这么简单，一群并不投入精力思考的都能总结出来这么有价值的方法，那么Inmon和Kimball这种行业奠基人的价值又在哪里呢？难道他们会笨到如此吗！</p>
+<p>​	说到这里相信读者已经猜到，笔者是不赞同宽表建模这种建仓思想的，准确的说是毫无逻辑可言下的暴力宽表建模（后文会做解释），那么主张宽表建模的人通常主要有如下几点原因：</p>
+<ul>
+<li>宽表建模更好用，在一定程度上可以提高查询性能、使用效率</li>
+<li>宽表建模更容易建设，我们建设几张宽表就搞定数仓了</li>
+<li>宽表建模覆盖范围更广，更能剔除数据孤岛</li>
+</ul>
+<h2 id="2-为什么不能用宽表建模">2 为什么不能用宽表建模？</h2>
+<p>​	这里首先要回答一个问题，我们为什么要对数据建模？不建模为什么行不通？相信这个问题很多读者都能很快给出各种角度的答案。这里笔者从两个方面来做解答，其一数据建模最容易想到的好处就是清晰的数据结构有助于提升生产性能，降低生产成本，提高生产效率，提升数据一致性；另一方面的好处是优秀的模型设计一般都伴随着更合理的ETL数据流，清晰的数据流同样对数仓结构的可塑性提供了更强的保障。</p>
+<p>​	以上我们讨论了数据建模的优点？那么宽表建模的缺点有哪些呢？笔者从以下几个方面进行论证：</p>
+<ul>
+<li>从模型角度来看宽表建模数据质量一致性保证比较困难，其一是宽表通常横跨多个业务过程，不同业务过程粒度可能不一致，会丧失统计精度；</li>
+<li>从ETL角度来看问题就更严重了，宽表通常横跨多业务过程，同时也会冗余大量维度数据，多事实加杂维度融合到一张表里，无疑会造成后台ETL逻辑的复杂性增加，ETL过程本身加工会比较复杂，加上多个维度、事实一起加工会对后期宽表的扩展造成麻烦，同时也会衍生出比较大的安全隐患，比如：
+<ol>
+<li>宽表增加属性；</li>
+<li>宽表产出时间；</li>
+<li>宽表数据修复；</li>
+</ol>
+</li>
+</ul>
+<p>​	从以上的讨论中可以看出来，宽表建模这种方法并不适合数据仓库建模。</p>
+<h2 id="3-什么时候可以采用宽表建模">3 什么时候可以采用宽表建模？</h2>
+<p>​	宽表建模难道就没有适用的场景吗？笔者也不这么认为，就像文章开头所讲的那样，主张宽表建模的同学被吸引的主要原因是宽表建模理解起来更容易，没啥理论成本。这一点在数仓建模上肯定是不合适的，但是这一点特别适合提供业务人员使用，因为业务方没有义务理解数据仓库理论，他们的主要目的是用数据，能让使用方更快速的上手数据的方案就是好方案。</p>
+<p>​	基于这一点，宽表建模的应用场景就展现出来了，那就是可以应用宽表建模方法针对数据集市及应用层的设计上。这种更易于理解的模型表更容易赢得业务方的好感，提高体验。同时，数据集市从数据仓库拿数据，数据加工只需要按照业务场景进行指标加工，并不需要进行复杂的ETL工作，所以后台的多left join子查询也是可以接受的。</p>
+<p>​	到这里读者也许能发现，并没有完全使用的建模方案，也没有不值一提的建模方案，他们差的只是合适的应用场景。</p>
+<h2 id="附录">附录</h2>
+<p>所谓宽表有两种理解：</p>
+<ul>
+<li>其一是模型表也是针对单业务过程进行设计，冗余了大量维度属性到事实表（参考《大数据之路》模型篇事务事实表）；</li>
+<li>其二是模型表横跨多业务过程，本身一张表描述了多个业务过程事实，同时可能也冗余大量维度属性。</li>
+</ul>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">ChavinKing</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2022-04-11 01:37
+        
+    </span>
+  </p>
+  
+  
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">赞赏支持</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wx.png">
+        <span>微信打赏</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/zfb.png">
+        <span>支付宝打赏</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/ETL/">ETL</a>
+          <a href="/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/">数据仓库</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/dw/%E7%BB%B4%E5%BA%A6%E5%BB%BA%E6%A8%A1%E4%B9%8B%E4%B8%9A%E5%8A%A1%E8%BF%87%E7%A8%8B/">
+            <span class="next-text nav-default">维度建模之业务过程</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="http://www.cnblogs.com/wcwen1990" class="iconfont icon-cnblogs" title="cnblogs"></a>
+      <a href="mailto:chavinking1990@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/chavinking" class="iconfont icon-github" title="github"></a>
+  <a href="https://chavinking.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2020 - 
+    2022
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">ChavinKing</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.30dad356188cdaba5047112eaa8bf5e85cb14ae7e803337403591fce94a531a0.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-138883536-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

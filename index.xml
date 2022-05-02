@@ -9,10 +9,10 @@
     <lastBuildDate>Mon, 11 Apr 2022 01:37:56 +0800</lastBuildDate><atom:link href="https://chavinking.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>数据仓库之宽表建模</title>
-      <link>https://chavinking.github.io/post/dw/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E4%B9%8B%E5%86%8D%E8%AE%BA%E5%AE%BD%E8%A1%A8%E5%BB%BA%E6%A8%A1/</link>
+      <link>https://chavinking.github.io/post/dw/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E4%B9%8B%E5%AE%BD%E8%A1%A8%E5%BB%BA%E6%A8%A1/</link>
       <pubDate>Mon, 11 Apr 2022 01:37:56 +0800</pubDate>
       
-      <guid>https://chavinking.github.io/post/dw/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E4%B9%8B%E5%86%8D%E8%AE%BA%E5%AE%BD%E8%A1%A8%E5%BB%BA%E6%A8%A1/</guid>
+      <guid>https://chavinking.github.io/post/dw/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E4%B9%8B%E5%AE%BD%E8%A1%A8%E5%BB%BA%E6%A8%A1/</guid>
       <description>​ 数据仓库理论经过最近这三十年的发展，到目前为止主要有两大主流门派，范式建模和维度建模，然而随着国内大数据技术的应用普及，在国内衍生出了另外</description>
     </item>
     
@@ -77,6 +77,15 @@
       
       <guid>https://chavinking.github.io/post/dw/%E5%A2%9E%E9%87%8FETL-%E9%95%BF%E5%91%A8%E6%9C%9F%E6%8C%87%E6%A0%87-%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88/</guid>
       <description>一 背景 ​ 在日常数据处理过程中避免不了要计算跨长周期数据指标统计需求，常见三种场景抽象如下： pv类： 统计每个城市(过去30天)用户浏览次数； 统</description>
+    </item>
+    
+    <item>
+      <title>编译原理知识点整理</title>
+      <link>https://chavinking.github.io/post/base/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%861/</link>
+      <pubDate>Wed, 15 Apr 2020 01:37:56 +0800</pubDate>
+      
+      <guid>https://chavinking.github.io/post/base/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%861/</guid>
+      <description>第一章 绪论 计算机语言发展历程 第一代语言：机器语言 第二代语言：汇编语言 第三代语言：高级语言(如C，C++，Java等) 第四代语言：极高级领域语</description>
     </item>
     
     <item>
