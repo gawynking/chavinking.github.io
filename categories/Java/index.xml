@@ -6,7 +6,16 @@
     <description>Recent content in Java on ChavinKing</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sun, 25 Oct 2020 01:37:56 +0800</lastBuildDate><atom:link href="https://chavinking.github.io/categories/Java/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 10 May 2022 01:37:56 +0800</lastBuildDate><atom:link href="https://chavinking.github.io/categories/Java/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>在线视频多倍播放</title>
+      <link>https://chavinking.github.io/post/tools/B%E7%AB%99%E5%A4%9A%E5%80%8D%E6%92%AD%E6%94%BE/</link>
+      <pubDate>Tue, 10 May 2022 01:37:56 +0800</pubDate>
+      
+      <guid>https://chavinking.github.io/post/tools/B%E7%AB%99%E5%A4%9A%E5%80%8D%E6%92%AD%E6%94%BE/</guid>
+      <description>方法1 chrome浏览器：工具-开发者工具-console 3倍播放：document. querySelector(&amp;lsquo;video&amp;rsquo;).playbackRate=3 方法2 Chrome浏览器安装插件： Global Speed: 视频速度控制</description>
+    </item>
+    
     <item>
       <title>Java编程思想-知识整理-思维导图</title>
       <link>https://chavinking.github.io/post/java/Thinking-in-Java/</link>

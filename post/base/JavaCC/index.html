@@ -1,0 +1,2106 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>JavaCC-用于Java应用程序的最流行的解析器生成器 - ChavinKing</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="ChavinKing" /><meta name="description" content="Java Compiler Compiler (JavaCC) 是用于 Java 应用程序的最流行的解析器生成器。 解析器生成器是一种读取语法规范并将其转换为可以识别与语法匹配的 Java程序的工具。 除了解析器" /><meta name="keywords" content="data warehouse, Github, flink, java, spark, ETL" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.96.0 with theme even" />
+
+
+<link rel="canonical" href="https://chavinking.github.io/post/base/JavaCC/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<link href="/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/reset-even.css">
+
+
+<meta property="og:title" content="JavaCC-用于Java应用程序的最流行的解析器生成器" />
+<meta property="og:description" content="Java Compiler Compiler (JavaCC) 是用于 Java 应用程序的最流行的解析器生成器。 解析器生成器是一种读取语法规范并将其转换为可以识别与语法匹配的 Java程序的工具。 除了解析器" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://chavinking.github.io/post/base/JavaCC/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2020-06-15T01:37:56+08:00" />
+<meta property="article:modified_time" content="2020-06-15T01:37:56+08:00" />
+
+<meta itemprop="name" content="JavaCC-用于Java应用程序的最流行的解析器生成器">
+<meta itemprop="description" content="Java Compiler Compiler (JavaCC) 是用于 Java 应用程序的最流行的解析器生成器。 解析器生成器是一种读取语法规范并将其转换为可以识别与语法匹配的 Java程序的工具。 除了解析器"><meta itemprop="datePublished" content="2020-06-15T01:37:56+08:00" />
+<meta itemprop="dateModified" content="2020-06-15T01:37:56+08:00" />
+<meta itemprop="wordCount" content="21688">
+<meta itemprop="keywords" content="编译," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="JavaCC-用于Java应用程序的最流行的解析器生成器"/>
+<meta name="twitter:description" content="Java Compiler Compiler (JavaCC) 是用于 Java 应用程序的最流行的解析器生成器。 解析器生成器是一种读取语法规范并将其转换为可以识别与语法匹配的 Java程序的工具。 除了解析器"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">ChavinKing</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">首页</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">归档</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">分类</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">标签</li>
+      </a><a href="/about/">
+        <li class="mobile-menu-item">关于我</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">ChavinKing</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">首页</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">归档</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">分类</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">标签</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/about/">关于我</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">JavaCC-用于Java应用程序的最流行的解析器生成器</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-06-15 01:37 </span>
+        <div class="post-category">
+            <a href="/categories/%E5%9F%BA%E6%9C%AC%E5%8A%9F/"> 基本功 </a>
+            </div>
+          <span class="more-meta"> 约 21688 字 </span>
+          <span class="more-meta"> 预计阅读 44 分钟 </span>
+        <span id="busuanzi_container_page_pv" class="more-meta"> <span id="busuanzi_value_page_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次阅读 </span>
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#一-介绍">一 介绍</a>
+      <ul>
+        <li><a href="#1-javacc基本特征">1 JavaCC基本特征</a></li>
+      </ul>
+    </li>
+    <li><a href="#二-安装">二 安装</a></li>
+    <li><a href="#三-语法">三 语法</a>
+      <ul>
+        <li><a href="#1-javacc语法">1 JavaCC语法</a></li>
+        <li><a href="#2-javacc常见选项24个">2 JavaCC常见选项(24个)</a></li>
+        <li><a href="#3-javacc产生式">3 JavaCC产生式</a></li>
+      </ul>
+    </li>
+    <li><a href="#四-jjtree介绍">四 JJTree介绍</a>
+      <ul>
+        <li><a href="#1-definite-node">1 Definite node</a></li>
+        <li><a href="#2-conditional-node">2 Conditional node</a></li>
+        <li><a href="#3-node-scopes-and-user-actions">3 Node scopes and user actions</a></li>
+        <li><a href="#4-exception-handling">4 Exception handling</a></li>
+        <li><a href="#5-node-scope-hooks">5 Node scope hooks</a></li>
+        <li><a href="#6-tracking-tokens">6 Tracking tokens</a></li>
+        <li><a href="#7-lifecycle-of-a-node">7 Lifecycle of a node</a></li>
+        <li><a href="#8-visitor-support">8 Visitor support</a></li>
+        <li><a href="#9-options">9 Options</a></li>
+      </ul>
+    </li>
+    <li><a href="#五-token-manager介绍">五 Token Manager介绍</a>
+      <ul>
+        <li><a href="#1-lexical-states">1 Lexical States</a></li>
+        <li><a href="#2-lexical-actions">2 Lexical Actions</a></li>
+        <li><a href="#3-special-tokens">3 Special Tokens</a></li>
+      </ul>
+    </li>
+    <li><a href="#六-示例">六 示例</a>
+      <ul>
+        <li><a href="#1-javacc使用方法">1 JavaCC使用方法</a></li>
+        <li><a href="#2-javacc示例">2 JavaCC示例</a></li>
+        <li><a href="#3-jjtree示例">3 JJTree示例</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <hr>
+<p>Java Compiler Compiler (JavaCC) 是用于 Java 应用程序的最流行的解析器生成器。</p>
+<p>解析器生成器是一种读取语法规范并将其转换为可以识别与语法匹配的 Java程序的工具。</p>
+<p>除了解析器生成器本身之外，JavaCC 还提供与解析器生成相关的其他标准功能，例如树构建（通过 JavaCC 附带的名为 JJTree 的工具）、操作和调试。</p>
+<p>运行 JavaCC 解析器所需要的只是 Java 运行时环境 (JRE)。</p>
+<h2 id="一-介绍">一 介绍</h2>
+<p>为了简化基于<strong>Java</strong>语言的词法分析器或者语法分析器的开发，Sun公司的开发人员开发了JavaCC(Java Compiler Compiler)。JavaCC是一个基于<strong>Java</strong>语言的分析器的自动生成器解析器。用户只要按照JavaCC的语法规范编写JavaCC的源文件，然后使用JavaCC的编译器编译，就能够生成基于Java语言的为某种特定语言的分析器。JavaCC允许我们用类似EBNF的方式来定义语法规则，这样就使得从EBNF语法规则到JavaCC格式的语法规则的转换很容易。JavaCC已经成为最受欢迎的Java解析器创建工具，它还自带了的预先设定好的JavaCC语法，以其作为应用起点，从而使使用难度进一步降低。</p>
+<h3 id="1-javacc基本特征">1 JavaCC基本特征</h3>
+<p><code>以下内容截取自JavaCC官网</code></p>
+<ul>
+<li>
+<p>JavaCC 生成<strong>自顶向下</strong>（递归下降）解析器，而不是由类似YACC的工具生成的自底向上解析器。这允许使用更通用的语法，尽管不允许左递归。自顶向下解析器具有许多其他优点（除了更通用的语法），例如更容易调试，能够解析到语法中的任何非终结符，并且还能够向上传递值（属性）并在解析过程中向下解析树。</p>
+</li>
+<li>
+<p>默认情况下，JavaCC 会生成一个**<code>LL(1)</code>**解析器。但是，可能有部分语法不是<code>LL(1)</code>. JavaCC 提供了句法和语义提前的能力，以在这些点上解决本地的移位歧义。例如，解析器<code>LL(k)</code>只在这些点上，但<code>LL(1)</code>在其他任何地方都保留着以获得更好的性能。移位归约和归约归约冲突对于自上而下的解析器来说不是问题。</p>
+</li>
+<li>
+<p>JavaCC 生成 100% 纯 Java 的解析器，因此对 JavaCC 没有运行时依赖，也不需要在不同机器平台上运行所需的特殊移植工作。</p>
+</li>
+<li>
+<p>JavaCC 允许在词法和语法规范内扩展 BNF规范,像<code>(A)*</code>,<code>(A)+</code>等。扩展的 BNF 在一定程度上减轻了对左递归的需求。事实上，扩展的 BNF 通常更容易阅读，如<code>A ::= y(x)*</code>vs <code>A ::= Ax|y</code>。</p>
+</li>
+<li>
+<p>词法规范（如正则表达式、字符串）和语法规范（BNF）都写在<strong>同一个文件</strong>中。它使语法更易于阅读，因为可以在语法规范中内联使用正则表达式，并且更易于维护。</p>
+</li>
+<li>
+<p>JavaCC的词法分析器可以处理完整的 Unicode 输入，词法规范也可以包含任何 Unicode 字符。这有助于描述语言元素，例如允许某些 Unicode 字符（不是 ASCII）但不允许其他字符的 Java 标识符。</p>
+</li>
+<li>
+<p>JavaCC 提供了类似于 Lex的词法状态和词法动作功能。JavaCC 中优于其他工具的特定方面是它提供的第一类状态概念，例如<code>TOKEN</code>和状态更改。这允许来自 JavaCC 的更清晰的规范以及更好的错误和警告消息。</p>
+</li>
+<li>
+<p>在词法规范中定义为<em>特殊标记</em>的标记在解析期间会被忽略，但这些标记可供工具处理。一个有用的应用是处理注释。</p>
+</li>
+<li>
+<p>词法规范可以在整个词法规范的全局级别或在单个词法规范的基础上定义不区分大小写的标记。</p>
+</li>
+<li>
+<p>JavaCC 带有 JJTree，这是一个非常强大的树构建预处理器。</p>
+</li>
+<li>
+<p>JavaCC 还包括 JJDoc，这是一个将语法文件转换为文档文件的工具，可以选择 HTML。</p>
+</li>
+<li>
+<p>JavaCC 提供了许多选项来定制其行为和生成的解析器的行为。此类选项的示例是要对输入流执行的 Unicode 处理类型、要执行的歧义检查令牌的数量等。</p>
+</li>
+<li>
+<p>JavaCC 错误报告是解析器生成器中最好的。JavaCC 生成的解析器能够通过完整的诊断信息清楚地指出解析错误的位置。</p>
+</li>
+<li>
+<p>使用选项<code>DEBUG_PARSER</code>、<code>DEBUG_LOOKAHEAD</code>和<code>DEBUG_TOKEN_MANAGER</code>，用户可以深入分析解析和令牌处理步骤。</p>
+</li>
+<li>
+<p>JavaCC 版本包括范围广泛的示例，包括 Java 和 HTML 语法。通过学习示例及其文档是熟悉 JavaCC 的好方法。</p>
+</li>
+</ul>
+<h2 id="二-安装">二 安装</h2>
+<blockquote>
+<p>注意：依赖apache ant</p>
+</blockquote>
+<p>源码安装：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">$ git clone https://github.com/javacc/javacc.git
+</span></span><span class="line"><span class="cl">$ <span class="nb">cd</span> javacc
+</span></span><span class="line"><span class="cl">$ ant
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>配置环境变量：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1">## javaCC</span>
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">JAVACC_HOME</span><span class="o">=</span>/opt/app/javacc-7.0.11
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$JAVACC_HOME</span>/scripts:<span class="nv">$PATH</span>:.
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>最好按照我上边方法安装，避免踩坑</code></p>
+<h2 id="三-语法">三 语法</h2>
+<blockquote>
+<p><a href="https://javacc.github.io/javacc/documentation/grammar.html">JavaCC官网-JavaCC语法链接</a></p>
+</blockquote>
+<p>以下是JavaCC中定义的关键字：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-tex" data-lang="tex"><span class="line"><span class="cl">EOF
+</span></span><span class="line"><span class="cl">IGNORE<span class="nb">_</span>CASE
+</span></span><span class="line"><span class="cl">JAVACODE
+</span></span><span class="line"><span class="cl">LOOKAHEAD
+</span></span><span class="line"><span class="cl">MORE
+</span></span><span class="line"><span class="cl">PARSER<span class="nb">_</span>BEGIN
+</span></span><span class="line"><span class="cl">PARSER<span class="nb">_</span>END
+</span></span><span class="line"><span class="cl">SKIP
+</span></span><span class="line"><span class="cl">SPECIAL<span class="nb">_</span>TOKEN
+</span></span><span class="line"><span class="cl">TOKEN
+</span></span><span class="line"><span class="cl">TOKEN<span class="nb">_</span>MGR<span class="nb">_</span>DECLS
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="1-javacc语法">1 JavaCC语法</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-tex" data-lang="tex"><span class="line"><span class="cl">javacc<span class="nb">_</span>input ::= javacc<span class="nb">_</span>options
+</span></span><span class="line"><span class="cl">                 &#34;PARSER<span class="nb">_</span>BEGIN&#34; &#34;(&#34; &lt;IDENTIFIER&gt; &#34;)&#34;
+</span></span><span class="line"><span class="cl">                 java<span class="nb">_</span>compilation<span class="nb">_</span>unit
+</span></span><span class="line"><span class="cl">                 &#34;PARSER<span class="nb">_</span>END&#34; &#34;(&#34; &lt;IDENTIFIER&gt; &#34;)&#34;
+</span></span><span class="line"><span class="cl">                 ( production )+
+</span></span><span class="line"><span class="cl">                 &lt;EOF&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>语法文件以<strong>选项列表</strong>开始（可选）。然后是一个包含在<code>PARSER_BEGIN(name)</code>和<code>PARSER_END(name)</code>之间的 Java 编译单元。在此之后是语法产生式列表（选项和产生式都在下面描述）。</p>
+<p><code>PARSER_BEGIN</code>和<code>PARSER_END</code>的名称必须相同，它标识生成的解析器的名称。例如，如果 name 是<code>MyParser</code>，则生成以下文件：</p>
+<ul>
+<li><code>MyParser.java</code>- 生成的解析器。</li>
+<li><code>MyParserTokenManager.java</code>- 生成的令牌管理器（扫描器/词法分析器）。</li>
+<li><code>MyParserConstants.java</code>- 一堆有用的常量。</li>
+</ul>
+<p>还会生成其他文件<code>Token.java</code>、<code>ParseException.java</code>等。但是，这些文件包含样板代码，对于任何语法都是相同的，并且可以跨语法重用（假设语法使用兼容的选项）。</p>
+<p><code>PARSER_BEGIN</code>和<code>PARSER_END</code>之间是一个常规的 Java 编译单元（Java 术语中的编译单元是 Java 文件的全部内容）。这可以是任意 Java 编译单元，只要它包含名称与生成的解析器名称相同的类声明（在上面的示例中的<code>MyParser</code>）。</p>
+<p>因此，一般来说，这部分语法文件看起来像：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">PARSER_BEGIN</span><span class="o">(</span><span class="n">parser_name</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">class</span> <span class="nc">parser_name</span> <span class="o">...</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">PARSER_END</span><span class="o">(</span><span class="n">parser_name</span><span class="o">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>JavaCC不会对编译单元进行详细的检查，所以一个语法文件有可能通过JavaCC，生成编译时产生错误的Java文件。</p>
+<p>如果编译单元包含包声明，则它包含在所有生成的文件中。如果编译单元包含导入声明，则它包含在生成的parser和token manager文件中。</p>
+<p>生成的解析器文件包含编译单元中的所有内容，此外，还包含生成的解析器代码，该代码包含在解析器类的末尾。对于上面的示例，生成的解析器将如下所示：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">class</span> <span class="nc">parser_name</span> <span class="o">...</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// generated parser is inserted here.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// ...
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>生成的解析器包含一个对应于每个非终结符的公共方法声明。针对非终结符的解析是通过调用与该非终结符对应的方法来实现的。与 Yacc 不同，JavaCC 中没有单个开始符号 - 可以针对语法中的任何非终结符进行解析。</p>
+<p>生成的令牌管理器提供了一种公共方法：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">Token</span> <span class="nf">getNextToken</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">ParseError</span><span class="o">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>有关如何使用此方法的更多详细信息，请参阅<a href="https://javacc.github.io/javacc/documentation/grammar.html#javacc-api">JavaCC API</a>文档。</p>
+<h3 id="2-javacc常见选项24个">2 JavaCC常见选项(24个)</h3>
+<p>语法：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">javacc_options ::= [ &#34;options&#34; &#34;{&#34; ( option-binding )*; &#34;}&#34; ]
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>选项若果存在，会以保留字<code>options</code>开头，后跟大括号内的一个或多个选项绑定列表。每个选项绑定指定一个选项的设置项。不能多次设置相同的选项。选项名称不区分大小写。</p>
+<p>定义：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">option_binding ::= &#34;BUILD_PARSER&#34; &#34;=&#34; java_boolean_literal &#34;;&#34;
+</span></span><span class="line"><span class="cl">                 | &#34;BUILD_TOKEN_MANAGER&#34; &#34;=&#34; java_boolean_literal &#34;;&#34;
+</span></span><span class="line"><span class="cl">                 | &#34;CACHE_TOKENS&#34; &#34;=&#34; java_boolean_literal &#34;;&#34;
+</span></span><span class="line"><span class="cl">                 | &#34;CHOICE_AMBIGUITY_CHECK&#34; &#34;=&#34; java_integer_literal &#34;;&#34;
+</span></span><span class="line"><span class="cl">                 | &#34;COMMON_TOKEN_ACTION&#34; &#34;=&#34; java_boolean_literal &#34;;&#34;
+</span></span><span class="line"><span class="cl">                 | &#34;DEBUG_LOOKAHEAD&#34; &#34;=&#34; java_boolean_literal &#34;;&#34;
+</span></span><span class="line"><span class="cl">                 | &#34;DEBUG_PARSER&#34; &#34;=&#34; java_boolean_literal &#34;;&#34;
+</span></span><span class="line"><span class="cl">                 | &#34;DEBUG_TOKEN_MANAGER&#34; &#34;=&#34; java_boolean_literal &#34;;&#34;
+</span></span><span class="line"><span class="cl">                 | &#34;ERROR_REPORTING&#34; &#34;=&#34; java_boolean_literal &#34;;&#34;
+</span></span><span class="line"><span class="cl">                 | &#34;FORCE_LA_CHECK&#34; &#34;=&#34; java_boolean_literal &#34;;&#34;
+</span></span><span class="line"><span class="cl">                 | &#34;IGNORE_CASE&#34; &#34;=&#34; java_boolean_literal &#34;;&#34;
+</span></span><span class="line"><span class="cl">                 | &#34;JAVA_UNICODE_ESCAPE&#34; &#34;=&#34; java_boolean_literal &#34;;&#34;
+</span></span><span class="line"><span class="cl">                 | &#34;LOOKAHEAD&#34; &#34;=&#34; java_integer_literal &#34;;&#34;
+</span></span><span class="line"><span class="cl">                 | &#34;OTHER_AMBIGUITY_CHECK&#34; &#34;=&#34; java_integer_literal &#34;;&#34;
+</span></span><span class="line"><span class="cl">                 | &#34;OUTPUT_DIRECTORY&#34; &#34;=&#34; java_string_literal &#34;;&#34;
+</span></span><span class="line"><span class="cl">                 | &#34;SANITY_CHECK&#34; &#34;=&#34; java_boolean_literal &#34;;&#34;
+</span></span><span class="line"><span class="cl">                 | &#34;STATIC&#34; &#34;=&#34; java_boolean_literal &#34;;&#34;
+</span></span><span class="line"><span class="cl">                 | &#34;SUPPORT_CLASS_VISIBILITY_PUBLIC&#34; &#34;=&#34; java_boolean_literal &#34;;&#34;
+</span></span><span class="line"><span class="cl">                 | &#34;TOKEN_EXTENDS&#34; &#34;=&#34; java_string_literal &#34;;&#34;
+</span></span><span class="line"><span class="cl">                 | &#34;TOKEN_FACTORY&#34; &#34;=&#34; java_string_literal &#34;;&#34;
+</span></span><span class="line"><span class="cl">                 | &#34;TOKEN_MANAGER_USES_PARSER&#34; &#34;=&#34; java_boolean_literal &#34;;&#34;
+</span></span><span class="line"><span class="cl">                 | &#34;UNICODE_INPUT&#34; &#34;=&#34; java_boolean_literal &#34;;&#34;
+</span></span><span class="line"><span class="cl">                 | &#34;USER_CHAR_STREAM&#34; &#34;=&#34; java_boolean_literal &#34;;&#34;
+</span></span><span class="line"><span class="cl">                 | &#34;USER_TOKEN_MANAGER&#34; &#34;=&#34; java_boolean_literal &#34;;&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol>
+<li><strong>LOOKAHEAD</strong>：设置在解析过程中面临choice point可以look ahead的token数量。缺省的值是1，这个值越小，解析的速度就越快。这个设置可能会被特定产生式内部的声明给覆盖掉。</li>
+<li><strong>CHOICE_AMBIGUITY_CHECK</strong>：这个选项的值是数值型，缺省的值是2。这是在形如”A | B | …”这种选择点出现文法二义性的时候，作为参考的token的数量。例如，A和B有着两个相同的开始token序列，但是从第3个token开始就不一样了（在这个例子中假设这个option的值设置成3），这个时候javacc就会告诉你使用值为3的lookahead就可以消除二义性。如果A和B有着3个共同Token的前缀，那么javacc就是告诉你需lookahead 3个或者更多的token了。增加这个选项的值可以以解析的速度换了更详细的二义性信息。但是，对于复杂的语法，比如java，增加这个数字就会导致增加太多的解析时间。</li>
+<li><strong>OTHER_AMBIGUITY_CHECK</strong>：这是一个数值型的选项，默认值是1。这个设置了在其他类型的二义性发生的时候选择lookahead的token数量。例如”(A)*”, “(A)+”, and “(A)?”形式的二义性。这个比上choice checking更加耗时（也就是上面那个选项），所以其默认值是1而不是2。</li>
+<li><strong>STATIC</strong>：boolean类型的选项，默认值是true。如果为true，那么所有在parser和token manager中生成的方法和属性，都会被声明成static。这样做会导致只允许一个parser对象被创建，但是可以提高parser的性能。如果static为true，那么在需要多parser对象的时候，需要调用ReInit方法去重新初始化parser。如果static为false，就可以通过new操作符来创建对象了，然后他们可以在多个线程中同时被使用。这个得非常注意，特别是使用javacc来并行处理一些业务逻辑。</li>
+<li><strong>DEBUG_LOOKAHEAD</strong>：boolean类型的选项，初始值是false。设置为true的时候，可以显示在paraser执行lookahead 的时候把动作打印出来。</li>
+<li><strong>DEBUG_TOKEN_MANAGER</strong>：boolean类型的选项，默认值为false。用于打开token manager的debug日志。当选项为true的时候，token manager就会打印出其所有的动作。这中类型的日志非常多，所有应该在你面对一个文法错误，但是又不知道是怎么回事的时候才被使用。一般来说，你只需要看日志的最后几行应该就能够定位到错误了。</li>
+<li><strong>ERROR_REPORTING</strong>：boolean类型的选项，默认值为true。设置为false的时候，会导致解析错误的信息以更简洁的形式提供。只有在为了提高效率的情况下才需要把这个选项设置为false。</li>
+<li><strong>JAVA_UNICODE_ESCAPE</strong>：boolean类型的选项，默认值为false。当设置为true的时候，生成的解析器会在把字符串传递给token manager之前处理其中的unicode字符。否则形如\u…的字符串是不会被特殊处理的。如果USER_TOKEN_MANAGER, USER_CHAR_STREAM选项设置为true后，这个选项将会被忽略。</li>
+<li><strong>UNICODE_INPUT</strong>：boolean类型的选项，默认值是false。设置为true的时候，生成的解析器将使用一个读取unicode文件的输入流，默认情况下是一个读取ascii文件的输入流。在选项USER_TOKEN_MANAGER，USER_CHAR_STREAM被设置成true的时候，这个选项会被忽略。</li>
+<li><strong>IGNORE_CASE</strong>：boolean类型的选项，默认值是false。当设置成true的时候，生成的token manager会忽略输入的文件和token的声明中的大小写。在书写类似如html的语言的时候，这个选项就会非常有用了，当然你也可以定制化IGNORE_CASE。</li>
+<li><strong>USER_TOKEN_MANAGER</strong>：boolean类型的选项，默认值是false。默认的情况下，生成的token manager仅仅工作在特定的token范围内。如果这个选项设置为true，生成的解析器会接受来自于任何实现了TokenManager对象。</li>
+<li><strong>SUPPORT_CLASS_VISIBILITY_PUBLIC</strong>：boolean类型的选项，默认值是true。在默认的情况下，生成的支撑类（例如Token.java, ParseException.java等等）是具有Public 可见性的对象，如果这个选项被设置成false，那么这些类的可见性将会被设置成package-private级别。</li>
+<li><strong>USER_CHAR_STREAM</strong>：boolean类型的选项，默认值是true。在默认的情况下，按照<strong>JAVA_UNICODE_ESCAPE</strong>和<strong>UNICODE_INPUT</strong>选项生成一个字符stream reader。生成的token manager会从这个reader中接受字符串。如果这个选项被设置成true，token manager将从任意一个实现了”CharStream.java”的reader中接受字符串。这个文件可以在解析器生成的文件夹下。在<strong>USER_TOKEN_MANAGER</strong>选项设置成true的时候，这个选项会被忽略。</li>
+<li><strong>BUILD_PARSER</strong>：boolean类型的选项，默认值为true。在默认的情况下，javacc会生成一个解析器对象，例如上面提到的MyParser.java文件。在这个选项被设置成false的时候，解析器将不会被生成。一般情况下，如果仅仅需要生成token manager，那个就可以使用这个选项。</li>
+<li><strong>BUILD_TOKEN_MANAGER</strong>：boolean类型的选项，默认值是true。在默认情况下，javacc会生成一个token manager文件。如果这个选项设置成false，那么token manager文件就不会被生成了。这样做的一个场景是，你在修改语法文件的时候仅仅修改了语法，而且没有修改任何的文法规则，那么就可以通过这个选项来节约解析器的生成时间了。</li>
+<li><strong>TOKEN_MANAGER_USES_PARSER</strong>：boolean类型的选项，默认值是false。当设置为true的时候，生成的token manager会包含一个域指向生成的解析器实例。这样做的好处是，可以在文法分析中使用解析器的一些逻辑。如果static选项设置成true了，那么这个选项将不起作用。</li>
+<li><strong>TOKEN_EXTENDS</strong>：字符串类型的选项，默认值是“”，这意味着生成的Token对象将继承自java.lang.Object。这个选项的值可以设置成一个希望Token继承的基类。</li>
+<li><strong>TOKEN_FACTORY</strong>：字符串类型的选项，默认值是“”，意味着Token是通过调用Token.newToken()方法生成的。通过这个选项可以指定一个Token factory，factory类需要有一个static的newToken(int ofKind, String image)方法。</li>
+<li><strong>SANITY_CHECK</strong>：boolean类型的选项，默认值是true。在解析器生成的过程中，javacc会进行很多的语法和语义检查。诸如左递归、二义性。通过把这个选项设置成false，可以减少这些检查，从而加快生成速度。需要注意的是，即使不做这些检查，上面的现象仍然会导致解析器没有按照你想要的方式去工作。</li>
+<li><strong>COMMON_TOKEN_ACTION</strong>：boolean类型的选项，默认值是false。如果这个选项被设置成true。那么在token被扫描进token manager后，每次调用token manager的getNextToken方法后，会触发一个对方法CommonTokenAction的访问。这个函数必须要在TOKEN_MGR_DECLS中定义。CommonTokenAction的签名如下：void CommonTokenAction(Token t)</li>
+<li><strong>CACHE_TOKENS</strong>：boolean类型的选项，默认值是false。这个选项设置成true会导致解析器提前拿token。这样做可以提高一些性能，但是交互型的工作就能不能完成了。</li>
+<li><strong>OUTPUT_DIRECTORY</strong>：字符串类型的选项，默认值是当前文件夹。这个选项可以控制生成的文件的输出位置。</li>
+<li><strong>DEBUG_PARSER</strong>：boolean类型的选项，默认值是false。这个选项用于从parser中获取debug信息。为true的时候，parser会打印很多日志来显示其工作的路径。日志的跟踪也可以通过调用方法disable_tracing()方法来关闭。然后还可以通过enable_tracing()方法来打开tracing。</li>
+<li><strong>FORCE_LA_CHECK</strong>: boolean类型的选项，默认值是false。这个选项可以控制javacc对二义性的检查。在默认情况下，二义性检查仅仅在使用LOOKAHEAD 为1的choice point进行。对于明确声明了LOOKAHEAD 或者LOOKAHEAD 的值不等于1的choice point是不做检查的。如果这个选项被设置成true，那么二义性检查将在所有的choice point处执行。</li>
+</ol>
+<h3 id="3-javacc产生式">3 JavaCC产生式</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">production ::= javacode_production
+</span></span><span class="line"><span class="cl">             | regular_expr_production
+</span></span><span class="line"><span class="cl">             | bnf_production
+</span></span><span class="line"><span class="cl">             | token_manager_decls
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>JavaCC有4种不同类型产生式：</p>
+<ul>
+<li>javacode_production和bnf_production用来定义parser的生成规则；</li>
+<li>regular_expr_production用于定义Token的语法，并且javacc将依据这个信息去生成Token Manager（还会使用在Paraser语法中嵌套的Token）</li>
+<li>token_manager_decls是插入到token manager中的一些申明信息。</li>
+</ul>
+<h4 id="javacode_productionjava-code产生式">javacode_production(Java Code产生式)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">javacode_production ::= &#34;JAVACODE&#34;
+</span></span><span class="line"><span class="cl">                        java_access_modifier java_return_type java_identifier &#34;(&#34; java_parameter_list &#34;)&#34;
+</span></span><span class="line"><span class="cl">                        java_block
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Javacode产生式，是用java代码来书写产生式的一种手段。如果有些规则不好用EBNF来描述，并且上下文相关，就可以使用Javacode产生式，下面的例子是获取流中的一个“)”。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">JAVACODE</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">skip_to_matching_brace</span><span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">Token</span> <span class="n">tok</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">int</span> <span class="n">nesting</span> <span class="o">=</span> <span class="n">1</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">while</span> <span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">tok</span> <span class="o">=</span> <span class="n">getToken</span><span class="o">(</span><span class="n">1</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="o">(</span><span class="n">tok</span><span class="o">.</span><span class="na">kind</span> <span class="o">==</span> <span class="n">LBRACE</span><span class="o">)</span> <span class="n">nesting</span><span class="o">++;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="o">(</span><span class="n">tok</span><span class="o">.</span><span class="na">kind</span> <span class="o">==</span> <span class="n">RBRACE</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">nesting</span><span class="o">--;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="o">(</span><span class="n">nesting</span> <span class="o">==</span> <span class="n">0</span><span class="o">)</span> <span class="k">break</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">tok</span> <span class="o">=</span> <span class="n">getNextToken</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">  <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>上面的代码如果用在选择点的时候可能会出现问题，JavaCC中有4种选择点，分别如下:</p>
+<blockquote>
+<ol>
+<li>( exp1 | exp2 | … )：关系或</li>
+<li>( exp )?：一次或一次都没有</li>
+<li>( exp )*：零次或者多次</li>
+<li>( exp )+：一次或者多次</li>
+</ol>
+</blockquote>
+<p>有问题的代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">NT</span><span class="o">()</span> <span class="o">:</span> <span class="o">{</span> <span class="c1">// 声明本地变量 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">}</span> 
+</span></span><span class="line"><span class="cl"><span class="o">{</span> <span class="c1">// java代码块 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">skip_to_matching_brace</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">  <span class="o">|</span>
+</span></span><span class="line"><span class="cl">  <span class="n">some_other_production</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>没有问题的代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">NT</span><span class="o">()</span> <span class="o">:</span> <span class="o">{</span> <span class="c1">// 声明本地变量 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">}</span> 
+</span></span><span class="line"><span class="cl"><span class="o">{</span> <span class="c1">// java代码块 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="s">&#34;{&#34;</span> <span class="n">skip_to_matching_brace</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">  <span class="o">|</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;(&#34;</span> <span class="n">parameter_list</span><span class="o">()</span> <span class="s">&#34;)&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Javacode产生式用在选择点的时候，也可以在其前面加上语义上的或者语法上的LOOKAHEAD来帮助解析器做出选择。如下例所示：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">void NT() : {
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  LOOKAHEAD ( {errorOccurred} ) skip_to_matching_brace()
+</span></span><span class="line"><span class="cl">  |
+</span></span><span class="line"><span class="cl">  &#34;(&#34; parameter_list() &#34;)&#34;
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Javacode产生式的访问权限是<code>package private</code></p>
+<h4 id="bnf_productionbnf产生式">bnf_production(BNF产生式)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">bnf_production</span> <span class="o">::=</span> <span class="n">java_access_modifier</span> <span class="n">java_return_type</span> <span class="n">java_identifier</span> <span class="s">&#34;(&#34;</span> <span class="n">java_parameter_list</span> <span class="s">&#34;)&#34;</span> <span class="s">&#34;:&#34;</span>
+</span></span><span class="line"><span class="cl">                   <span class="n">java_block</span>
+</span></span><span class="line"><span class="cl">                   <span class="s">&#34;{&#34;</span> <span class="n">expansion_choices</span> <span class="s">&#34;}&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>BNF产生式是书写javacc语法的标准产生式。每个BNF产生式的左边是一个非终结符，然后BNF产生式会在右边用BNF展开式定义这个非终结符。非终结符的写法就跟声明一个java方法的函数一样。这种写非终结符的方式非常明显，因为每个非终结符都会翻译成一个paraser类中的方法。非终结符的名字就是函数的名字，参数和返回值就是传进解析树的值和传出解析树的值。后面我们还将看见，右边的非终结符使用写起来就像一个函数调用。在解析树上传递的值跟函数的参数和返回值具有相同的范型。BNF产生式的范文权限默认是public。</p>
+<p>一个BNF产生式的右边有<strong>两个部分</strong>。首先是一个任意的java块（包括java声明和java code）。这些代码会插入生成的方法的开头。因此，每次在解析过程中使用这个非终结符的时候，这块java代码就会被执行。任何在BNF展开式中间的java代码都可以使用这块的java代码。javacc不会对这块代码做任何处理，仅仅是收集这块的代码。因此，经过javacc处理的代码还是有可能通不过java编译器的。</p>
+<p><strong>BNF产生式示例:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">NT</span><span class="o">()</span> <span class="o">:</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;{&#34;</span> <span class="n">skip_to_matching_brace</span><span class="o">()</span>
+</span></span><span class="line"><span class="cl">  <span class="o">|</span>
+</span></span><span class="line"><span class="cl">  <span class="s">&#34;(&#34;</span> <span class="n">parameter_list</span><span class="o">()</span> <span class="s">&#34;)&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="regular_expr_production正则表达式产生式">regular_expr_production(正则表达式产生式)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">regular_expr_production ::= [ lexical_state_list ]
+</span></span><span class="line"><span class="cl">                            regexpr_kind [ &#34;[&#34; &#34;IGNORE_CASE&#34; &#34;]&#34; ] &#34;:&#34;
+</span></span><span class="line"><span class="cl">                            &#34;{&#34; regexpr_spec ( &#34;|&#34; regexpr_spec )* &#34;}&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>正则表达式产生式用于定于被token manager处理的词法实体。在这里介绍的是文法实体的语法。这个教程会告诉你这些语法构造是怎样和token manager的实际工作联系起来的。</p>
+<p>一个正则表达式产生式以一个文法状态开始，可以通过词法状态列表指定状态。token manager有一个默认的词法状态叫”DEFAULT”。如果lexical state list被省略了，那么DEFAULT状态就会被使用。</p>
+<p>状态声明的后面是一个对正则表达产生式类型的描述（参见<a href="https://javacc.github.io/javacc/documentation/grammar.html#regexpr-kind">regexpr_kind</a>）。</p>
+<p>然后是可选的”IGNORE_CASE”。如果出现了这个选项，那么这个正则表达式就是大小写无关的，和前面提到的IGNORE_CASE选项有同样的作用，区别仅仅是作用于的不同。前面提到的IGNORE_CASE的作用域是全局的。</p>
+<p>接下来就是一些对这个正则表达式产生式的词法实体进行更详细描述的正则表达式了。</p>
+<h4 id="token_manager_declstoken-manager声明">token_manager_decls(token manager声明)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">token_manager_decls ::= &#34;TOKEN_MGR_DECLS&#34; &#34;:&#34; ClassOrInterfaceBody
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Token manager的声明以”TOKEN_MGR_DECLS”保留字开始，然后是 “:” ，然后再是一些列的java声明和语句（也就是一个java block）。这些声明和语句会被写进生成的Token Manager，并且可以在<a href="https://javacc.java.net/doc/javaccgrm.html#prod18">lexical actions</a>中访问。</p>
+<p>在一个javacc语法文件中仅仅只能有一个Token Manager声明。</p>
+<h4 id="lexical_state_list词法的状态列表">lexical_state_list(词法的状态列表)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">lexical_state_list ::= &#34;&lt;&#34; &#34;*&#34; &#34;&gt;&#34;
+</span></span><span class="line"><span class="cl">                     | &#34;&lt;&#34; java_identifier ( &#34;,&#34; java_identifier )* &#34;&gt;&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>词法的状态列表描述的是对应的正则表达式产生式生效的范围，可以视为一个作用域。如果使用了“&lt;*&gt;”，那么这个正则表达式产生式可以在所用的状态中使用。否则对应的正则表达式产生式仅仅能够在尖括号中指定的状态中使用。</p>
+<h4 id="regexpr_kind正则表达式种类">regexpr_kind(正则表达式种类)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">regexpr_kind ::= &#34;TOKEN&#34;
+</span></span><span class="line"><span class="cl">               | &#34;SPECIAL_TOKEN&#34;
+</span></span><span class="line"><span class="cl">               | &#34;SKIP&#34;
+</span></span><span class="line"><span class="cl">               | &#34;MORE&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这指定了正则表达式产生的类型。有四种类型：</p>
+<ul>
+<li>TOKEN: 这个产生式中的正则表达式描述了tokens的语法，主要定义语法分析阶段用到的非终结符。
+Token Manager会根据这些正则表达式生成Token对象并返回给parser。</li>
+<li>SPECIAL_TOKEN: 这产生式中的正则表达式描述了特殊的Token。特殊的Token是在解析过程中没有意义的Token，也就是本BNF产生式忽略的Token。但是，这些Token还是会被传递给parser，并且parser也可以访问他们。访问特殊Token的方式是通过其相邻的Token的specialToken域。特殊Token在处理像注释这种token的时候会非常有用。可以参考这个文档以了解更多关于特殊token的知识。</li>
+<li>SKIP: 这个产生式的规则命中的Token会被Token Manager丢弃掉。</li>
+<li>MORE: 有时候会需要逐步地构建Token。被这种规则命中的Token会存到一个Buffer中，直到遇到下一个Token或者Special_token，然后他们和最后一个Token或者Special_token会连在一起作为一个Token返回给parser。如果一个More后面紧跟了一个SKIP，那么整个Buffer中的内容都会被丢弃掉。</li>
+</ul>
+<h4 id="regexpr_spec正则表达式规范">regexpr_spec(正则表达式规范)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">regexpr_spec ::= regular_expression [ java_block ] [ &#34;:&#34; java_identifier ]
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>正则表达式规范开始作为正则产生式的一部分用来实际描述词法实体，每个正则表达式产生式可以包含任意数量的正则表达式规范。</p>
+<p>每个正则表达式规范都包含一个正则表达式，后跟一个可选的 Java 块（词法操作）。然后是词法状态的标识符（这也是可选的）。每当匹配此正则表达式时，就会执行词法操作（如果有），然后执行任何常见的token操作。然后根据<a href="https://javacc.github.io/javacc/documentation/grammar.html#regexpr-kind">正则表达式产生类型</a>采取动作。最后，如果指定了词法状态，则token manager将移动到该词法状态以进行进一步处理（token manager最初在 state 中启动<code>DEFAULT</code>）。</p>
+<h4 id="expansion_choices扩展选项">expansion_choices(扩展选项)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">expansion_choices ::= expansion ( &#34;|&#34; expansion )*
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>扩展选项写成一个或多个用<code>|</code> 分隔的扩展列表，这合法的解析集合所允许的扩展选项是对所包含的任何一个合法展开的解析。</p>
+<h4 id="expansion扩展产生式">expansion(扩展产生式)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">expansion	::=	( expansion_unit )*
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>expansion被写成扩展单元的序列。expansion unit的合法解析串是扩展的合法解析。</p>
+<p>例如，expansion<code>{</code> <code>decls()</code> <code>}</code>由三个扩展单元 - <code>{</code>、<code>decls()</code>和<code>}</code>组成。单个扩展的匹配是扩展单元的匹配的串联 - 在这种情况下，这将是任何以一个以<code>{</code>开头、以 <code>}</code>结尾，并在两者之间包含<code>decls()</code>的匹配。</p>
+<h4 id="expansion_unit扩展单元">expansion_unit(扩展单元)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">expansion_unit ::= local_lookahead
+</span></span><span class="line"><span class="cl">                 | java_block
+</span></span><span class="line"><span class="cl">                 | &#34;(&#34; expansion_choices &#34;)&#34; [ &#34;+&#34; | &#34;*&#34; | &#34;?&#34; ]
+</span></span><span class="line"><span class="cl">                 | &#34;[&#34; expansion_choices &#34;]&#34;
+</span></span><span class="line"><span class="cl">                 | [ java_assignment_lhs &#34;=&#34; ] regular_expression
+</span></span><span class="line"><span class="cl">                 | [ java_assignment_lhs &#34;=&#34; ] java_identifier &#34;(&#34; java_expression_list &#34;)&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>扩展单元可以是local lookahead规范。这指示生成的解析器如何在选择点做出选择。有关怎么使用<code>LOOKAHEAD</code>工作以及如何编写<code>LOOKAHEAD</code>规范的详细信息，请参阅 <a href="https://javacc.github.io/javacc/tutorials/lookahead.html"><code>LOOKAHEAD</code></a>。</p>
+<p>扩展单元可以是一组 Java 声明和括在大括号中的代码（Java 块）集合，这些也称为解析器动作，这些会生成到解析非终结符位置的方法中。只要解析过程成功越过这一点，就会执行此该代码块。当 JavaCC 处理 Java 代码块时，它不执行任何详细的语法或语义检查。因此，Java 编译器可能会在 JavaCC 处理的操作中发现错误。lookahead 评估期间不执行任何动作。</p>
+<p>一个扩展单元可以是一组带括号的一个或多个<a href="https://javacc.github.io/javacc/documentation/grammar.html#expansion-choices">扩展选项</a>。在这种情况下，扩展单元的合法解析是嵌套在任何扩展选择合法解析中。括号中的扩展选项集可以通过以下方式（可选）添加后缀：</p>
+<blockquote>
+<p><code>+</code> ：扩展单元的任何合法解析都是括号中的一组扩展选择的合法解析的一个或多个的重复。</p>
+<p><code>*</code> ：扩展单元的任何合法解析都是对带括号的扩展选择集的合法解析的零次或多次的重复。</p>
+<p><code>?</code> ：扩展单元的合法解析要么是空token序列，要么是嵌套扩展选择的任何合法解析。此构造的另一种语法是将扩展选项括在括号内<code>[...]</code>。</p>
+</blockquote>
+<p>扩展单元可以是<a href="https://javacc.github.io/javacc/documentation/grammar.html#regular-expression">正则表达式</a>。那么扩展单元的合法解析是匹配这个正则表达式的任何token。当一个正则表达式匹配时，它会创建一个类型为<code>Token</code>的对象。可以通过在正则表达式前加上<code>variable =</code>将其分配给变量来访问该对象。通常，您可以在<code>=</code>左侧有一个有效的左匹配。在lookahead评估期间不执行此分配。</p>
+<p>扩展单元可以是非终结符（上面语法中的最后一个选择）。在这种情况下，它采用方法调用的形式，将非终结符名称用作方法的名称。成功解析非终结符会导致对方法调用中放置的参数进行操作并返回一个值（如果非终结符未声明为类型为 <code>void</code>）。可以通过在正则表达式前加上<code>variable =</code>来将返回值（可选）分配给变量。通常，您可以在<code>=</code>左侧有一个有效的左匹配。非终结符不能以引入左递归的方式在扩展中使用。JavaCC 会为您检查这一点。</p>
+<h4 id="local_lookahead向前看">local_lookahead(向前看)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">local_lookahead ::= &#34;LOOKAHEAD&#34; &#34;(&#34; [ java_integer_literal ] [ &#34;,&#34; ] [ expansion_choices ] [ &#34;,&#34; ] [ &#34;{&#34;    java_expression &#34;}&#34; ] &#34;)&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>local lookahead规范用于影响生成的解析器在语法中的各个选择点做出选择的方式。local lookahead规范以保留字<code>LOOKAHEAD</code>开头，后跟括号内的一组lookahead约束。存在三种不同类型的前瞻约束-lookahead限制（整数常量）、语法lookahead（扩展选择）和语义lookahead（大括号内的表达式）。必须至少存在一个前瞻约束。如果存在多个前瞻约束，则它们必须用逗号分隔。</p>
+<p>有关lookahead工作原理的详细说明，请单击此处访问<code>LOOKAHEAD</code> <a href="https://javacc.github.io/javacc/tutorials/lookahead.html">教程</a>。下面给出了每种前瞻约束的简要说明：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">约束</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">前瞻限制</td>
+<td style="text-align:left">这是可用于选择确定目的的前瞻token的最大数量。这将覆盖由 LOOKAHEAD 选项指定的默认值。此先行限制仅适用于本地先行规范位置处的选择点。如果本地先行规范不在选择点，则忽略先行限制（如果有）。</td>
+</tr>
+<tr>
+<td style="text-align:left">句法前瞻</td>
+<td style="text-align:left">这是一个扩展（或扩展选择），用于确定是否要采用此本地前瞻规范适用的特定选择。如果未提供，则解析器将在前瞻确定期间使用要选择的扩展。如果本地前瞻规范不在选择点，则忽略语法前瞻（如果有）。</td>
+</tr>
+<tr>
+<td style="text-align:left">语义前瞻</td>
+<td style="text-align:left">这是一个布尔表达式，只要解析器在解析期间越过该点，就会对其进行评估。如果表达式的计算结果为真，则解析将正常继续。如果表达式的计算结果为 false 并且本地前瞻规范位于选择点，则不采用当前选择并考虑下一个选择。如果表达式的计算结果为 false 并且本地前瞻规范不在选择点，则解析中止并出现解析错误。与其他两个在非选择点被忽略的前瞻约束不同，语义前瞻总是被评估。事实上，如果在评估其他一些语法先行检查期间遇到语义先行，甚至会对其进行评估。</td>
+</tr>
+</tbody>
+</table>
+<h5 id="local_lookahead的默认值">local_lookahead的默认值</h5>
+<p>如果提供了本地前瞻规范，但并未包括所有前瞻约束，则为缺少的前瞻约束分配默认值，如下所示：</p>
+<ul>
+<li>如果未提供前瞻限制并且提供了语法前瞻，则前瞻限制默认为最大整数值 ( <code>2147483647</code>)。这基本上实现了 - 即<code>infinite lookahead</code>，根据需要向前预测尽可能多的token以匹配已提供的语法预测。</li>
+<li>如果既没有提供前瞻限制也没有提供语法前瞻（这意味着提供了语义前瞻），则前瞻限制默认为<code>0</code>. 这意味着不执行语法前瞻，而只执行语义前瞻。</li>
+<li>如果未提供语法前瞻，则默认为应用本地前瞻规范的选择。如果本地前瞻规范不在选择点，则忽略语法前瞻 - 因此默认值不相关。</li>
+<li>如果未提供语义前瞻，则默认为布尔表达式<code>true</code>。也就是说，它并不重要。</li>
+</ul>
+<h4 id="regular_expression正则表达式">regular_expression(正则表达式)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">regular_expression ::= java_string_literal
+</span></span><span class="line"><span class="cl">                     | &#34;&lt;&#34; [ [ &#34;#&#34; ] java_identifier &#34;:&#34; ] complex_regular_expression_choices &#34;&gt;&#34;
+</span></span><span class="line"><span class="cl">                     | &#34;&lt;&#34; java_identifier &#34;&gt;&#34;
+</span></span><span class="line"><span class="cl">                     | &#34;&lt;&#34; &#34;EOF&#34; &#34;&gt;&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>语法文件中有两个地方可以写正则表达式：</p>
+<ol>
+<li>在<a href="https://javacc.github.io/javacc/documentation/grammar.html#regexpr_spec">正则表达式规范</a>（<a href="https://javacc.github.io/javacc/documentation/grammar.html#regular-expr-production">正则表达式产生</a>式的一部分）中，</li>
+<li>作为扩展中的<a href="https://javacc.github.io/javacc/documentation/grammar.html#expansion">扩展</a><a href="https://javacc.github.io/javacc/documentation/grammar.html#expansion-unit">单元</a>。当以这种方式时使用正则表达式，就好像正则表达式在此位置及以下方式定义，然后由扩展单元的标签引用：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;DEFAULT&gt; TOKEN :
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  regular expression
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>也就是说，正则表达式的这种用法可以用另一种用法重写。token manager的正则表达式匹配的完整细节可在token manager<a href="https://javacc.github.io/javacc/tutorials/token-manager.html">教程</a>中找到。语法结构的描述如下。</p>
+<ol>
+<li>第一种正则表达式是字符串文字。如果token manager处于适用此正则表达式的<a href="https://javacc.github.io/javacc/documentation/grammar.html#regular-expr-production">词法状态</a>并且输入流中的下一组字符与此字符串文字相同（可能忽略大小写），则被解析的输入匹配此正则表达式。</li>
+<li>正则表达式也可能是一个更<a href="https://javacc.github.io/javacc/documentation/grammar.html#complex-regular-expression">复杂的正则表达式</a>，使用该正则表达式涉及更多的正则表达式（可以定义字符串文字）。这样的正则表达式放置在尖括号内<code>&lt;...&gt;</code>，并且可以选择使用标识符进行标记。此标签可用于从<a href="https://javacc.github.io/javacc/documentation/grammar.html#expansion-unit">扩展单元</a>或其他正则表达式中引用此正则表达式。如果标签前面有一个<code>#</code>，则此正则表达式可能不会从扩展单元中引用，而只能从其他正则表达式中引用。当<code>#</code>存在时，正则表达式被称为<em>私有正则表达式</em>。</li>
+<li>正则表达式可能是对其他一些标记的正则表达式的引用，在这种情况下，它被写成用尖括号括起来的标签<code>&lt;...&gt;</code>。</li>
+<li>最后，正则表达式可以是<code>&lt;EOF&gt;</code>对文件末尾匹配的预定义正则表达式的引用。</li>
+</ol>
+<p>token manager不将私有正则表达式匹配为令牌。它们的目的仅仅是为了方便其他更复杂的正则表达式的定义。</p>
+<p>考虑以下定义 Java 浮点数的示例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">TOKEN</span> <span class="o">:</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span> <span class="n">FLOATING_POINT_LITERAL</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">      <span class="o">([</span><span class="s">&#34;0&#34;</span><span class="o">-</span><span class="s">&#34;9&#34;</span><span class="o">])+</span> <span class="s">&#34;.&#34;</span> <span class="o">([</span><span class="s">&#34;0&#34;</span><span class="o">-</span><span class="s">&#34;9&#34;</span><span class="o">])*</span> <span class="o">(&lt;</span><span class="n">EXPONENT</span><span class="o">&gt;)?</span> <span class="o">([</span><span class="s">&#34;f&#34;</span><span class="o">,</span><span class="s">&#34;F&#34;</span><span class="o">,</span><span class="s">&#34;d&#34;</span><span class="o">,</span><span class="s">&#34;D&#34;</span><span class="o">])?</span>
+</span></span><span class="line"><span class="cl">    <span class="o">|</span> <span class="s">&#34;.&#34;</span> <span class="o">([</span><span class="s">&#34;0&#34;</span><span class="o">-</span><span class="s">&#34;9&#34;</span><span class="o">])+</span> <span class="o">(&lt;</span><span class="n">EXPONENT</span><span class="o">&gt;)?</span> <span class="o">([</span><span class="s">&#34;f&#34;</span><span class="o">,</span><span class="s">&#34;F&#34;</span><span class="o">,</span><span class="s">&#34;d&#34;</span><span class="o">,</span><span class="s">&#34;D&#34;</span><span class="o">])?</span>
+</span></span><span class="line"><span class="cl">    <span class="o">|</span> <span class="o">([</span><span class="s">&#34;0&#34;</span><span class="o">-</span><span class="s">&#34;9&#34;</span><span class="o">])+</span> <span class="o">&lt;</span><span class="n">EXPONENT</span><span class="o">&gt;</span> <span class="o">([</span><span class="s">&#34;f&#34;</span><span class="o">,</span><span class="s">&#34;F&#34;</span><span class="o">,</span><span class="s">&#34;d&#34;</span><span class="o">,</span><span class="s">&#34;D&#34;</span><span class="o">])?</span>
+</span></span><span class="line"><span class="cl">    <span class="o">|</span> <span class="o">([</span><span class="s">&#34;0&#34;</span><span class="o">-</span><span class="s">&#34;9&#34;</span><span class="o">])+</span> <span class="o">(&lt;</span><span class="n">EXPONENT</span><span class="o">&gt;)?</span> <span class="o">[</span><span class="s">&#34;f&#34;</span><span class="o">,</span><span class="s">&#34;F&#34;</span><span class="o">,</span><span class="s">&#34;d&#34;</span><span class="o">,</span><span class="s">&#34;D&#34;</span><span class="o">]</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">|</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span> <span class="err">#</span><span class="n">EXPONENT</span><span class="o">:</span> <span class="o">[</span><span class="s">&#34;e&#34;</span><span class="o">,</span><span class="s">&#34;E&#34;</span><span class="o">]</span> <span class="o">([</span><span class="s">&#34;+&#34;</span><span class="o">,</span><span class="s">&#34;-&#34;</span><span class="o">])?</span> <span class="o">([</span><span class="s">&#34;0&#34;</span><span class="o">-</span><span class="s">&#34;9&#34;</span><span class="o">])+</span> <span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在此示例中，<code>FLOATING_POINT_LITERAL</code>使用另一个token的定义来定义token，即<code>EXPONENT</code>。 <code>#</code>标签之前的标识<code>EXPONENT</code>仅是为了定义其他token而存在（在这种情况下的FLOATING_POINT_LITERAL）。定义<code>FLOATING_POINT_LITERAL</code>不受#存在或不存在的影响。但是，token manager的行为是，如果<code>#</code>省略 ，token manager将错误地将 E123 之类的字符串识别为一种合法的token <code>EXPONENT</code>（而不是<code>IDENTIFIER</code>在 Java 语法中）。</p>
+<h4 id="complex_regular_expression_choices复杂正则表达式选项">complex_regular_expression_choices(复杂正则表达式选项)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">complex_regular_expression_choices ::= complex_regular_expression ( &#34;|&#34; complex_regular_expression )*
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>复杂正则表达式选择由一个或多个以<code>|</code>分隔的<a href="https://javacc.github.io/javacc/documentation/grammar.html#complex-regular-expression">复杂正则表达式</a>的列表组成。对复杂正则表达式选择的匹配是与其组成的任何复杂正则表达式的匹配。</p>
+<h4 id="complex_regular_expression复杂正则表达式">complex_regular_expression(复杂正则表达式)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">complex_regular_expression ::= ( complex_regular_expression_unit )*
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>复杂正则表达式是复杂正则表达式单元的序列。复杂正则表达式的匹配是与复杂正则表达式单元匹配的串联。</p>
+<h4 id="complex_regular_expression_unit复杂正则表达式单元">complex_regular_expression_unit(复杂正则表达式单元)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">complex_regular_expression_unit ::= java_string_literal
+</span></span><span class="line"><span class="cl">                                  | &#34;&lt;&#34; java_identifier &#34;&gt;&#34;
+</span></span><span class="line"><span class="cl">                                  | character_list
+</span></span><span class="line"><span class="cl">                                  | &#34;(&#34; complex_regular_expression_choices &#34;)&#34; [ &#34;+&#34; | &#34;*&#34; | &#34;?&#34; ]
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>一个复杂的正则表达式单元可以是一个字符串常量，在这种情况下，这个单元只有一个匹配，即字符串常量本身。</p>
+<p>一个复杂的正则表达式单元可以是对另一个正则表达式的引用。必须标记另一个正则表达式，以便可以引用它。这个单元的匹配就是这个其他正则表达式的所有匹配。正则表达式中的此类引用不能在标记之间的依赖关系中引入循环。</p>
+<p>一个复杂的正则表达式单元可以是一个<a href="https://javacc.github.io/javacc/documentation/grammar.html#character_list">字符列表</a>。字符列表是定义一组字符的一种方式。这种复杂的正则表达式单元的匹配是字符列表允许的任何字符。</p>
+<p>一个复杂的正则表达式单元可以是一组带括号的复杂正则表达式选项。在这种情况下，单元的合法匹配是嵌套选择的任何合法匹配。括号中的选项集可以通过以下方式（可选）添加后缀：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">后缀</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>+</code></td>
+<td style="text-align:left">该单元的任何合法匹配都是括号中的一组选择的合法匹配的一个或多个重复。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>*</code></td>
+<td style="text-align:left">该单元的任何合法匹配都是括号内的一组选择的合法匹配的零次或多次重复。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>?</code></td>
+<td style="text-align:left">单元的合法匹配要么是空字符串，要么是嵌套选择的任何合法匹配。</td>
+</tr>
+</tbody>
+</table>
+<p><em>注意 与<code>BNF</code>扩展不同，正则表达式<code>[...]</code>不等同于正则表达式<code>(...)?</code>。这是因为该<code>[...]</code>构造用于描述正则表达式中的字符列表</em>。</p>
+<h4 id="character_list字符列表">character_list(字符列表)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">character_list ::= [ &#34;~&#34; ] &#34;[&#34; [ character_descriptor ( &#34;,&#34; character_descriptor )* ] &#34;]&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>字符列表描述了一组字符。字符列表的合法匹配是该集合中的任何字符。字符列表是由方括号内的逗号分隔的字符描述符列表。每个字符描述符描述单个字符或一系列字符（参见下面的<a href="https://javacc.github.io/javacc/documentation/grammar.html#character-descriptor">字符描述符</a>），并将其添加到字符列表的字符集中。如果字符列表以<code>~</code>符号为前缀，则它表示的字符集是<code>UNICODE</code>不在指定集中的任何字符。</p>
+<h4 id="character_descriptor字符描述符">character_descriptor(字符描述符)</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">character_descriptor ::= java_string_literal [ &#34;-&#34; java_string_literal ]
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>字符描述符可以是单个字符串文字，在这种情况下，它描述包含该字符的单例集或者它是由-分隔的两个单个字符串文字，在这种情况下，它描述介于之间的范围内的所有字符的集合并包括这两个字符。</p>
+<h2 id="四-jjtree介绍">四 JJTree介绍</h2>
+<p>JJtree 是JavaCC的一个预处理器，它能在JavaCC源文件的许多位置插入解析树构建动作。JJTree的输出是通过运行JavaCC来创建解析器。本文描述如何使用JJTree以及如何将你的解析操作连接到它。</p>
+<p>默认情况下，JJTree通过生成代码为语言中的每个非终结符构建解析树节点。这个行为可被修改，使得一些非终结符不会生成节点，或为产生式扩展的某一部分生成节点。</p>
+<p>JJTree定义了一个java Interface Node，所有的解析树节点都实现该接口。该接口提供某些方法供操作，例如：设定节点parent或添加chaildren节点，或检索节点。</p>
+<p>JJTree有两种操作模式，simple 和 multi（想要获得更好的效果）。在simple模式下每个解析树节点是一个具体的类型SimpleNode；在multi模式下解析树节点的类型来自于相应节点的名字。如果你不提供node类的实现，JJTree会为你生成简单的实现，该实现基于SimpleNode。然后你可以通过修改实现来适应你得需求。</p>
+<p>虽然JavaCC是一个自顶向下的解析器，但JJTree是自底向上来构造解析树的。它使用stack数据结构来存储已经创建的节点。当发现节点的父节点时，它从stack中pop出孩子节点并添加到parent下，并最终push新的parent节点到stack中。stack是开放的，你可以push，pop或其他你认为合适的操作stack的内容。</p>
+<p>JJTree为节点的两个基本变种提供装饰，和一些简写语法使得它们便于使用。</p>
+<h3 id="1-definite-node">1 Definite node</h3>
+<p>一个definite node是由特定数量的孩子构成的。有许多节点从stack pop出来组成新节点的孩子节点，然后将自己push到stack中，你可以像这样指定一个definite node：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">#ADefiniteNode(INTEGER EXPRESSION)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>一个definite node描述表达式可以使多个integer 表达式，尽管文字整型常量是迄今为止最常见的表达式。</p>
+<h3 id="2-conditional-node">2 Conditional node</h3>
+<p>一个conditional node由所有在其作用域下的已经push到stack的孩子节点组成，当且仅当条件判定为true时。如果条件判定为false，则node不会被构造，并且所有孩子节点保留在stack中。你可以像下面这样指定一个conditional node：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">#ConditionalNode(BOOLEAN EXPRESSION)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>一个conditional node描述表达式可以是很多个boolean 表达式。有两种一般的简写：</p>
+<ol>
+<li>Indefinite nodes</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">#IndefiniteNode is short for #IndefiniteNode(true)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>Greater-than nodes</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">#GTNode(&gt;1) is short for #GTNode(jjtree.arity() &gt; 1)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>indefinite node的简写表达式可能导致歧义，当它后边跟随的是一个括号表达式。在这种情形下必须替换为完整表达式，例如：<code>( ... ) #N ( a() )</code>是有歧义的，你可以使用清晰的条件<code>( ... ) #N(true) ( a() )</code></p>
+<p><strong>警告：node描述表达式不应该有副作用。JJTree不指定表达式被计算多少次。</strong></p>
+<p>默认情况下，JJTree把每个非终结符当成indefinite node，并且节点名字来源于名字对应的产生式。你可以使用如下语法指定一个不同的名字：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">void P1() #MyNode : { ... } { ... }
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>当解析器识别P1这个非终结符时，它将初始一个indefinite node。并为它构建stack，因此在P1非终结符下创建的任何解析树节点会push到stack中，并且pop出来构建MyNode 节点的孩子节点。</p>
+<p>如果你不想为某个产生式创建节点，你可以使用如下语法：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">void P2() #void : { ... } { ... }
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>现在由在表达式P2里的非终结符创建的解析树节点都保留在stack中，被用于构造解析树的孩子节点。你可以将这个设定为默认行为，当节点未被装饰时，通过设定 NODE_DEFAULT_VOID选项。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">void P3() : {} {
+</span></span><span class="line"><span class="cl">    P4() ( P5() )+ P6()
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在这个例子中，indefinite node P3 是开始，构建stack，然后是P4节点，一个或多个P5节点和一个P6节点被解析。任意节点被push和pop都是作为P3的孩子节点。你可以进一步定制生成树。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">void P3() : {} {
+</span></span><span class="line"><span class="cl">    P4() ( P5() )+ #ListOfP5s P6()
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>现在P3节点将拥有一个P4节点，一个ListOfP5s节点和一个P6节点作为孩子节点。#Name构造一个后置操作，并且它的作用域是紧跟着扩展单元的。</p>
+<h3 id="3-node-scopes-and-user-actions">3 Node scopes and user actions</h3>
+<p>每个节点关联着一个节点作用域。用户动作在节点作用域下可以通过使用jjtThis标识符引用到该节点。这个标识符定义为该节点的类型，因此该节点的任意方法和属性都可以很方便的访问到。</p>
+<p>作用域是节点装饰前紧接的扩展单元。这可以是一个括号表达式。当一个产生式签名被装饰（也许是隐式的默认节点），它的作用域是产生式整个右侧，并包含它的定义块。</p>
+<p>你可以在一个扩展引用的左侧使用包含jjtThis的表达式。例如</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">... ( jjtThis.my_foo = foo() ) #Baz ...
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这里jjtThis引用一个Baz节点，它拥有一个my_foo属性。这导致解析产生式foo（）时赋值给my_foo。</p>
+<p>在节点作用域最后的用户动作不同于其它。当其中的代码在执行时，节点的孩子节点已经从stack中pop处理并添加到了该节点，并且将自身push到stack中。可以通过该节点的jjtGetChild()方法来访问孩子节点。</p>
+<p>除了最后一个用户动作，其它的都只能访问在stack中的孩子节点。他们还未被加入到节点，因此不能通过节点的方法访问到。</p>
+<p>一个conditional node的描述表达式被计算为false时，不会被push到stack，并且没有孩子节点加入到它。最后的用户动作在conditional node作用域里可以通过nodeCreated()方法判断节点是否被创建。返回true时表示节点创建并push到stack，false则没有。</p>
+<h3 id="4-exception-handling">4 Exception handling</h3>
+<p>在一个节点作用域中，扩展抛出的异常并没有在节点的作用域下捕获，而是由JJTree所捕获。当异常发生时，在该节点作用域下push进stack中的所有节点被pop出并抛弃。然后异常重新抛出。</p>
+<p>其目的是使解析器能够实现错误恢复，并且在一个已知的状态下继续使用节点stack。</p>
+<p><strong>警告：JJTree目前不能探测到在一个节点作用域下异常是否由用户动作抛出。这样的异常很可能不能被正常处理。</strong></p>
+<h3 id="5-node-scope-hooks">5 Node scope hooks</h3>
+<p>如果NODE_SCOPE_HOOK选项启用，JJTree生成两个用户定义的解析方法调用，在进入和退出节点作用域时。方法签名如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">void jjtreeOpenNodeScope(Node n)
+</span></span><span class="line"><span class="cl">void jjtreeCloseNodeScope(Node n)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果解析器是STATIC的，那么这些方法将被定义为static的。他们都将被调用，并以当前节点为参数。</p>
+<p>一种用处是存储解析器对象自己到节点中，这样该解析器创建的所有节点将共享状态。例如，解析器可能维护一个符号表。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">void jjtreeOpenNodeScope(Node n) {
+</span></span><span class="line"><span class="cl">  ((SimpleNode)n).jjtSetValue(getSymbolTable());
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">void jjtreeCloseNodeScope(Node n) {
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>getSymbolTable()</code>是一个用户自定义方法用来为每一个节点返回一个符号表。</p>
+<h3 id="6-tracking-tokens">6 Tracking tokens</h3>
+<p>常用于保持对节点开始和结尾token的跟踪，这样可以简单的将输入重建一遍。通过设定TRACK_TOKENS选项生成的SimpleNode类会包含4个额外方法。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">public Token jjtGetFirstToken()
+</span></span><span class="line"><span class="cl">public void jjtSetFirstToken(Token token)
+</span></span><span class="line"><span class="cl">public Token jjtGetLastToken()
+</span></span><span class="line"><span class="cl">public void jjtSetLastToken(Token token)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>The first and last token for each node will be set up automatically when the parser is run.</p>
+<h3 id="7-lifecycle-of-a-node">7 Lifecycle of a node</h3>
+<p>节点在构建过程中经历一系列确定的过程。以下是从节点自身角度透视它的顺序：</p>
+<p>1）节点的构造函数调用会以一个唯一的整数为参数。这个参数标识节点类型，这在simple模式下尤其有用。JJTree自动生成一个i称作 parserTreeConstants.java的文件定义有效的常量。常量名是JJT+节点名大写的方式生成，使用.替换所有_。为简便，在同一个文件中，一个String类型的jjtNodeName[]数组映射所有不可修改的节点名常量。</p>
+<p>2）jjOpen方法被调用</p>
+<p>3）如果NODE_SCOPE_HOOK选项启用，用户定义的openNodeScope()方法将被调用，并以节点自身为参数。这个方法可以初始化字段或调用节点中的方法。例如，它可能存储下节点的第一个token。</p>
+<p>4）如果一个未处理的异常在节点解析时抛出，则该节点将被抛弃。JJTree再不会引用它。它将被close，并且用户定义的closeNodeHook方法不会被调用。</p>
+<p>5）另外，如果是conditional 节点，并且条件表达式计算得false，则该节点被遗弃。它不回被关闭，虽然用户定义的节点钩子函数closeNodeHook()方法会被调用。</p>
+<p>6）另外，一个definite节点的数字表达式所指定的所有孩子节点，或者是一个conditional节点所有push到stack中的所有节点会被加入节点。它们被添加的顺序未指定。</p>
+<p>7）jjtClose方法被调用。</p>
+<p>8）节点被push到stack中。</p>
+<p>9）如果NODE_SCOPE_HOOK选项启用，则用户定义的closeNodeScope方法被调用。</p>
+<p>10）如果不是根节点，它会被设定为其它节点的孩子节点，jjSetParent方法被调用。</p>
+<h3 id="8-visitor-support">8 Visitor support</h3>
+<p>JJTree提供为访问者设计模式提供简单的支持，如果VISITOR选项启用，JJTree将在节点生成时，插入jjAccept()方法，并且生成visitor接口，接口可以被实现并传入节点。</p>
+<p>visitor接口名字的构成，通过给在解析器的名字后加上Visitor。接口会在JJTree每次运行时重新生成，因此它能准确代表解析器使用的节点集合。这将导致编译失败，因为实现类没有更新。</p>
+<h3 id="9-options">9 Options</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Option</th>
+<th style="text-align:left">Default</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>BUILD_NODE_FILES</code></td>
+<td style="text-align:left"><code>true</code></td>
+<td style="text-align:left">Generate sample implementations for <code>SimpleNode</code> and any other nodes used in the grammar.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>MULTI</code></td>
+<td style="text-align:left"><code>false</code></td>
+<td style="text-align:left">Generate a multi mode parse tree. The default for this is false, generating a simple mode parse tree.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>NODE_DEFAULT_VOID</code></td>
+<td style="text-align:left"><code>false</code></td>
+<td style="text-align:left">Instead of making each non-decorated production an indefinite node, make it void instead.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>NODE_CLASS</code></td>
+<td style="text-align:left"><code>&quot;&quot;</code></td>
+<td style="text-align:left">If set defines the name of a user-supplied class that will extend <code>SimpleNode</code>. Any tree nodes created will then be subclasses of <code>NODE_CLASS</code>.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>NODE_FACTORY</code></td>
+<td style="text-align:left"><code>&quot;&quot;</code></td>
+<td style="text-align:left">Specify a class containing a factory method with following signature to construct nodes: <code>public static Node jjtCreate(int id)</code> For backwards compatibility, the value false may also be specified, meaning that <code>SimpleNode</code> will be used as the factory class.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>NODE_PACKAGE</code></td>
+<td style="text-align:left"><code>&quot;&quot;</code></td>
+<td style="text-align:left">The package to generate the node classes into. The default for this is the parser package.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>NODE_EXTENDS</code></td>
+<td style="text-align:left"><code>&quot;&quot;</code></td>
+<td style="text-align:left">Deprecated. The superclass for the <code>SimpleNode</code> class. By providing a custom superclass you may be able to avoid the need to edit the generated <code>SimpleNode.java</code>.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>NODE_PREFIX</code></td>
+<td style="text-align:left"><code>&quot;AST&quot;</code></td>
+<td style="text-align:left">The prefix used to construct node class names from node identifiers in multi mode. The default for this is AST.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>NODE_SCOPE_HOOK</code></td>
+<td style="text-align:left"><code>false</code></td>
+<td style="text-align:left">Insert calls to user-defined parser methods on entry and exit of every node scope.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>NODE_USES_PARSER</code></td>
+<td style="text-align:left"><code>false</code></td>
+<td style="text-align:left">JJTree will use an alternate form of the node construction routines where it passes the parser object in. For example: <code>public static Node MyNode.jjtCreate(MyParser p, int id);&lt;br&gt; MyNode(MyParser p, int id);</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>TRACK_TOKENS</code></td>
+<td style="text-align:left"><code>false</code></td>
+<td style="text-align:left">Insert <code>jjtGetFirstToken()</code>, <code>jjtSetFirstToken()</code>, <code>getLastToken()</code>, and <code>jjtSetLastToken()</code> methods in <code>SimpleNode</code>. The <code>FirstToken</code> is automatically set up on entry to a node scope; the <code>LastToken</code> is automatically set up on exit from a node scope.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>STATIC</code></td>
+<td style="text-align:left"><code>true</code></td>
+<td style="text-align:left">Generate code for a static parser. This must be used consistently with the equivalent JavaCC options. The value of this option is emitted in the JavaCC source.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>VISITOR</code></td>
+<td style="text-align:left"><code>false</code></td>
+<td style="text-align:left">Insert a <code>jjtAccept()</code> method in the node classes, and generate a visitor implementation with an entry for every node type used in the grammar.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>VISITOR_DATA_TYPE</code></td>
+<td style="text-align:left"><code>&quot;Object&quot;</code></td>
+<td style="text-align:left">If this option is set, it is used in the signature of the generated <code>jjtAccept()</code> methods and the <code>visit()</code> methods as the type of the data argument.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>VISITOR_RETURN_TYPE</code></td>
+<td style="text-align:left"><code>&quot;Object&quot;</code></td>
+<td style="text-align:left">If this option is set, it is used in the signature of the generated jjtAccept() methods and the <code>visit()</code> methods as the return type of the method.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>VISITOR_EXCEPTION</code></td>
+<td style="text-align:left"><code>&quot;&quot;</code></td>
+<td style="text-align:left">If this option is set, it is used in the signature of the generated <code>jjtAccept()</code> methods and the <code>visit()</code> methods.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>JJTREE_OUTPUT_DIRECTORY</code></td>
+<td style="text-align:left"><code>&quot;OUTPUT_DIRECTORY&quot;</code></td>
+<td style="text-align:left">By default, JJTree generates its output in the directory specified in the global <code>OUTPUT_DIRECTORY</code> setting. Explicitly setting this option allows the user to separate the parser from the tree files.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="五-token-manager介绍">五 Token Manager介绍</h2>
+<p>本章节详细描述JavaCC token manager，覆盖了lexical states, lexical actions和<code>SPECIAL_TOKEN</code>的使用方式。</p>
+<h3 id="1-lexical-states">1 Lexical States</h3>
+<p>JavaCC 词法规范被组织成一组<em>词法状态</em> 集合，每个词法状态都用一个唯一的标识符命名。有一个标准的词汇状态称为<code>DEFAULT</code>。生成的token manager随时处于这些词汇状态之一。当token manager被初始化时它处于<code>DEFAULT</code>状态。在构造令牌管理器对象时，也可以将起始词法状态指定为参数。</p>
+<p>每个词法状态都包含一个有序的正则表达式列表-该顺序是从输入文件中出现的顺序派生的。有四种类型的正则表达式：<code>SKIP</code>、<code>MORE</code>、<code>TOKEN</code>和<code>SPECIAL_TOKEN</code>。</p>
+<p>在语法中作为扩展单元出现的所有正则表达式都被认为处于<code>DEFAULT</code>词法状态，它们的出现顺序由它们在语法文件中的位置决定。</p>
+<h4 id="token-matching">Token matching</h4>
+<p>当前词法状态下的所有正则表达式都被视为潜在的匹配候选者。token manager使用可能与这些正则表达式之一匹配的输入流中的最大字符数。也就是说，token manager更喜欢尽可能长的匹配。如果有多个相同长度的最长匹配，则匹配的正则表达式是语法文件中出现顺序最早的那个。</p>
+<p>如上所述，token manager在任何时候都处于一种状态。此时，token manager仅考虑在此状态中定义的正则表达式用于匹配目的。匹配后，可以指定要执行的动作以及要移动到的新词法状态。如果未指定新的词法状态，则token manager保持当前状态。</p>
+<h3 id="2-lexical-actions">2 Lexical Actions</h3>
+<p>正则表达式类型指定当正则表达式成功匹配时要执行的操作：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">行动</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>SKIP</code></td>
+<td style="text-align:left">只需丢弃匹配的字符串（在执行任何词法操作之后）。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>MORE</code></td>
+<td style="text-align:left">继续下一个状态，带上匹配的字符串。该字符串将是新匹配字符串的前缀。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>TOKEN</code></td>
+<td style="text-align:left">使用匹配的字符串创建一个token并将其发送给解析器（或任何调用者）。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>SPECIAL_TOKEN</code></td>
+<td style="text-align:left">创建一个不参与解析的特殊token。</td>
+</tr>
+</tbody>
+</table>
+<p>每当检测到文件结尾<code>&lt;EOF&gt;</code>时，它都会创建一个<code>&lt;EOF&gt;</code>标记，而不管词法分析器的当前状态如何。但是，如果在正则表达式的匹配过程中检测到一个<code>&lt;EOF&gt;</code>- 或在之后立即匹配 MORE 正则表达式 - 将报告错误。</p>
+<p>正则表达式匹配后，执行词法动作。该区域中声明的所有变量和方法<code>TOKEN_MGR_DECLS</code>（见下文）都可以在此处使用。此外，下面列出的变量和方法也可供使用。</p>
+<p>此后，token manager立即将状态更改为指定的状态（如果有）。</p>
+<p>如果正则表达式匹配到的是token将执行指定的动作（<code>SKIP</code>、<code>MORE</code>等）。如果类型是<code>TOKEN</code>，则返回匹配的token。如果类型为<code>SPECIAL_TOKEN</code>，则保存匹配的token以与匹配的下一个token一起返回<code>TOKEN</code>。</p>
+<h4 id="variables-within-lexical-actions">Variables within lexical actions</h4>
+<p>以下变量可用于词法动作：</p>
+<ol>
+<li><code>StringBuffer image (READ/WRITE)</code></li>
+</ol>
+<p>image变量（与image匹配token的字段不同）是一个StringBuffer类型，包含自最后一个<code>SKIP</code>,<code>TOKEN</code>,<code>SPECIAL_TOKEN</code>以来匹配的所有字符 。只要您不将null分配给它，您就可以自由地对其进行任何更改，因为生成的token manager也使用此变量。</p>
+<p>如果您对<code>image</code>进行更改，则此更改将传递给后续匹配项（如果当前匹配项是<code>MORE</code>）。内容<code>image</code> <em>不会</em>自动分配给<code>image</code>匹配token的字段。如果您希望发生这种情况，您必须在<code>TOKEN</code>或<code>SPECIAL_TOKEN</code>正则表达式的词法操作中显式分配它。</p>
+<h4 id="example-1">Example 1</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;DEFAULT&gt; MORE : { &#34;a&#34; : S1 }
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&lt;S1&gt; MORE :
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  &#34;b&#34;
+</span></span><span class="line"><span class="cl">    { int l = image.length()-1; image.setCharAt(l, image.charAt(l).toUpperCase()); }
+</span></span><span class="line"><span class="cl">    ^1                                                                             ^2
+</span></span><span class="line"><span class="cl">    : S2
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&lt;S2&gt; TOKEN :
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  &#34;cd&#34; { x = image; } : DEFAULT
+</span></span><span class="line"><span class="cl">       ^3
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在上面的例子中，image的值在 3 个点上被分别标记为是：^1，^2，^3：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">At ^1: &#34;ab&#34;
+</span></span><span class="line"><span class="cl">At ^2: &#34;aB&#34;
+</span></span><span class="line"><span class="cl">At ^3: &#34;aBcd&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol>
+<li><code>int lengthOfMatch (READ ONLY)</code></li>
+</ol>
+<p>这是当前匹配的长度（它不是累积<code>MORE</code>的）。您不应修改此变量。</p>
+<h4 id="example-2">Example 2</h4>
+<p>使用与上述相同的示例， <code>lengthOfMatch</code>的值为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">At ^1: 1 (the size of &#34;b&#34;)
+</span></span><span class="line"><span class="cl">At ^2: 1 (does not change due to lexical actions)
+</span></span><span class="line"><span class="cl">At ^3: 2 (the size of &#34;cd&#34;)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol>
+<li><code>int curLexState (READ ONLY)</code></li>
+</ol>
+<p>这是当前词法状态的索引。您不应修改此变量。名称为词法状态的整数常量被生成到<code>...Constants</code>文件中，因此您可以引用词法状态而不必担心它们的实际索引值。</p>
+<ol>
+<li><code>inputStream (READ ONLY)</code></li>
+</ol>
+<p>This is an input stream of the appropriate type depending on the values of options <code>UNICODE_INPUT</code> and <code>JAVA_UNICODE_ESCAPE</code> and is one of:</p>
+<p>这是一个适当类型的输入流，具体取决于选项的值，<code>UNICODE_INPUT</code>、<code>JAVA_UNICODE_ESCAPE</code>还是以下之一：</p>
+<ul>
+<li><code>ASCII_CharStream</code></li>
+<li><code>ASCII_UCodeESC_CharStream</code></li>
+<li><code>UCode_CharStream</code></li>
+<li><code>UCode_UCodeESC_CharStream</code></li>
+</ul>
+<p>这个流是此匹配消耗的最后一个字符。<code>inputStream</code>方法可以调用。例如，<code>getEndLine</code> 和 <code>getEndColumn</code> 可以被调用来获取当前匹配的行号和列号信息。<code>inputStream</code> 不能被修改。</p>
+<ol>
+<li><code>Token matchedToken (READ/WRITE)</code></li>
+</ol>
+<p>此变量只能用于<code>TOKEN</code>与<code>SPECIAL_TOKEN</code>正则表达式相关的操作。这被设置为将返回给解析器的token。您可以更改此变量，从而导致更改的token返回到解析器而不是原始token。在这里，您可以将变量的值分配<code>image</code>给<code>matchedToken.image</code>。通常这就是您的更改如何<code>image</code>在词汇操作之外产生影响。</p>
+<h4 id="example-3">Example 3</h4>
+<p>如果我们将上例的最后一个正则表达式规范修改为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;S2&gt; TOKEN :
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  &#34;cd&#34; { matchedToken.image = image.toString(); } : DEFAULT
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后返回给解析器的token将其<code>.image</code>字段设置为<code>aBcd</code>. 如果未执行此分配，则该<code>.image</code>字段将保持为<code>abcd</code>。</p>
+<ol>
+<li><code>void SwitchTo(int)</code></li>
+</ol>
+<p>调用此方法会将您切换到指定的词法状态。除了从词法动作中调用之外，还可以从解析器动作中调用此方法。但是，在使用这种方法从解析器切换状态时必须小心，因为在存在大量 lookaheads的情况下，词法分析可能在解析器之前有许多标记。在词法动作中使用此方法时，必须确保它是动作中执行的最后一条语句，否则可能会出现意外行为。</p>
+<p>如果使用<code>: state</code>语法指定状态更改，它将覆盖所有<code>switchTo</code>调用，因此当指定显式状态更改时调用<code>switchTo</code>没有意义。通常，只有当您无法以其他任何方式执行此操作时，才应使用此方法。使用这种切换状态的方法还会导致您丢失 JavaCC 在使用标准语法时所做的一些语义检查。</p>
+<h4 id="access-to-class-level-declarations-within-lexical-actions">Access to class level declarations within lexical actions</h4>
+<p>词法动作可以访问一组类级别的声明。这些声明使用以下语法在 JavaCC 文件中引入：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">token_manager_decls ::=
+</span></span><span class="line"><span class="cl">  &#34;TOKEN_MGR_DECLS&#34; &#34;:&#34;
+</span></span><span class="line"><span class="cl">  &#34;{&#34; java_declarations_and_code &#34;}&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这些声明可从所有词法操作中访问。</p>
+<h4 id="example-1---注释">Example 1 - 注释</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">SKIP :
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  &#34;/*&#34; : WithinComment
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&lt;WithinComment&gt; SKIP :
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  &#34;*/&#34; : DEFAULT
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&lt;WithinComment&gt; MORE :
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  &lt;~[]&gt;
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="example-2---具有打印字符串长度的动作">Example 2 - 具有打印字符串长度的动作</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">TOKEN_MGR_DECLS :
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  int stringSize;
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">MORE :
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  &#34;\&#34;&#34; {stringSize = 0;} : WithinString
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&lt;WithinString&gt; TOKEN :
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  &lt;STRLIT: &#34;\&#34;&#34;&gt; {System.out.println(&#34;Size = &#34; + stringSize);} : DEFAULT
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&lt;WithinString&gt; MORE :
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  &lt;~[&#34;\n&#34;,&#34;\r&#34;]&gt; {stringSize++;}
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="3-special-tokens">3 Special Tokens</h3>
+<p>Special tokens 也类似于 tokens，只是它们被允许出现在输入文件中的任何位置（在任何两个标记之间）。在语法输入文件中指定特殊标记<code>TOKEN</code>可以使用保留字<code>SPECIAL_TOKEN</code>代替 ，例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">SPECIAL_TOKEN :
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  &lt;SINGLE_LINE_COMMENT: &#34;//&#34; (~[&#34;\n&#34;,&#34;\r&#34;])* (&#34;\n&#34;|&#34;\r&#34;|&#34;\r\n&#34;)&gt;
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>任何定义为<code>SPECIAL_TOKEN</code>的正则表达式都可以通过词汇和语法规范中的用户操作以特殊方式访问。这允许在解析期间恢复这些token，同时这些令牌不参与解析。</p>
+<p>JavaCC 已被引导以使用此功能将相关注释从输入语法文件自动复制到生成的文件中。</p>
+<p>Token类现在有一个附加字段：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Token specialToken;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>该字段指向当前token之前的特殊token（特殊或其他）。如果当前标记之前的token是常规token（而不是特殊token），则此字段设置为<code>null</code>。常规token的<code>next</code>字段具有相同的含义，即它们指向下一个常规token，除非字段为的<code>EOF</code>标记。特殊token字段指向紧跟在当前token之后的特殊token。如果紧跟在当前token之后的token是常规token，则下一个字段也被设置为null。</p>
+<h4 id="example">Example</h4>
+<p>假设您希望打印常规token <code>t</code>之前的所有特殊token（仅在常规token后并且在<code>t</code>之前）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">// if there are no special tokens return control to the caller
+</span></span><span class="line"><span class="cl">if (t.specialToken == null) {
+</span></span><span class="line"><span class="cl">  return;
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">// walk back the special token chain until it reaches the first special token after the previous regular token
+</span></span><span class="line"><span class="cl">Token tmp_t = t.specialToken;
+</span></span><span class="line"><span class="cl">while (tmp_t.specialToken != null) {
+</span></span><span class="line"><span class="cl">  tmp_t = tmp_t.specialToken;
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">// now walk the special token chain forward and print them in the process
+</span></span><span class="line"><span class="cl">while (tmp_t != null) {
+</span></span><span class="line"><span class="cl">  System.out.println(tmp_t.image);
+</span></span><span class="line"><span class="cl">  tmp_t = tmp_t.next;
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="六-示例">六 示例</h2>
+<h3 id="1-javacc使用方法">1 JavaCC使用方法</h3>
+<ol>
+<li>如果编写jjtree文件，请使用以下方法生成jj文件：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">jjtree Example1.jjt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>在语法输入文件上运行<code>javacc</code>以生成一堆实现解析器和词法分析器的 Java 文件：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">javacc Example1.jj
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>现在编译生成的 Java 程序：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">javac *.java
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>解析器现在可以使用了，要运行解析器，请键入：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">java Example1
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>后输入待匹配字符串即可进行语法验证。</p>
+<h3 id="2-javacc示例">2 JavaCC示例</h3>
+<p><code>Example.jj</code>是一个简单的 JavaCC 语法文件，它识别一组左大括号，后跟相同数量的右大括号，最后跟零个或多个行终止符，最后是文件结尾。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">options {
+</span></span><span class="line"><span class="cl">  LOOKAHEAD = 1;
+</span></span><span class="line"><span class="cl">  CHOICE_AMBIGUITY_CHECK = 2;
+</span></span><span class="line"><span class="cl">  OTHER_AMBIGUITY_CHECK = 1;
+</span></span><span class="line"><span class="cl">  STATIC = true;
+</span></span><span class="line"><span class="cl">  DEBUG_PARSER = false;
+</span></span><span class="line"><span class="cl">  DEBUG_LOOKAHEAD = false;
+</span></span><span class="line"><span class="cl">  DEBUG_TOKEN_MANAGER = false;
+</span></span><span class="line"><span class="cl">  ERROR_REPORTING = true;
+</span></span><span class="line"><span class="cl">  JAVA_UNICODE_ESCAPE = false;
+</span></span><span class="line"><span class="cl">  UNICODE_INPUT = false;
+</span></span><span class="line"><span class="cl">  IGNORE_CASE = false;
+</span></span><span class="line"><span class="cl">  USER_TOKEN_MANAGER = false;
+</span></span><span class="line"><span class="cl">  USER_CHAR_STREAM = false;
+</span></span><span class="line"><span class="cl">  BUILD_PARSER = true;
+</span></span><span class="line"><span class="cl">  BUILD_TOKEN_MANAGER = true;
+</span></span><span class="line"><span class="cl">  SANITY_CHECK = true;
+</span></span><span class="line"><span class="cl">  FORCE_LA_CHECK = false;
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">PARSER_BEGIN(Example3)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">/**
+</span></span><span class="line"><span class="cl"> * Simple brace matcher.
+</span></span><span class="line"><span class="cl"> */
+</span></span><span class="line"><span class="cl">public class Example3 {
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  /** Main entry point. */
+</span></span><span class="line"><span class="cl">  public static void main(String args[]) throws ParseException {
+</span></span><span class="line"><span class="cl">    Example3 parser = new Example3(System.in);
+</span></span><span class="line"><span class="cl">    parser.Input();
+</span></span><span class="line"><span class="cl">  }
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">PARSER_END(Example3)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">SKIP :
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  &#34; &#34;
+</span></span><span class="line"><span class="cl">| &#34;\t&#34;
+</span></span><span class="line"><span class="cl">| &#34;\n&#34;
+</span></span><span class="line"><span class="cl">| &#34;\r&#34;
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">TOKEN :
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  &lt;LBRACE: &#34;{&#34;&gt;
+</span></span><span class="line"><span class="cl">| &lt;RBRACE: &#34;}&#34;&gt;
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">/** Root production. */
+</span></span><span class="line"><span class="cl">void Input() :
+</span></span><span class="line"><span class="cl">{ int count; }
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  count=MatchedBraces() &lt;EOF&gt;
+</span></span><span class="line"><span class="cl">  { System.out.println(&#34;The levels of nesting is &#34; + count); }
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">/** Brace counting production. */
+</span></span><span class="line"><span class="cl">int MatchedBraces() :
+</span></span><span class="line"><span class="cl">{ int nested_count=0; }
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  &lt;LBRACE&gt; [ nested_count=MatchedBraces() ] &lt;RBRACE&gt;
+</span></span><span class="line"><span class="cl">  { return ++nested_count; }
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="3-jjtree示例">3 JJTree示例</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">PARSER_BEGIN(Example1)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">/**
+</span></span><span class="line"><span class="cl"> * An Arithmetic Grammar.
+</span></span><span class="line"><span class="cl"> */
+</span></span><span class="line"><span class="cl">public class Example1 {
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  /** Main entry point. */
+</span></span><span class="line"><span class="cl">  public static void main(String args[]) {
+</span></span><span class="line"><span class="cl">    System.out.println(&#34;Reading from standard input...&#34;);
+</span></span><span class="line"><span class="cl">    Example1 t = new Example1(System.in);
+</span></span><span class="line"><span class="cl">    try {
+</span></span><span class="line"><span class="cl">      SimpleNode n = t.Start();
+</span></span><span class="line"><span class="cl">      n.dump(&#34;&#34;);
+</span></span><span class="line"><span class="cl">      System.out.println(&#34;Thank you.&#34;);
+</span></span><span class="line"><span class="cl">    } catch (Exception e) {
+</span></span><span class="line"><span class="cl">      System.out.println(&#34;Oops.&#34;);
+</span></span><span class="line"><span class="cl">      System.out.println(e.getMessage());
+</span></span><span class="line"><span class="cl">      e.printStackTrace();
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">  }
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">PARSER_END(Example1)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">SKIP :
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  &#34; &#34;
+</span></span><span class="line"><span class="cl">| &#34;\t&#34;
+</span></span><span class="line"><span class="cl">| &#34;\n&#34;
+</span></span><span class="line"><span class="cl">| &#34;\r&#34;
+</span></span><span class="line"><span class="cl">| &lt;&#34;//&#34; (~[&#34;\n&#34;,&#34;\r&#34;])* (&#34;\n&#34;|&#34;\r&#34;|&#34;\r\n&#34;)&gt;
+</span></span><span class="line"><span class="cl">| &lt;&#34;/*&#34; (~[&#34;*&#34;])* &#34;*&#34; (~[&#34;/&#34;] (~[&#34;*&#34;])* &#34;*&#34;)* &#34;/&#34;&gt;
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">TOKEN : /* LITERALS */
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  &lt; INTEGER_LITERAL:
+</span></span><span class="line"><span class="cl">        &lt;DECIMAL_LITERAL&gt; ([&#34;l&#34;,&#34;L&#34;])?
+</span></span><span class="line"><span class="cl">      | &lt;HEX_LITERAL&gt; ([&#34;l&#34;,&#34;L&#34;])?
+</span></span><span class="line"><span class="cl">      | &lt;OCTAL_LITERAL&gt; ([&#34;l&#34;,&#34;L&#34;])?
+</span></span><span class="line"><span class="cl">  &gt;
+</span></span><span class="line"><span class="cl">|
+</span></span><span class="line"><span class="cl">  &lt; #DECIMAL_LITERAL: [&#34;1&#34;-&#34;9&#34;] ([&#34;0&#34;-&#34;9&#34;])* &gt;
+</span></span><span class="line"><span class="cl">|
+</span></span><span class="line"><span class="cl">  &lt; #HEX_LITERAL: &#34;0&#34; [&#34;x&#34;,&#34;X&#34;] ([&#34;0&#34;-&#34;9&#34;,&#34;a&#34;-&#34;f&#34;,&#34;A&#34;-&#34;F&#34;])+ &gt;
+</span></span><span class="line"><span class="cl">|
+</span></span><span class="line"><span class="cl">  &lt; #OCTAL_LITERAL: &#34;0&#34; ([&#34;0&#34;-&#34;7&#34;])* &gt;
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">TOKEN : /* IDENTIFIERS */
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  &lt; IDENTIFIER: &lt;LETTER&gt; (&lt;LETTER&gt;|&lt;DIGIT&gt;)* &gt;
+</span></span><span class="line"><span class="cl">|
+</span></span><span class="line"><span class="cl">  &lt; #LETTER: [&#34;_&#34;,&#34;a&#34;-&#34;z&#34;,&#34;A&#34;-&#34;Z&#34;] &gt;
+</span></span><span class="line"><span class="cl">|
+</span></span><span class="line"><span class="cl">  &lt; #DIGIT: [&#34;0&#34;-&#34;9&#34;] &gt;
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">/** Main production. */
+</span></span><span class="line"><span class="cl">SimpleNode Start() : {}
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  Expression() &#34;;&#34;
+</span></span><span class="line"><span class="cl">  { return jjtThis; }
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">/** An Expression. */
+</span></span><span class="line"><span class="cl">void Expression() : {}
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  AdditiveExpression()
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">/** An Additive Expression. */
+</span></span><span class="line"><span class="cl">void AdditiveExpression() : {}
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  MultiplicativeExpression() ( ( &#34;+&#34; | &#34;-&#34; ) MultiplicativeExpression() )*
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">/** A Multiplicative Expression. */
+</span></span><span class="line"><span class="cl">void MultiplicativeExpression() : {}
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  UnaryExpression() ( ( &#34;*&#34; | &#34;/&#34; | &#34;%&#34; ) UnaryExpression() )*
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">/** A Unary Expression. */
+</span></span><span class="line"><span class="cl">void UnaryExpression() : {}
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  &#34;(&#34; Expression() &#34;)&#34; | Identifier() | Integer()
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">/** An Identifier. */
+</span></span><span class="line"><span class="cl">void Identifier() : {}
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  &lt;IDENTIFIER&gt;
+</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">/** An Integer. */
+</span></span><span class="line"><span class="cl">void Integer() : {}
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  &lt;INTEGER_LITERAL&gt;
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><hr>
+<p>附1：JavaCC官网：<a href="https://javacc.github.io/javacc/">参考连接</a></p>
+<p>附2：JavaCC BNF规范：<a href="https://javacc.github.io/javacc/documentation/bnf.html">参考链接</a></p>
+<p>附3：JavaCC API：<a href="https://javacc.github.io/javacc/documentation/api.html">参考链接</a></p>
+<p>附4：JavaCC示例：<a href="https://javacc.github.io/javacc/tutorials/examples.html">参考连接</a></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">ChavinKing</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-06-15 01:37
+        
+    </span>
+  </p>
+  
+  
+</div>
+<div class="post-reward">
+  <input type="checkbox" name="reward" id="reward" hidden />
+  <label class="reward-button" for="reward">赞赏支持</label>
+  <div class="qr-code">
+    
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/wx.png">
+        <span>微信打赏</span>
+      </label>
+    <label class="qr-code-image" for="reward">
+        <img class="image" src="/images/zfb.png">
+        <span>支付宝打赏</span>
+      </label>
+  </div>
+</div><footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/%E7%BC%96%E8%AF%91/">编译</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/post/dw/%E5%A2%9E%E9%87%8FETL-%E9%95%BF%E5%91%A8%E6%9C%9F%E6%8C%87%E6%A0%87-%E4%BC%98%E5%8C%96%E6%96%B9%E6%A1%88/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">增量ETL (长周期指标) 优化方案</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/base/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%861/">
+            <span class="next-text nav-default">编译原理知识点整理</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="http://www.cnblogs.com/wcwen1990" class="iconfont icon-cnblogs" title="cnblogs"></a>
+      <a href="mailto:chavinking1990@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/chavinking" class="iconfont icon-github" title="github"></a>
+  <a href="https://chavinking.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  <div class="busuanzi-footer">
+    <span id="busuanzi_container_site_pv"> 本站总访问量 <span id="busuanzi_value_site_pv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 次 </span>
+      <span class="division">|</span>
+    <span id="busuanzi_container_site_uv"> 本站总访客数 <span id="busuanzi_value_site_uv"><img src="/img/spinner.svg" alt="spinner.svg"/></span> 人 </span>
+  </div>
+
+  <span class="copyright-year">
+    &copy; 
+    2020 - 
+    2022
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">ChavinKing</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.30dad356188cdaba5047112eaa8bf5e85cb14ae7e803337403591fce94a531a0.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-138883536-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>
